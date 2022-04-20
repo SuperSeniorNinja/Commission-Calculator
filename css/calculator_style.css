@@ -1,0 +1,1152 @@
+@font-face {
+  font-family: 'Bebas Neue';
+  src: url("../css/fonts/BebasNeue-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Montserrat-Regular';
+  src: url("../css/fonts/Montserrat-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'OpenSans-Regular';
+  src: url("../css/fonts/OpenSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url("../css/fonts/Roboto-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Roboto-Bold';
+  src: url("../css/fonts/Roboto-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+.calculator_body .step{
+	display: none;
+}
+.calculator_body .active{
+	display: block;
+	/*display: revert;*/
+}
+.calculator_container{
+	max-width: none !important;
+	border: 1px solid #000;
+	padding: 0px;
+	/*width: 90%;*/
+	width: 100%;
+}
+.calculator_sidebar{
+	border-right: 1.63px solid #000;
+	padding: 20px;
+}
+.calculator_body{
+	padding: 25px;
+}
+/*progress bar styles*/
+.progressbar label, .step .calculator_body div label, .back_div label{
+	font-family: 'Montserrat-Regular';
+	font-size: 24px;
+	line-height: 29.26px;
+}
+.progress_div {
+    position: relative;
+    margin: 20px;
+    width: 100%;
+    border: 1px solid #000;
+    /*padding: 1px;*/
+    /*border-radius: 3px;*/
+    margin: 0 auto;
+}
+.progressbar{
+	margin-bottom: 36px;
+}
+.progress-bars {
+    background-color: rgba(227, 19, 19, 0.25);;
+    border-right: 1px solid #000;
+    width: 40%;
+    height: 38px;
+    /*border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;*/
+}
+.percent {
+	font-family: "Bebas Neue";
+    position: absolute;
+    display: inline-block;
+    color: #000;
+    font-weight: bold;
+    top: 22%;
+    left: 44%;
+    -webkit-border-radius: 4px;
+    font-size: 18px;
+    line-height: 21.6px;
+    font-weight: 400;
+}
+.calculator_sidebar .sidebar_text_div, .calculator_sidebar .sidebar_text_div ul li{
+	font-family: "Bebas Neue";
+	font-weight: 400;
+}
+.calculator_sidebar .sidebar_text_div label{
+	font-size: 31.92px;	
+	line-height: 38.31px;
+	margin-bottom: 0px;
+}
+.calculator_sidebar .sidebar_text_div ul li{
+	font-size: 27.1px;
+	/*line-height: 32.52px;*/
+	line-height: 70px;
+}
+.step{
+	padding: 61px 0px 37px 0px;
+}
+.step .header_line{
+	text-align: center;
+	margin-bottom: 49px;
+}
+.step .header_line .page_title{
+	font-family: "Bebas Neue";
+	font-weight: 400;
+	font-style: normal;
+	font-size: 46.51px;
+	line-height: 55.81px;
+	margin-bottom: 0px;
+}
+.step .header_line .sub_header{
+	font-family: "Bebas Neue";
+	font-weight: 400;
+	font-style: normal;
+	font-size: 26.93px;
+	line-height: 32.32px;
+}
+.step .answer_div{
+	margin: 0 auto;
+}
+.step .answer_div .answer_option {
+	padding: 38px 0;    
+    border: 1px solid #000;
+    margin-bottom: 36px;
+    text-align: center;    
+    line-height: 54.13px    
+}
+.step .answer_div .answer_option label{
+	font-size: 45.11px;
+	font-family: "Bebas Neue";
+	font-weight: 400;
+	margin-bottom: 0px;
+}
+.step .answer_div .answer_option:hover, .back_div, .back_div label{
+	cursor: pointer;
+}
+.answer_div .answer_option:last-child{
+	margin-bottom: 0px;
+}
+.calculator_body .back_icon{
+	width: 40px;
+    margin-right: 5px;
+    height: 20px;
+}
+.back_div{	
+	width: fit-content;
+}
+.step .answer_div .answer_option:hover{
+	box-shadow: 0px 4px 4px 6px rgba(0, 0, 0, 0.25);
+}
+.hidden{
+	display: none;
+}
+.step .answer_div .answer_option span{
+	font-size: 20.21px;
+	font-family: "OpenSans-Regular";
+	font-weight: 300;
+	line-height: 27.51px;
+}
+.step .button_div{
+	text-align: center;
+	font-family: "Bebas Neue";
+	font-weight: 400;
+}
+.step button, .step .button_div .next_btn, .page31 .button_div button, .page32 .button_div button
+{
+	background-color: #fff !important;
+    color: #000 !important;
+    border: 1px solid #000;
+    margin-top: 70px;
+}
+.step button:focus, #salary_edit_modal button:focus, .page31 .button_div button:focus, .page33 .button_div button{
+	outline: none;
+}
+.step button:hover, .step .button_div .next_btn:hover, #salary_edit_modal button:hover, .page31 .button_div button:hover, .page32 .button_div button:hover{
+	background-color: #000 !important;
+	color: #fff !important;
+	cursor: pointer;
+}
+.page25 .input_div{
+	margin: 20px 0px 30px 0px;
+}
+.page25 .input_div input, #salary_edit_modal input{
+	border: none;
+    border-bottom: 1px solid #000;
+    padding: 0px 10px 0px 10px;
+    width: 100px;
+}
+input:focus{
+	outline: none !important;
+}
+.page25 .input_div span, .page29 .input_div span{
+	font-weight: bold;
+}
+.page25 .header_line{
+	margin-bottom: 0px;
+}
+/*Edit Salary Modal*/
+#salary_edit_modal{
+	top: 20%;
+	left: 27%;
+	overflow-y: hidden;
+	padding-right: 0px;
+	text-align: center;
+}
+#salary_edit_modal .modal-header, #salary_edit_modal .modal-footer{
+	display: block;
+}
+#salary_edit_modal .modal-header label{
+	font-size: 26px;
+	font-family: "Bebas Neue";
+	font-weight: 400;
+}
+#salary_edit_modal .modal-header span, .page31 .row span{
+	font-size: 18px;
+	font-family: "OpenSans-Regular";
+	font-weight: 400;
+}
+#salary_edit_modal .modal-header, #salary_edit_modal .modal-footer{
+	border: 0px;
+}
+#salary_edit_modal input{
+	padding: 0px;
+}
+#salary_edit_modal button{
+	background-color: #fff !important;
+    color: #000 !important;
+    border: 1px solid #000;
+}
+.step .answer_div .active{
+	background: #000;
+	color: #fff;
+	box-shadow: 0px 4px 4px 6px rgb(52 49 49 / 30%);
+}
+.page26 .section .sub_header {
+	font-size: 36px;
+	font-family: "Bebas Neue";
+	line-height: 43.2px;
+	font-weight: 400;
+}
+.page26 .section input, .page26 .section select{
+	width: 100px;
+}
+.page29 input, .sidebar_option .input_div input, .sidebar_advanced_option .input_div input, .page31 input, .page33 input{
+	padding: 0px;
+	width: 55px;
+	border: none;
+    border-bottom: 1px solid #000;
+}
+.page29 .answer_div, .page30 table{
+	text-align: center;
+}
+.page29 .answer_div .div_section label span{
+	color: #e30cab;
+    font-weight: bold;
+}
+.pink_txt{
+	color: #e30cab;
+}
+.page29 input, .page31 input{
+	text-align: center;
+	font-size: 18px;
+	font-family: "OpenSans-Regular";
+}
+.page29 .answer_div .div_section{
+	margin-bottom: 50px;
+}
+.page29 .button_div .next_btn{
+	margin-top: 0px;
+}
+.page29 .answer_div .div_section .row label{
+	font-size: 24px;
+	font-family: "OpenSans-Regular";
+	line-height: 30px;
+	font-weight: 400;
+}
+/*color overlay table styles*/
+.caculator_configurator table tr td:nth-of-type(2)
+{
+	background: rgba(227, 19, 19, 0.6);
+}
+.caculator_configurator table tr td:nth-of-type(3)
+{
+	background: rgba(227, 19, 19, 0.5);
+}
+.caculator_configurator table tr td:nth-of-type(4)
+{
+	background: rgba(227, 19, 19, 0.4);
+}
+.caculator_configurator table tr td:nth-of-type(5)
+{
+	background: rgba(227, 19, 19, 0.3);
+}
+.caculator_configurator table tr td:nth-of-type(6)
+{
+	background: rgba(227, 19, 19, 0.25);
+}
+.caculator_configurator table tr td:nth-of-type(7)
+{
+	background: rgba(183, 178, 178, 0.25);
+}
+.caculator_configurator table tr td:nth-of-type(8)
+{
+	background: rgba(20, 120, 18, 0.25);
+}
+.caculator_configurator table tr td:nth-of-type(9)
+{
+	background: rgba(20, 120, 18, 0.4);
+}
+.caculator_configurator table tr td:nth-of-type(10)
+{
+	background: rgba(20, 120, 18, 0.5);
+}
+.caculator_configurator table tr td:nth-of-type(11)
+{
+	background: rgba(20, 120, 18, 0.6);
+}
+.caculator_configurator table tr td:nth-of-type(12)
+{
+	background: rgba(20, 120, 18, 0.76);
+}
+.caculator_configurator table tr td{
+	border: none;
+}
+.caculator_configurator{
+	font-size: 12px;
+}
+.caculator_configurator thead tr:last-child td{
+	border-bottom: 1px solid #000;
+}
+.caculator_configurator thead tr:last-child td:first-child{
+	border-bottom: none;
+}
+.sidebar_option .input_div input, .sidebar_option .input_div span, .sidebar_advanced_option .input_div input, .sidebar_advanced_option .input_div span,
+.sidebar_option span{
+	font-size: 18px;
+	font-family: "OpenSans-Regular";
+}
+.sidebar_option, .sidebar_advanced_option{
+	text-align: center;
+}
+.sidebar_option .row:last-child, .sidebar_advanced_option .row:first-child{
+	margin-top: 30px;
+}
+.sidebar_advanced_option .input_div input{
+	width: 20px;
+	border-bottom: 1px solid red;
+	color: red;
+}
+.sidebar_advanced_option{
+	text-align: right;
+}
+.sidebar_advanced_option .row:first-child{
+	text-align: center;
+}
+.red-txt{
+	color: red;
+}
+.caculator_configurator table tbody tr.active{
+	border-top: 8px solid #FFF500;
+    border-bottom: 8px solid #FFF500;
+    display: revert;
+}
+.caculator_configurator table tr .active{
+	border-left: 8px solid #FFF500;
+    border-right: 8px solid #FFF500;
+    display: revert;
+}
+.page31 .row label, .page32 .row label{
+	font-size: 28px;
+	font-family: "OpenSans-Regular";
+	font-weight: 400;
+	margin-bottom: 0px;
+}
+.page31 .row, .page31 table{
+	text-align: center;
+}
+.page31 .subheader{
+	margin: 30px 0px 50px 0px;
+}
+/*.page31 .button_div  button:first-child{
+	margin-right: 100px;
+}*/
+.page31 .button_div{
+	margin-top: 50px;
+	text-align: center;
+}
+.page31 .button_div .edit_commission_calculator{
+	margin: 0 auto;
+}
+.page31{
+	padding-top: 0px;
+}
+
+.page32 .header_title{
+	border-bottom: 1px solid #000;
+	margin-bottom: 30px;
+}
+.page32{
+	/*display: flex !important;*/
+	padding-top: 0px;
+	text-align: center;
+}
+.page32 .sidebar_option, .page32 .sidebar_advanced_option{
+	border: 1px solid #000;
+    padding: 50px 20px;
+    box-shadow: 0px 2px 2px 4px rgb(0 0 0 / 25%);
+}
+.page32 .sidebar_option{
+	margin-bottom: 70px;
+}
+.page32 .sidebar_option .row:first-child, .page32 .sidebar_advanced_option .row:first-child{
+	margin-bottom: 20px;
+}
+.page32 .sidebar_advanced_option .row:first-child{
+	margin-top: 0px;
+}
+.page32 .button_div button
+{
+	width: 100px;
+}
+.page32 .button_div button:first-child{
+	float: left;
+}
+.page32 .button_div button:last-child{
+	float: right;
+}
+.page32 .col-12, .page32 .row{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.page32 .header_title{
+	margin: 0px;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+.page32 .flex_div{
+	margin: 0px;
+}
+.sidebar_advanced_option .input_div .fs14{
+	font-size: 14px;
+}
+.sidebar_advanced_option .input_div .fs13{
+	font-size: 13px;
+}
+.caculator_configurator table{
+	font-size: 18px;
+	font-family: "OpenSans-Regular";
+	font-weight: 400;
+}
+
+.questions_section{
+	display: none;
+}
+.result_section, .page33{
+	display: block;
+}
+
+.step .header_title label, .page33 .header_title label, .page34 .header_title label, .page35 .header_title label{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 46.5055px;
+	line-height: 56px;	
+	color: #000000;
+}
+.page33 input, .page35 input{
+	width: 105px;
+}
+.step .header_title, .page33 .header_title, .page34 .header_title, .page35 .header_title{
+	text-align: center;
+}
+.page33 .header_title{
+	margin-bottom: 30px;
+}
+.page35 .bar_div{
+	height: 500px;
+	width: 90%;
+	margin: 0 auto;
+	
+}
+.page35 #bar_div{
+	height: 500px;
+}
+.page33 .sub_title, .page34 .sub_title, .page35 .sub_title{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 36px;
+	line-height: 43px;
+}
+.page34 .row span.small_text{
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	font-size: 20.2105px;
+	line-height: 28px;
+}
+.page33 .button_div button{
+	margin-top: 70px !important;
+}
+.page33 input, .page35 input{
+	border: 1px solid #000;
+    padding: 1px 10px 1px 10px;
+    font-size: 20px;
+    font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+}
+.page35 .month_number1{
+	width: 150px;
+}
+.page35 #myChart{
+	width: auto;
+}
+.page33 .add_bonus_div{
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	font-size: 9px;
+	line-height: 12px;
+	text-align: center;
+}
+.page33 .adjust_base span{
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	font-size: 20.2105px;
+	line-height: 28px;
+}
+.page33 .slider_row label{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 22.8119px;
+	line-height: 27px;
+}
+.page33 .slider_row span{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 12.5465px;
+	line-height: 15px;
+}
+.page33 .text_row{
+	margin-top: 78px;
+}
+.page33 .adjust_base{
+	margin-bottom: 104px;
+}
+.page33 .text_row label{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 36px;
+	line-height: 43.6px;
+}
+.page33 .text_row .col-md-9{
+	line-height: 24px;
+}
+.page33 .text_row span{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 19.9815px;
+	line-height: 24px;
+}
+.page33 .adjust_base .small_text{
+	text-align: center;
+	margin-top: 30px;
+}
+.page33 .adjust_base .small_text span{
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	font-size: 12px;
+	line-height: 16px;
+	text-align: center;
+}
+.page33 select, .page37 select{
+	width: auto;
+	padding-top: 3.5px;
+    padding-bottom: 3.5px;
+    border: 1px solid #000;
+}
+.page33 select:focus, .page37 select{
+	outline: none;
+}
+.page34 .header_title{
+	margin-bottom: 57px;
+}
+.page34 .left_half .row{
+	margin-bottom: 41px;
+}
+.page34 .left_half ul{
+	padding-left: 43px;
+}
+.page34 .right_half .row:first-child{
+	margin-bottom: 93px;
+}
+.page34 .left_half .row:last-child{
+	margin-bottom: 0px;
+}
+.page34 .right_half button{
+	width: auto;
+	font-family: 'Montserrat-Regular';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 24px;
+	line-height: 29px;
+	padding: 25px 45px;
+	margin-top: 0px;
+}
+.page34 .right_half .share_div{
+	margin-top: 34px;
+}
+.page34 .question_icon{
+	width: 13px;
+	padding: 0px;
+	margin-top: -30px;
+	cursor: pointer;
+}
+.page34 .extra_icon{
+	margin-left: 10%;
+	margin-bottom: -5%;
+}
+.page34 .row:last-child .sub_title{
+	margin-bottom: 0px;
+}
+.page34 .right_half .share_div button{
+	padding: 25px 39px;
+}
+.page34 .button_div button{
+	font-family: 'Montserrat-Regular';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 24px;
+	line-height: 29px;
+}
+.page34 .button_div {
+	text-align: left;
+}
+.page34 .button_div button{
+	padding: 25px 41px;
+    width: auto;
+    margin-top: 0px;
+}
+.page34 .button_div{
+	margin-top: 112px;
+}
+#recommendation_modal .modal-content{
+	background: #E3E3E3;
+}
+#recommendation_modal .modal-header {
+	justify-content: center;
+}
+#recommendation_modal .modal-header label{
+	font-family: 'Montserrat-Regular';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 28px;
+	line-height: 34px;
+	text-align: center;
+}
+#recommendation_modal .modal-dialog{
+	width: 617px;
+}
+#recommendation_modal .modal-header{
+	padding-bottom: 0px;
+	margin-bottom: 91px;
+}
+#recommendation_modal .modal-body{
+	padding-top: 0px;
+}
+#recommendation_modal .modal-content{
+	height: 649px;
+	width: 617px;
+}
+#recommendation_modal .modal-header{
+	padding-top: 48px;
+}
+#recommendation_modal .modal-body ul
+{
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 20px;
+	line-height: 27px;
+}
+.flex_div{
+	display: flex;
+}
+.inline_div{
+	display: inline;
+}
+.txt_c{
+	text-align: center;
+}
+.mgb10{
+	margin-bottom: 10px;
+}
+.page33 .adjust_base .slider_row .tag_div{
+	padding: 45px 0px;
+}
+.page33 .adjust_base .text_row .tag_div{
+	padding-left: 0px;
+}
+.page33 .bonus_row, .page33 .bonus_row span, .page35 .bonus_row span{
+	font-size: 20px;
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+}
+.page33 .bonus_row{
+	margin-bottom: 15px;
+}
+.page33 .bonus_row span.small_text{
+	font-size: 16px;
+}
+
+.page33 .slidecontainer {
+  width: 100%;
+}
+.page33 .determine_amount .add_bonus_div label{
+	width: auto;
+	cursor: pointer;
+}
+.page33 .determine_amount .add_bonus_div{
+	justify-content: center;
+}
+.page33 .slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.page33 .slider:hover {
+  opacity: 1;
+}
+
+.page33 .slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  content: "$500";
+  width: 90px;
+  height: 26px;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 0px;
+  border: 1px solid #E64B36;
+}
+
+.page33 .slider::-moz-range-thumb {
+  width: 90px;
+  height: 26px;
+  content: "$500";
+  background: #fff;
+  cursor: pointer;
+  border-radius: 0px;
+  border: 1px solid #E64B36;
+}
+.page33 #revenue_range{
+	border: 1px solid #E64B36;
+    border-radius: 0px;
+    padding: 0px;
+    height: 8px;
+    background: #fff;
+}
+.page33 .add_bonus_div .plus_icon::before{
+	content: "\002B";
+}
+.page33 .button_div button:first-child{
+	float: left;
+}
+.page33 .button_div button:last-child{
+	float: right;
+}
+.page33 .button_div button{
+	width: 100px;
+	margin-top: 0px;
+}
+.page34 .right_half .save_div div:last-child, .page34 .right_half .share_div div:last-child{
+	padding: 27px 0px;
+}
+#recommendation_modal{
+	max-width: none;
+}
+.page35 .container, .page36 .container{
+	width: 80%;
+	margin: 0 auto;
+}
+.page35 .switch_div, .page36 .switch_div, .page37 .switch_div{
+	margin-top: 137px;
+	justify-content: center;
+	margin-bottom: 20px;
+	text-align: center;
+}
+.page35 .switch_item, .page36 .switch_item, .page37 .switch_item{
+	width: 155px;
+	height: 40px;
+	border-radius: 50px;
+}
+.page35 .switch_div .text_div, .page36 .switch_div .text_div, .page37 .switch_div .text_div{
+	width: 140px;
+}
+.page35 .switch_div label, .page36 .switch_div label, .page37 .switch_div label{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 14px;	
+}
+.page35 .row, .page36 .row, .page37 .row{
+	justify-content: center;
+}
+.red_bg{
+	background-color: #E64B36;
+}
+.black_bg{
+	background-color: #000;
+}
+.light_red_bg{
+	background: rgba(230, 75, 54, 0.6);
+}
+.page35 .switch_div .switch_item:first-child, .page36 .switch_div .switch_item:first-child,
+.page37 .switch_div .switch_item:first-child{
+	margin-right: -30px;
+    z-index: 2;
+}
+.page35 .button_div button, .page36 .button_div button, .page37 .button_div button{
+	width: fit-content;
+}
+.page36 .switch_div, .page37 .switch_div{
+	margin-top: 20px;
+}
+.page36 .container .row:first-child{
+	text-align: center;
+}
+.page37 .tier_div label{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 36px;
+	line-height: 43px;	
+}
+.page37 span{
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	font-size: 20.2105px;
+	line-height: 28px;
+}
+.page37 .small_text{
+	font-size: 14px;
+}
+.page37 select{
+	font-size: 12px;
+}
+.page37 input
+{
+	border: none;
+	width: 50px;
+	border: 1px solid #000;
+	padding: 0px;
+}
+.page37 .add_tier_div{
+	justify-content: center;
+	text-align: center;
+	cursor: pointer;
+}
+.page37 .add_tier_div .plus_icon{
+	font-size: 16px;
+	font-family: 'OpenSans-Regular';
+}
+.page37 .add_tier_div span:last-child{
+	font-size: 14px;
+	font-family: 'OpenSans-Regular';
+}
+.commission_tier{
+	border: none;
+}
+.page37 .add_tier_div label{
+	cursor: pointer;
+	width: fit-content;
+}
+.commission_tier td .first_half .row:first-child label, .commission_tier td .second_half .row label{
+	font-family: 'Roboto-Bold';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 12px;
+	line-height: 14px;
+	text-align: center;
+}
+.commission_tier td .first_half .row:last-child span{
+	font-family: 'Roboto-Regular';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 14px;
+	text-align: center;
+}
+.commission_tier td{
+	padding:0px;
+}
+.commission_tier .first_half, .commission_tier .second_half{
+	padding: 10px;
+}
+.commission_tier .second_half .row{
+	line-height: 14px;
+}
+.commission_tier .second_half{
+	min-height: 68px;
+}
+.commission_tier .second_half .row label:first-child{
+	margin-bottom: 0px;
+}
+.commission_tier td{
+	border: none;
+}
+.commission_tier tr td:first-child{
+	border: none;
+    border-right: 26px solid #fff;
+}
+.commission_tier .first_half{
+	border-bottom: 1px solid #000;
+}
+.commission_tier tr{
+	border-bottom: 7px solid #fff;
+}
+.page37 .sub_title{
+	width: 60%;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 30px;    
+}
+.page .sub_title span{
+	font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: center;
+}
+
+.page37 .tier_div .small_text{
+	display: inline-flex;
+}
+.page37 .remove_tier{
+	width: 30px;
+	height: 5px;
+	background-image: url("../img/red_minus.png");
+	background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-right: 5px;
+    margin-left: -35px;
+    /*position: absolute;
+    left: 0px;
+    margin-top: 15px;*/
+}
+.page37 .tier_div div{
+	display: flex;
+}
+/*hide up/down icon for input number*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.pull-left{
+	float: left;
+}
+.pull-right{
+	float: right;
+}
+/*responsive styles for ipad version*/
+@media only screen and (min-width:481px) and (max-width:1200px){
+	.calculator_container .calculator_sidebar, .calculator_container .calculator_body{
+		width: 100%;
+	}
+	.calculator_sidebar{
+		border-right: none;
+		border-bottom: 1px solid #000;
+	}
+	.calculator_sidebar .sidebar_text_div ul li, .step .header_line .sub_header{
+		line-height: 40px;
+	}
+	.calculator_body .step{
+		padding-top: 0px;
+	}
+	.step .answer_div .answer_option{
+		padding: 20px 0;
+		margin-bottom: 20px;
+	}
+	.step .header_line{
+		margin-bottom: 10px;
+	}
+	.calculator_sidebar, .calculator_body .step{
+		padding-bottom: 0px;
+	}
+}
+
+/*responsive styles for mobile version*/
+@media only screen and (max-width: 480px){
+	.page33 .header_title label, .step .header_line .page_title, .page34 .header_title label, .step .header_title label {
+		font-size: 28px;
+		line-height: 40px;
+		margin-bottom: 20px;
+	}
+	.page34 .left_half .row, .page34 .header_title{
+		margin-bottom: 20px;
+	}
+	.page34 .question_icon{
+		margin-top: -25px
+	}
+	.page34 .right_half .row:first-child{
+		margin-bottom: 30px;
+	}
+	.page34 .right_half .save_div, .page34 .right_half .share_div, .page34 .button_div{
+		text-align: center;
+	}
+	.page34 .button_div{
+		margin-top: 0px;
+	}
+	#recommendation_modal .modal-header label{
+		font-size: 20px;
+	}
+	#recommendation_modal .modal-content{
+		height: auto;
+	}
+	#recommendation_modal .modal-dialog, #recommendation_modal .modal-content, #recommendation_modal{
+		width: auto;
+	}
+	#recommendation_modal .modal-header{
+		margin-bottom: 50px;
+	}	
+	.step .sub_title, .page35 .header_title label{
+		font-size: 24px;
+	}
+	.page33 .text_row, .page33 .adjust_base .small_text{
+		margin-top: 0px;
+	}
+	.page33 .adjust_base{
+		margin-bottom: 0px;
+		margin-top: 30px;
+	}
+	.page33 .adjust_base .slider_row .tag_div{
+		padding-bottom: 20px;
+	}
+	.page33 .adjust_base .slider_row, .page33 .adjust_base .text_row{
+		text-align: center;
+	}
+	.page33 .range_div{
+		margin-bottom: 20px;
+	}
+	.page33 .adjust_base .slider_row, .page33 .adjust_base .text_row{
+		margin: 0px;
+	}
+	.page33 .add_bonus_div{
+		margin-top: 40px;
+	}
+	.page33 .button_div{
+		display: flex;
+	}
+	.page33 .button_div button:nth-of-type(1), .page33 .button_div button:nth-of-type(2){
+		margin: 0px 5px;
+	}
+	.progressbar label, .step .calculator_body div label, .back_div label, 
+	.calculator_sidebar .sidebar_text_div ul li, .step .header_line .sub_header{
+		font-size: 18px;
+	}
+	.calculator_sidebar{
+		border-right: none;
+		border-bottom: 1px solid #000;
+	}
+	.calculator_sidebar .sidebar_text_div label{
+		font-size: 24px;
+	}
+	.calculator_sidebar .sidebar_text_div ul li, .step .header_line .sub_header{
+		line-height: 30px;
+	}
+	.progressbar{
+		margin-bottom: 5px;
+	}
+	.calculator_body .step{
+		padding-top: 0px;
+	}
+	.calculator_sidebar, .calculator_body .step{
+		padding-bottom: 0px;
+	}
+	.step .header_line .page_title, .step .answer_div .answer_option label{
+		font-size: 28px;
+		line-height: 35px;
+	}
+	.step .header_line{
+		margin-bottom: 10px;
+	}
+	.step .answer_div .answer_option{
+		padding: 10px 0;
+		line-height: 20px;
+		margin-bottom: 10px;
+	}
+	.step .answer_div .answer_option span{
+		font-size: 14px;
+	}
+	.calculator_body .back_icon{
+		width: 20px;
+	}
+	.page35 .bonus_row span{
+		line-height: 40px;
+		font-size: 16px;
+	}
+	.page35 input, .page37 input{
+		font-size: 16px;
+    	width: 90px;
+	}
+	.page35 .month_number1{
+		width: 120px;
+	}
+	.page35 .switch_div, .page37 .swithc_div{
+		margin-top: 50px;
+	}
+	.page35 .switch_div .text_div, .page35 .switch_div .switch_item, .page37 .switch_div .switch_item{
+		width: 50%;
+	}
+}

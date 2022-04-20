@@ -1,0 +1,150 @@
+.chartContainer {
+  margin-bottom: 50px;
+  width: 100%;
+  height: 100%;
+  font-family: sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chartTitle {
+  text-align: center;
+  width: 100%;
+  padding: 20px 0;
+  border: 0;
+}
+
+.chartLegend {
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+.legendKey {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin: 0 10px;
+}
+
+input:focus {
+  outline: none;
+}
+
+.yAxisTitle {
+  width: 5%;
+  writing-mode: tb-rl;
+  transform: rotate(-180deg);
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 0 2.5%;
+  padding-left: 0;
+}
+
+.yAxis {
+  width: 5%;
+  height: 85%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.chartGrid {
+  width: 75%;
+  height: 80%;
+  display: flex;
+  flex-direction: row;
+  /*justify-content: center;*/
+  border-bottom: 1px solid #E64B36;
+  border-left: 1px solid #E64B36;
+  background: repeating-linear-gradient(to bottom, #aaa 0, #aaa 1px, transparent 1px, transparent 20%);
+}
+.diagonal_line{
+  height: 1px;
+  background-color: #000;
+  transform: rotate(150deg);
+  margin-left: 46px;
+  margin-top: 6px;
+  /*margin-right: -8px;*/
+}
+.bar {
+  align-self: flex-end;
+  flex-direction: column-reverse;
+  margin: 0 5%;
+  text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.bar:hover {
+  /*opacity: 0.7;*/
+
+}
+.bar p.barValue{
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px;
+  font-size: 12px;
+  text-align: center;
+}
+/*.bar p.barValue:nth-child(even){
+  font-size: 10px;
+}
+.bar p.barValue:first-child, .bar p.barValue:last-child{
+  font-size: 12px;
+}*/
+.xAxis .xAxisLabel{
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 19px;
+}
+.yAxis div
+{
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  margin-right: 50px;
+}
+.innerBar {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.emptyBox {
+  /*width: 12.5%;*/
+  width: 6.5%;
+}
+
+.xAxis {
+  width: 75%;
+  display: flex;
+  flex-direction: row;
+  /*justify-content: center;*/
+  padding: 0px;
+}
+
+.xAxisLabel {
+  flex-wrap: wrap;
+  text-align: center;
+  margin: 0 5%;
+}
+
+.xAxisTitle {
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 1%;
+}
+.yAxis .yAxisLabel:last-child{
+  opacity: 0;
+}
