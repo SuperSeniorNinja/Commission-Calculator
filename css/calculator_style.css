@@ -44,8 +44,18 @@
 	max-width: none !important;
 	border: 1px solid #000;
 	padding: 0px;
-	/*width: 90%;*/
-	width: 100%;
+	width: 90%;
+	/*width: 100%;*/
+}
+.calculator_container .page1 .answer_div .row label{
+	font-family: "OpenSans-Regular";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 55.81px;
+}
+.calculator_container .page1 .answer_div .row{
+	text-align: center;
 }
 .calculator_sidebar{
 	border-right: 1.63px solid #000;
@@ -75,7 +85,7 @@
 .progress-bars {
     background-color: rgba(227, 19, 19, 0.25);;
     border-right: 1px solid #000;
-    width: 40%;
+    width: 0%;
     height: 38px;
     /*border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -99,7 +109,7 @@
 	font-weight: 400;
 }
 .calculator_sidebar .sidebar_text_div label{
-	font-size: 31.92px;	
+	font-size: 28.92px;	
 	line-height: 38.31px;
 	margin-bottom: 0px;
 }
@@ -107,12 +117,14 @@
 	font-size: 27.1px;
 	/*line-height: 32.52px;*/
 	line-height: 70px;
+	margin-left: 35px;
 }
 .step{
 	padding: 61px 0px 37px 0px;
 }
 .step .header_line{
-	text-align: center;
+	text-align: center;	
+    margin: 0 auto;
 	margin-bottom: 49px;
 }
 .step .header_line .page_title{
@@ -464,12 +476,12 @@ input:focus{
 	font-weight: 400;
 }
 
-.questions_section{
+/*.questions_section{
 	display: none;
 }
 .result_section, .page33{
 	display: block;
-}
+}*/
 
 .step .header_title label, .page33 .header_title label, .page34 .header_title label, .page35 .header_title label{
 	font-family: 'Bebas Neue';
@@ -1143,7 +1155,7 @@ input[type=number] {
 	.page35 .month_number1{
 		width: 120px;
 	}
-	.page35 .switch_div, .page37 .swithc_div{
+	.page35 .switch_div, .page37 .switch_div{
 		margin-top: 50px;
 	}
 	.page35 .switch_div .text_div, .page35 .switch_div .switch_item, .page37 .switch_div .switch_item{
