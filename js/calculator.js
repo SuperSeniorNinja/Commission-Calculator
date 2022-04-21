@@ -29,14 +29,14 @@ $(document).ready(function(){
 
 	//when an answer option is chosen
 	$(".step .answer_div .answer_option").on("click", function() {
-		console.log("answer option is chosen");
 		var question = $(this).parent().parent().find("div label").eq(0).text();
 		var chosen_answer = $(this).find("label").text();
 		var recommendation = '';
 		
 		//consider multiple choice case here
 		var option_dom = $(this);
-
+		var target_page;
+		var commission = window.commission = 5; //by default, 5
 		console.log(question);
 		console.log(chosen_answer);
 			
@@ -57,12 +57,11 @@ $(document).ready(function(){
 		else{
 			$(this).parent().find(".active").removeClass("active"); //remove other active options for single choice
 			$(this).addClass("active");
-			var target_page;
 			//Choose compensation format
-			if(window.current_page == 1){
+			/*if(window.current_page == 1){
 				saveToLocalStorage(window.current_page, recommendation);
-				target_page = 16;				
-			}
+				target_page = 16;
+			}*/
 
 			//prospecting/check all that apply/most sales will come from.
 			if(window.current_page == 3){
@@ -82,37 +81,44 @@ $(document).ready(function(){
 			//What's the potential for added revenue from accounts?
 			if(window.current_page == 4){
 				if(chosen_answer == "Low")
-					recommendation = `Commission -1`;
+					commission = commission - 1;
+					//recommendation = `Commission -1`;
 				else
-					recommendation = `Commission +1`;
+					commission = commission + 1;
+					//recommendation = `Commission +1`;
+				window.commission = commission;
+				target_page = 8;
+
+				saveToLocalStorage(window.current_page, recommendation);
+				goToPage(target_page);
+				return;
 			}
 
+			//What are the rep's responsibilities?
 			if(window.current_page == 5){
-				if(chosen_answer == "Managing Sales Reps")
-				{
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(6);
-					return;
+				saveFeature(2, "Bonuses");
+
+				if(chosen_answer == "Managing Sales Reps"){					
+					target_page = 6;
 				}
 				else if(chosen_answer == "Closing"){
-					recommendation = `Performance bonus for sales. Examples:
-					Bonus for new customers (e.g. $500 bonus for 10 new customers in a month)
-					Contest bonus for total sales
-					(e.g. $1,000 bonus to the rep with the highest conversion rate each quarter )`;
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(26);
-					return;
+					var temp = [];
+					temp.push("Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%.");
+					temp.push("Bonus for follow up task completion -- e.g. monthly bonus for exceeding daily follow-up task completion target of 95%");
+					temp.push("Bonus KPI contest winner -- e.g. bonus to whichever sales rep has the highest average deal size this quarter");
+
+					recommendation = temp;
+					saveRecommendation(1, recommendation);
+					target_page = 26;
 				}
-				else if(chosen_answer == "Managing Accounts"){
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(4);
-					return;
-				}
-				else if(chosen_answer == "Prospecting"){
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(3);
-					return;
-				}
+				else if(chosen_answer == "Managing Accounts")
+					target_page = 4;
+				else if(chosen_answer == "Prospecting")
+					target_page = 3;
+
+				saveToLocalStorage(window.current_page, recommendation);
+				goToPage(target_page);
+				return;
 			}
 
 			//Do managed reps earn commissions?
@@ -238,45 +244,60 @@ $(document).ready(function(){
 			/*Do sales reps negotiate prices with customers?*/
 			if(window.current_page == 16){
 				if(chosen_answer == "Yes"){
-					recommendation = `We recommend paying commission as a:
-					Percentage of profit
-					This incentivizes sales reps to negotiate the best deals, and makes commission more reflective of 
-					negotiation performance and deal quality.`;
-
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(2);
-					return;
+					saveFeature(1, "Profit");					
+					recommendation = `This incentivizes sales reps to negotiate the best deals, and makes commission more reflective 
+					of negotiation performance and deal quality.`;
+					saveRecommendation(0, recommendation);
+					target_page = 5;
 				}
 				else{
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(17);
-					return;
+					target_page = 17;
 				}
+
+				saveToLocalStorage(window.current_page, recommendation);
+				goToPage(target_page);
+				return;
 			}
 
 
 			/*Do sales reps have control over the cost of goods sold or expenses on each sale?*/
 			if(window.current_page == 17){
 				if(chosen_answer == "Yes"){
-					recommendation = `We recommend you pay commission as a:
-
-					Percentage of profit
-
-					This will incentivize sales reps to maintain good profit margins and keep an eye on expenses, making their goals more aligned with the company goals.`;
-
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(2);
-					return;
+					saveFeature(1, "Profit");					
+					recommendation = `This will incentivize sales reps to maintain good profit 
+					margins and keep an eye on expenses, making their goals more aligned with the company goals.`;					
+					saveRecommendation(0, recommendation);
+					target_page = 5;
 				}
 				else{
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(18);
-					return;
+					target_page = 18;
 				}
+
+				saveToLocalStorage(window.current_page, recommendation);
+				goToPage(target_page);
+				return;
 			}
 
 			/*Should sales reps try to push customers into buying products/services with a higher profit margin?*/
 			if(window.current_page == 18){
+				if(chosen_answer == "Yes"){
+					saveFeature(1, "Profit");					
+					recommendation = `This will incentivize sales reps towards the highest profit margins, 
+					but make sure your sales reps still keep the customer's best interests in mind.`;
+				}
+				else{
+					saveFeature(1, "Revenue");
+					recommendation = `If your sales can't impact profit margins on each deal, 
+					then it's best to pay based on revenue. This will incentivize sales reps to sell as much as possible.`;
+				}
+
+				target_page = 5;
+				saveRecommendation(0, recommendation);
+				saveToLocalStorage(window.current_page, recommendation);
+				goToPage(target_page);
+				return;
+
+
 				if(chosen_answer == "Yes")
 					recommendation = `We recommend you pay commission as a:
 
@@ -648,10 +669,15 @@ $(document).ready(function(){
 
 	//When the next button is clicked for muiltiple choices
 	$(".step .next_btn").on("click", function() {
-		if(multiple_pages.includes(window.current_page) || window.current_page == 25 || window.current_page == 29 || window.current_page == 33) {//if multiple choices
+		if(window.current_page == 1 || multiple_pages.includes(window.current_page) || window.current_page == 25 || window.current_page == 29 || window.current_page == 33) {//if multiple choices
 			saveToLocalStorage(window.current_page);
 		}
 
+		if(window.current_page == 1){
+			goToPage(16);
+			return;
+		}
+		
 		if(window.current_page == 29){
 			//hide sidebar + body and show only result page
 			$(".questions_section").hide();
@@ -707,7 +733,7 @@ $(document).ready(function(){
 	});
 
 	//save chosen option with page number to LocalStorage
-	function saveToLocalStorage(page_num, recommendation = ""){
+	async function saveToLocalStorage(page_num, recommendation = ""){
 		var question = $(".page" + window.current_page + " .header_line .page_title").text();
 		var answers = [];
 		var answer;
@@ -726,16 +752,17 @@ $(document).ready(function(){
 			answers.push(answer);
 		}
 
-		console.log("saveToLocalStorage");
-		console.log(question);
-		console.log(answer);
-
 		//format the item for each step of question/answer
 		var item = {
 			"page": (page_num) ? page_num: window.current_page,
 			"question": question,
 			"answer": answers
 		};
+
+		if(window.current_page == 1){
+			item["answer"] = "Salary + Commission";
+			let a = await saveFeature(0, "Salary + Commission");
+		}
 
 		//salary edit modal page
 		if(window.current_page == 25){
@@ -767,8 +794,6 @@ $(document).ready(function(){
 
 		//check if the user has already chosen answers for this page. If already exists, we update, not add a new one.
 		var has_page_answers = hasPageAnswers(window.current_page);
-		console.log("has_page_answers");
-		console.log(has_page_answers);
 
 		if(has_page_answers){
 			console.log("page answer exists. need to update it.");
@@ -781,21 +806,192 @@ $(document).ready(function(){
 		}		
 	}
 
+	//save recommendation
+	function saveRecommendation(index, recommendation){
+		var has_recommendations = hasRecommendations("recommendations", index);
+		if(has_recommendations){
+			updateRecommendationAnswers(index, recommendation);
+		}
+		else{
+			var chosen_recommendations = getPageValue("recommendations", "recommendations");
+
+			if(chosen_recommendations){
+				var recommendations = JSON.parse(chosen_recommendations).recommendations;				
+				recommendations.splice(index, 0, recommendation);
+			}
+			else
+			{
+				var recommendations = [];
+				recommendations.push(recommendation);
+			}
+			
+			updateRecommendationAnswers(index, recommendation, recommendations);
+		}
+	}
+
+	//update recommendation answer
+	function updateRecommendationAnswers(index, recommendation, recommendations_all = null){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		if(json){
+			if(hasRecommendations("recommendations", index)){
+				for(var i = 0; i < json.length; i++){
+					var json_item = JSON.parse(json[i]);
+					if(json_item.page == "recommendations"){
+						if(recommendations_all)
+							var recommendations_temp = recommendations_all;
+						else{
+							var recommendations_temp = json_item.recommendations;
+							recommendations_temp[index] = recommendation;
+						}
+
+						json_item.recommendations = recommendations_temp;
+						json[i] = JSON.stringify(json_item);
+						localStorage.removeItem("commission_calculator");
+						window.items = json;
+					}
+				}
+			}
+			else{
+				var recommendations_item = {
+					"page": "recommendations",
+					"recommendations": recommendations_all
+				};
+				window.items.push(JSON.stringify(recommendations_item));
+			}			
+		}
+		else{
+			if(recommendations_all){
+				var recommendations_item = {
+					"page": "recommendations",
+					"recommendations": recommendations_all
+				};
+				window.items.push(JSON.stringify(recommendations_item));
+			}
+		}
+
+		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+	}
+
+	function hasRecommendations(page_num, index){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		var found_flag = false;
+		if(json){//if localStorage has data
+			for(var i = 0; i < json.length; i++){
+				var json_item = JSON.parse(json[i]);
+				if(json_item.page == page_num && index <= json_item.recommendations.length && json_item.recommendations[index] != ""){
+					found_flag = true;
+				}
+			}
+		}
+		
+		return found_flag;
+	}
+
+	//save chosen feature
+	function saveFeature(index, feature){		
+		var has_features = hasFeatures("features", index);
+		if(has_features){
+			updateFeatureAnswers(index, feature);
+		}
+		else{
+			var chosen_features = getPageValue("features", "features");
+			if(chosen_features){
+				var features = JSON.parse(chosen_features).features;				
+				features.splice(index, 0, feature);
+			}
+			else
+			{
+				var features = [];
+				features.push(feature);
+			}
+
+			updateFeatureAnswers(index, feature, features);
+			
+			/*window.items.push(JSON.stringify(item));
+			localStorage.setItem("commission_calculator", JSON.stringify(window.items));*/
+		}
+	}
+
+	//update feature answer
+	function updateFeatureAnswers(index, feature, features_all = null){		
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		if(json){
+			for(var i = 0; i < json.length; i++){
+				var json_item = JSON.parse(json[i]);
+				if(json_item.page == "features"){
+					if(features_all)
+						var features_temp = features_all;
+					else{
+						var features_temp = json_item.features;
+						features_temp[index] = feature;
+					}					
+
+					json_item.features = features_temp;
+					json[i] = JSON.stringify(json_item);
+					localStorage.removeItem("commission_calculator");
+					window.items = json;
+				}
+			}
+		}
+		else{
+			if(features_all){
+				var features_item = {
+					"page": "features",
+					"features": features_all
+				};
+				window.items.push(JSON.stringify(features_item));
+			}
+		}
+
+		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+	}
+	
+	function hasFeatures(page_num, index){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		var found_flag = false;
+		if(json){//if localStorage has data
+			for(var i = 0; i < json.length; i++){
+				var json_item = JSON.parse(json[i]);
+				if(json_item.page == page_num && index < json_item.features.length){
+					found_flag = true;
+				}
+			}
+		}
+		
+		return found_flag;
+	}
+
 	//Get progress bar
 	function updateProgress(page_num){
 		var total_steps = 5;
 		var processed_steps = 0;
-		var step1 = 1; //we preset it from compensation format
-		var step2 = (hasPageAnswers(2)) ? 1 : 0 ;
-		var step3 = (hasPageAnswers(2)) ? 1 : 0 ;
-		var step4 = (hasPageAnswers(12)) ? 1 : 0 ;
-		var step5 = 1;//(hasPageAnswers(2)) ? 1 : 0 ;
-		processed_steps = step1 + step2 + step3 + step4 + step5;
+
+		var chosen_features = getPageValue("features", "features");
+		console.log("chosen_features");
+		console.log(chosen_features);
+		if(chosen_features){
+			var features = JSON.parse(chosen_features).features;
+			processed_steps = features.length;
+		}
+		
 		var percent = processed_steps / total_steps * 100;
 		var percent_string = percent + "%";
 
 		$("#progressDivId #progressBar")[0].style.width = percent_string; //update progressbar width
 		$("#progressDivId #percent").html(percent_string); //update percent string in the center of progress bar
+
+		if(features){
+			var features_html = ``;
+			for(var i = 0; i < features.length; i++){
+				var li_html = `<li>` + features[i] + `</li>`;
+				features_html += li_html;
+			}
+			$(".sidebar_text_div .selection_sidebar").html(features_html);
+		}
 
 		return percent;
 	}
@@ -934,8 +1130,6 @@ $(document).ready(function(){
 				$(".questions_section").show();
 				$(".result_section").hide();
 			}
-			console.log("prev_page");
-			console.log(prev_page);
 			goToPage(prev_page);
 		}
 		else
@@ -957,7 +1151,7 @@ $(document).ready(function(){
 		//Validation for the start/end page.
 		if(page_id < 1 || page_id > $(".step").length)
 			return;
-		else{			
+		else{
 			$(".calculator_body .page" + getCurrentPage()).removeClass("active");
 			updateProgress(page_id);
 			$(".page" + page_id).show();
