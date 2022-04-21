@@ -7,21 +7,19 @@
 
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 <div class="container calculator_container row">
-	<input type="hidden" name="num_page" class="current_page" value="33">
+	<input type="hidden" name="num_page" class="current_page" value="1">
 	<div class="questions_section row">
 		<div class="col-12 col-md-3 col-sm-12 calculator_sidebar">
 			<div class="progressbar">
 				<label>Progress</label>
 				<div class="progress_div" id="progressDivId">
 		            <div class="progress-bars" id="progressBar"></div>
-		            <div class="percent" id="percent">40%</div>
+		            <div class="percent" id="percent">0%</div>
 		        </div>
 			</div>
 			<div class="sidebar_text_div">
 				<label>Your compensation structure (so far)</label>
-				<ul>
-					<li>Salary + Comimission</li>
-					<li>Commission on revenue</li>
+				<ul class="selection_sidebar">
 				</ul>
 			</div>
 		</div>
@@ -33,12 +31,21 @@
 				</label>
 			</div>
 			
-			<div class="page1 step row ">
+			<div class="page1  step row active">
 				<div class="header_line">
 					<label class="page_title">Choose Compensation Format</label>
 				</div>
-				<div class="answer_div col-12 col-md-8  col-sm-12">
-					<div class="answer_option col-12 col-md-12 col-sm-12">
+				<div class="answer_div col-12 col-md-6  col-sm-12">
+					<div class="row">
+						<label>This tool was designed to created base Salary + Commission plans.</label>
+					</div>
+					<div class="row">
+						<label>This is a guaranteed base salary plus a performance incentive such as a percentage of revenue or profit, or fixed bonuses.</label>
+					</div>
+					<div class="row">
+						<label>We don't recommend using salary-only or commission-only for any full time sales roles.</label>
+					</div>
+					<!-- <div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Salary Only</label>
 						<span class="hidden">i.e. Finding leads; Qualifying; Scheduling appointments or demos</span>
 					</div>
@@ -53,11 +60,14 @@
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Commission Draw</label>
 						<span class="hidden">i.e. Leading a small team or co-managing</span>
-					</div>
+					</div> -->
+				</div>
+				<div class="button_div">
+					<button class="next_btn">Next</button>
 				</div>
 			</div>
 
-			<div class="page2 step row">
+			<!-- <div class="page2 step row">
 				<div class="header_line">
 					<label class="page_title">Choose Commission Types</label>
 				</div>
@@ -79,7 +89,7 @@
 						<span class="hidden">i.e. Leading a small team or co-managing</span>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- commission_types/prospecting -->
 			<div class="page3 step row ">
@@ -166,7 +176,7 @@
 			</div>
 
 			<!-- What are the rep's responsibilities? -->
-			<div class="page5 step row ">
+			<div class="page5 step row">
 				<div class="header_line">
 					<label class="page_title">What are the rep's responsibilities?</label><br>
 					<label class="sub_header">Choose all that apply.<!--  Hover for more information. --></label>
@@ -269,7 +279,7 @@
 					<label class="page_title">Here are some examples of common fixed bonuses. </label>
 					<label class="sub_header">Click each bonus for information and examples</label>
 				</div>
-				<div class="answer_div col-12 col-md-8  col-sm-12">
+				<div class="answer_div col-12 col-md-8  col-sm-12">					
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>KPI attainment bonus for outbound prospecting</label>
 					</div>
@@ -349,7 +359,7 @@
 
 			<!-- Who is responsible for continued sales and health of the account after the initial sale? -->
 			<div class="page14 step row ">
-				<div class="header_line">
+				<div class="header_line col-12 col-md-8 col-sm-12">
 					<label class="page_title">Who is responsible for continued sales and health of the account after the initial sale?</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
@@ -612,7 +622,7 @@
 			</div>
 
 			<!-- Commission Frequncy chosen results option pages -->
-			<div class="page29 step row active">
+			<div class="page29 step row">
 				<!-- <div class="header_line">
 					<label class="page_title">We recommend a base salary of around</label>				
 					<label class="sub_header">Due to:</label>
@@ -1966,7 +1976,7 @@
 			</div>
 
 			<!-- Commission Tiers-->
-			<div class="page37 active step row">
+			<div class="page37  step row">
 				<div class="back_div">
 					<label>
 						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
