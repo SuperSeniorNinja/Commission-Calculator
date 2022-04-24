@@ -7,7 +7,7 @@
 
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 <div class="container calculator_container row">
-	<input type="hidden" name="num_page" class="current_page" value="1">
+	<input type="hidden" name="num_page" class="current_page" value="22">
 	<div class="questions_section row">
 		<div class="col-12 col-md-3 col-sm-12 calculator_sidebar">
 			<div class="progressbar">
@@ -31,7 +31,7 @@
 				</label>
 			</div>
 			
-			<div class="page1  step row active">
+			<div class="page1  step row">
 				<div class="header_line">
 					<label class="page_title">Choose Compensation Format</label>
 				</div>
@@ -106,7 +106,7 @@
 						<span class="hidden">(commission +1)</span>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Most outbound leads are warm (e.g. old customers, referrals, they're familiar with us, etc.) </label>
+						<label>Most outbound leads are warm (e.g. old customers, referrals, they're familiar with us, etc.)</label>
 						<span class="hidden">(commission -1)</span>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
@@ -299,7 +299,7 @@
 			</div>
 
 			<!-- Check all that apply just below page10 multiple -->
-			<div class="page11 step row ">
+			<div class="page11 step row">
 				<div class="header_line">
 					<label class="page_title">Check all that apply.</label>
 				</div>
@@ -323,7 +323,7 @@
 			</div>
 
 			<!-- Choose Commission Frequncy -->
-			<div class="page12 step row ">
+			<!-- <div class="page12 step row ">
 				<div class="header_line">
 					<label class="page_title">Choose Commission Frequency</label>
 				</div>
@@ -338,10 +338,10 @@
 						<label>Recurring commission (uncapped)</label>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- How do customers pay for products? -->
-			<div class="page13 step row ">
+			<div class="page13 step row">
 				<div class="header_line">
 					<label class="page_title">How do customers pay for products?</label>
 				</div>
@@ -381,18 +381,22 @@
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Fixed</label>
+						<label>Fixed (monthly)</label>
 						<span class="hidden">Customers pay a fixed amount based on subscription tier</span>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Variable</label>
 						<span class="hidden">Customers pay a variable amount based on usage, seasonality, etc</span>
 					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Fixed (annual)</label>
+						<span class="hidden">Customers pay an annual fixed fee based on subscription tier</span>
+					</div>
 				</div>
 			</div>
 
 			<!--Do sales reps negotiate prices with customers?  -->
-			<div class="page16 step row ">
+			<div class="page16 step row">
 				<div class="header_line">
 					<label class="page_title">Do sales reps negotiate prices with customers?</label>
 				</div>
@@ -438,7 +442,7 @@
 			</div>
 
 			<!-- Choose Base Pay -->
-			<div class="page19 step row ">
+			<!-- <div class="page19 step row ">
 				<div class="header_line">
 					<label class="page_title">Should sales reps try to push customers into buying products/services with a higher profit margin?</label>
 					<label class="sub_header">Note: this won't always align with your customer's goal of purchasing the best product for them. </label>
@@ -457,7 +461,7 @@
 						<label>Base Pay 4</label>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Are reps required to work on-site in an office? -->
 			<div class="page20 step row">
@@ -491,7 +495,7 @@
 			</div>
 
 			<!-- Do reps have a clear, proven path to sales success? In other words, have other reps succeeded in this role before?  -->
-			<div class="page22 step row ">
+			<div class="page22 step row">
 				<div class="header_line">
 					<label class="page_title">Do reps have a clear, proven path to sales success? In other words, have other reps succeeded in this role before? </label>
 				</div>
@@ -521,9 +525,9 @@
 			</div>
 
 			<!-- just below page 23 -->
-			<div class="page24 step row ">
+			<div class="page24 step row active">
 				<div class="header_line">
-					<label class="page_title">No title</label>
+					<!-- <label class="page_title">No title</label> -->
 					<label class="sub_header">Choose all that apply.</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
