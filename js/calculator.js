@@ -63,35 +63,16 @@ $(document).ready(function(){
 				target_page = 16;
 			}*/
 
-			//prospecting/check all that apply/most sales will come from.
-			if(window.current_page == 3){
-				if(chosen_answer == "Most sales will come from outbound prospecting or cold outreach")
-					recommendation = `KPI attainment bonus for outbound prospecting. 
-					Bonus for outreach volume (e.g. monthly bonus if averaging over 30 new accounts touched per day)
-					Bonus for outreach success (e.g. monthly bonus for exceeding target number of conversations)`;
-				else if(chosen_answer == "Reps will have consistent inbound leads")
-					recommendation = `KPI attainment bonus for inbound leads. Bonus for qualified-to-close conversion rate (e.g. monthly bonus if over 75% of the leads qualified by rep end up closing)
-					Bonus for response time (e.g. monthly bonus for average response time under 10 minutes)`;
-
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(8);
-				return;	
-			}
-
 			//What's the potential for added revenue from accounts?
 			if(window.current_page == 4){
 				if(chosen_answer == "Low")
 					commission = commission - 1;
-					//recommendation = `Commission -1`;
 				else
 					commission = commission + 1;
-					//recommendation = `Commission +1`;
+
 				window.commission = commission;
 				target_page = 8;
-
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(target_page);
-				return;
+				updateCommission(commission);
 			}
 
 			//What are the rep's responsibilities?
@@ -107,59 +88,72 @@ $(document).ready(function(){
 					temp.push("Bonus for follow up task completion -- e.g. monthly bonus for exceeding daily follow-up task completion target of 95%");
 					temp.push("Bonus KPI contest winner -- e.g. bonus to whichever sales rep has the highest average deal size this quarter");
 
-					recommendation = temp;
-					saveRecommendation(1, recommendation);
-					target_page = 26;
+					var recommendation = [];
+					recommendation["title"] = `Bonus for closing`;
+					recommendation["description"] = temp;
+
+					saveRecommendation(0, recommendation);
+					/*target_page = 26;*/
+					target_page = 8;
 				}
 				else if(chosen_answer == "Managing Accounts")
 					target_page = 4;
 				else if(chosen_answer == "Prospecting")
 					target_page = 3;
-
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(target_page);
-				return;
 			}
 
 			//Do managed reps earn commissions?
 			if(window.current_page == 6){
 				if(chosen_answer == "Yes"){
-					recommendation = `Revenue share for managed reps. 
-					Examples: Managing sales rep earns 5% of all commissions earned by reps they manage`;
+					var temp = [];
+					temp.push("Commission share -- e.g. managing sales rep earns 5% of all commissions earned by managed reps.");
+					temp.push("Bonus for managed rep's KPI attainment -- e.g. monthly bonus for each KPI target managed rep's exceed.");
+					
+					var recommendation = [];
+					recommendation["title"] = `Management bonus`;
+					recommendation["description"] = temp;
+					saveRecommendation(1, recommendation);
+					target_page = 8;
 				}
-				else{
-					recommendation = `Bonus for managed rep's KPI attainment. Examples:
-					Monthly bonus for each KPI target that each managed rep exceeds. around 10% of how much the 
-					earning rep brings home`;
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(7);
-					return;
+				else
+					target_page = 7;
+			}
+
+			//Do managed reps have quotas?
+			if(window.current_page == 7){
+				if(chosen_answer == "Yes"){
+					var temp = [];
+					temp.push("Commission share -- e.g. managing sales rep earns 5% of all commissions earned by managed reps.");
+					temp.push("Bonus for managed rep's KPI attainment -- e.g. monthly bonus for each KPI target managed rep's exceed.");
+					var recommendation = [];
+					recommendation["title"] = `Management bonus`;
+					recommendation["description"] = temp;
+					saveRecommendation(1, recommendation);
+					target_page = 8;
 				}
+				else
+					target_page = 13;				
 			}
 
 			//Do you want to incentivize reps for beneficial activities and milestones, or just sales?
 			if(window.current_page == 8){
-				saveToLocalStorage(window.current_page, recommendation);
 				if(chosen_answer == "Add bonuses"){
 					//if user already chose rep responsibilities
-					if(1){
-						goToPage(9);
-						return;
+					if(hasPageAnswers(5)){
+						target_page = 9;
 					}
 					else{
-						goToPage(10);
-						return;
+						target_page = 10;
 					}				
 				}
-				else{				
-					goToPage(11);
-					return;
+				else{
+					target_page = 11;
 				}
-			}		
+			}
 
 			//Based on the job responsibilities you selected, consider adding some of these bonuses:
 			if(window.current_page == 9 || window.current_page == 10){			
-				if(chosen_answer == "KPI attainment bonus for outbound prospecting"){
+				/*if(chosen_answer == "KPI attainment bonus for outbound prospecting"){
 					recommendation = `KPI attainment bonus for outbound prospecting. Examples:
 					Bonus for outreach volume (e.g. monthly bonus if averaging over 30 new accounts touched per day)
 					Bonus for outreach success
@@ -174,17 +168,21 @@ $(document).ready(function(){
 					Bonus for qualified-to-close conversion rate (e.g. monthly bonus if over 75% of the leads qualified by rep end up closing)
 					Bonus for response time (e.g. monthly bonus for average response time under 10 minutes)`;
 				else
-					recommendation = `All other bonuses.....`;
+					recommendation = `All other bonuses.....`;*/
 
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(11);
-				return;
+				var temp = [];
+				temp.push("Sample bonus -- e.g. sample bonus explanation");
+				temp.push("Sample bonus -- e.g. sample bonus explanation");
+				temp.push("Sample bonus -- e.g. sample bonus explanation");
+				var recommendation = [];
+				recommendation["title"] = `NameOfBonus`;
+				recommendation["description"] = temp;
+				saveRecommendation(1, recommendation);
+				target_page = 13;
 			}	
 
 			if(window.current_page == 11){
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(12);
-				return;
+				target_page = 13;
 			}
 
 			/*Choose Commission Frequency*/
@@ -196,57 +194,83 @@ $(document).ready(function(){
 
 			/*How do customers pay for products?*/
 			if(window.current_page == 13){
-				if(chosen_answer == "All at once")				
-					recommendation = "One-time commission";
+				if(chosen_answer == "All at once"){
+					saveFeature(3, "One-time commission");
+					var temp = [];
+					temp["title"] = "One-time commission";
+					temp["description"] = `Each time a sales is made, a commission is earned. Earned commissions are then paid out at the end of the month (or term), 
+					accounting for any previous refunds or changes.`;
+					recommendation = temp;
+					saveRecommendation(2, recommendation);
+				}
 
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(14);
-				return;
+				target_page = 14;
 			}
 
 			/*Who is responsible for continued sales and health of the account after the initial sale?*/
 			if(window.current_page == 14){
-				if(chosen_answer == "Original sales rep")
-					recommendation = `Recurring uncapped commission. Examples:
-					Unlimited recurring (pays at the same rate until account terminates)
-					Unlimited tiered (pays at tiered rates, such as 10% for first year and 5% for all following years, 
-					until account terminates) `;
+				if(chosen_answer == "Original sales rep"){
+					saveFeature(3, "Recurring commission (Uncapped)");
+					var temp = [];
+					temp["title"] = "Recurring commission (Uncapped)";
+					temp["description"] = `These commissions continue accruing after each customer renews and 
+					only terminate once customers cancel. You can choose to always pay commissions at the same 
+					rate or you can pay in tiers, such as 10% for the customer's first year and 5% after that.`;
+					recommendation = temp;
+					saveRecommendation(2, recommendation);
+				}
 
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(15);
-				return;
+				target_page = 15;
 			}
 
 			/*Select one below page14*/
 			if(window.current_page == 15){
-				if(chosen_answer == "Fixed")
-					recommendation = `We recommend you pay a:
-					Recurring commission (Capped)
-					You should pay these to the original sales rep for a year or so, after which commissions should go 
-					to the rep(s) actively managing the account. Commissions stop if the account cancels.`;
-				else
-					recommendation = `We recommend you pay a:
-					One-time commission
-					You should try to pay this based on estimated one-year income for the new account, 
-					after which commissions should go to the rep(s) actively managing the account. You can always use 
-					a commission adjustment to correct misjudgments at the end of each year. `;
+				var temp = [];
+				if(chosen_answer == "Fixed (monthly)"){
+					saveFeature(3, "Recurring commission (Capped)");
+					temp["title"] = "Recurring commission (Capped)";
+					temp["description"] = `These commissions continue accruing after each customer renews. Pay 
+					commissions to the original sales rep for a year or so, then commissions should go to the 
+					rep(s) actively managing the account. Commissions stop if the account cancels.`;
+					
+					
+				}
+				else if(chosen_answer == "Variable"){
+					saveFeature(3, "One-time commission");
+					temp["title"] = "One-time commission";
+					temp["description"] = `You should pay this based on estimated one-year income for the new account, after 
+					which commissions should go to the rep(s) actively managing the account. You can always use a commission 
+					adjustment to correct misjudgments at the end of each year.`;
+				}
+				else{
+					saveFeature(3, "One-time commission");					
+					temp["title"] = "One-time commission";
+					temp["description"] = `You should pay this based on annualized income for the new account, 
+					after which commissions should go to the rep(s) actively managing the account. `;
+				}
 
-				saveToLocalStorage(window.current_page, recommendation);
+				recommendation = temp;
+				saveRecommendation(2, recommendation);
+				target_page = 20;
+
+				/*saveToLocalStorage(window.current_page, recommendation);
 				//Check if "Commission Only" chosen, if yes skip page19 and go to 20
 				var check_result = checkPageValue(1, "Commission Only");
 				if(check_result)
 					goToPage(20);
 				else
 					goToPage(19);
-				return;
+				return;*/
 			}
 
 			/*Do sales reps negotiate prices with customers?*/
 			if(window.current_page == 16){
 				if(chosen_answer == "Yes"){
-					saveFeature(1, "Profit");					
-					recommendation = `This incentivizes sales reps to negotiate the best deals, and makes commission more reflective 
-					of negotiation performance and deal quality.`;
+					saveFeature(1, "Commission On Profit");
+					var recommendation = [];
+					recommendation["title"] = `Percentage of profit`;
+					recommendation["description"] = `This incentivizes sales reps to negotiate the best deals, 
+					and makes commission more reflective of negotiation performance and deal quality.`;
 					saveRecommendation(0, recommendation);
 					target_page = 5;
 				}
@@ -263,9 +287,11 @@ $(document).ready(function(){
 			/*Do sales reps have control over the cost of goods sold or expenses on each sale?*/
 			if(window.current_page == 17){
 				if(chosen_answer == "Yes"){
-					saveFeature(1, "Profit");					
-					recommendation = `This will incentivize sales reps to maintain good profit 
-					margins and keep an eye on expenses, making their goals more aligned with the company goals.`;					
+					saveFeature(1, "Commission On Profit");
+					var recommendation = [];
+					recommendation["title"] = `Percentage of profit`;
+					recommendation["description"] = `This will incentivize sales reps to maintain good profit 
+					margins and keep an eye on expenses, making their goals more aligned with the company goals.`;
 					saveRecommendation(0, recommendation);
 					target_page = 5;
 				}
@@ -281,13 +307,17 @@ $(document).ready(function(){
 			/*Should sales reps try to push customers into buying products/services with a higher profit margin?*/
 			if(window.current_page == 18){
 				if(chosen_answer == "Yes"){
-					saveFeature(1, "Profit");					
-					recommendation = `This will incentivize sales reps towards the highest profit margins, 
+					saveFeature(1, "Commission On Profit");
+					var recommendation = [];
+					recommendation["title"] = `Percentage of profit`;
+					recommendation["description"] = `This will incentivize sales reps towards the highest profit margins, 
 					but make sure your sales reps still keep the customer's best interests in mind.`;
 				}
 				else{
-					saveFeature(1, "Revenue");
-					recommendation = `If your sales can't impact profit margins on each deal, 
+					saveFeature(1, "Commission On Revenue");
+					var recommendation = [];
+					recommendation["title"] = `Percentage of Revenue`;
+					recommendation["description"] = `If your sales can't impact profit margins on each deal, 
 					then it's best to pay based on revenue. This will incentivize sales reps to sell as much as possible.`;
 				}
 
@@ -317,57 +347,69 @@ $(document).ready(function(){
 			}
 
 			/*Are reps required to work on-site in an office?*/
-			if(window.current_page == 20){
-				if(chosen_answer == "Must work on-site"){
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(21);
-					return;
-				}
-				else{
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(22);
-					return;
-				}
+			if(window.current_page == 20){				
+				if(chosen_answer == "Must work on-site")
+					target_page = 21;
+				else
+					target_page = 22;
 			}
 
 			/*where?*/
 			if(window.current_page == 21){
-				if(chosen_answer == "High cost of living location")
-					recommendation = `+$2,000`;
-				else
-					recommendation = `+$1,000`;
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(22);
-				return;
+				var recommendation = [];
+				var temp = [];
+				
+				if(chosen_answer == "High cost of living location"){					
+					temp["title"] = "+$2,000";
+					temp["description"] = `+$2,000`; //salary recommendation
+					saveFeature(4, "Base Pay +$2,000");
+				}
+				else{
+					temp["title"] = "+$1,000";
+					temp["description"] = `+$1,000`; //salary recommendation
+					saveFeature(4, "Base Pay +$1,000");
+				}
+				recommendation = temp;
+				saveRecommendation(4, recommendation);
+				target_page = 24;
 			}
 
 			/*Do reps have a clear, proven path to sales success? In other words, have other reps succeeded in this role before? */
 			if(window.current_page == 22){
 				if(chosen_answer == "We've never had high-earning commissioned sales reps in this role"){
-					recommendation = `+$500
-					or
-					Add temporary salary bonus
-					e.g. $5,000 base for first six months dropping to $4,000 base after sixth month`;
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(24);
-					return;
+					var recommendation = [];
+					var temp = [];
+					temp["title"] = "+$500";
+					temp["description"] = `+$500`; //salary recommendation
+					saveFeature(4, "Base Pay +$500");
+
+					recommendation = temp;
+					saveRecommendation(4, recommendation);
+					target_page = 24;
 				}				
-				else{
-					saveToLocalStorage(window.current_page, recommendation);
-					goToPage(23);
-					return;
-				}
+				else
+					target_page = 23;
 			}
 
 			/*How much have your good sales reps earned in base + commission?*/
 			if(window.current_page == 23){
-				if(chosen_answer == "Over $100k")
-					recommendation = `subtract $1,000`;
-				else
-					recommendation = `subtract $500`;
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(24);
-				return;
+				var recommendation = [];
+				var temp = [];
+				
+				if(chosen_answer == "Over $100k"){
+					temp["title"] = "subtract $1,000";
+					temp["description"] = `subtract $1,000`; //salary recommendation
+					saveFeature(4, "Base Pay subtract $1,000");
+				}
+				else{
+					temp["title"] = "subtract $500";
+					temp["description"] = `subtract $500`; //salary recommendation
+					saveFeature(4, "Base Pay subtract $500");
+				}
+
+				recommendation = temp;
+				saveRecommendation(4, recommendation);
+				target_page = 24;
 			}
 
 			if(window.current_page == 24){
@@ -669,7 +711,7 @@ $(document).ready(function(){
 
 	//When the next button is clicked for muiltiple choices
 	$(".step .next_btn").on("click", function() {
-		if(window.current_page == 1 || multiple_pages.includes(window.current_page) || window.current_page == 25 || window.current_page == 29 || window.current_page == 33) {//if multiple choices
+		if(window.current_page == 1 || multiple_pages.includes(window.current_page) || window.current_page == 25 || window.current_page == 29 || window.current_page == 33) {//if multiple choices			
 			saveToLocalStorage(window.current_page);
 		}
 
@@ -678,6 +720,11 @@ $(document).ready(function(){
 			return;
 		}
 		
+		if(window.current_page == 3){
+			goToPage(8);
+			return;
+		}
+
 		if(window.current_page == 29){
 			//hide sidebar + body and show only result page
 			$(".questions_section").hide();
@@ -742,7 +789,7 @@ $(document).ready(function(){
 			console.log("active_options");
 			console.log(active_options);
 			for(var i = 0; i < active_options.length; i++){
-				answer = active_options[i].innerText.trim();
+				answer = active_options[i]/*.innerText.trim()*/;
 				console.log(answer);
 				answers.push(answer);
 			}
@@ -762,6 +809,45 @@ $(document).ready(function(){
 		if(window.current_page == 1){
 			item["answer"] = "Salary + Commission";
 			let a = await saveFeature(0, "Salary + Commission");
+		}
+
+		if(window.current_page == 3){
+			for(var i = 0; i < answers.length; i++){
+				var temp = [];
+				if(answers[i] == "Most sales will come from outbound prospecting or cold outreach"){
+					temp.push("Bonus for outreach volume target -- e.g. monthly bonus for contacting 30+ new accounts per day, on average");
+					temp.push("Bonus for outreach quality target -- e.g. monthly bonus for exceeding target lead-to-close ratio of 10%");
+					temp.push("Bonus per performance -- e.g. $100 for each scheduled qualified appointment");					
+					window.commission = window.commission + 1;
+
+					var recommendation = [];
+					recommendation["title"] = `Bonus for outbound prospecting`;
+					recommendation["description"] = temp;
+
+					saveRecommendation(1, recommendation);
+				}
+				else if(answers[i] == "Reps will have consistent inbound leads"){					
+					temp.push("Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%");
+					temp.push("Bonus for response time target -- e.g. monthly bonus for exceeding target response time of under 10 minutes");
+					window.commission = window.commission - 1;
+
+					var recommendation = [];
+					recommendation["title"] = `Bonus for inbound leads`;
+					recommendation["description"] = temp;
+					saveRecommendation(1, recommendation);
+				}
+				else if(answers[i] == "Most outbound leads are warm (e.g. old customers, referrals, they're familiar with us, etc.)" ||
+					answers[i] == "We have access to high quality, accurate, up to date contact information for leads, allowing sales reps to connect directly with decision makers"){
+					window.commission = window.commission - 1;
+				}
+				else if(answers[i] == "Leads and contact information are not provided to the rep; they have to find this on their own." || 
+					answers[i] == "Most outbound leads are cold (i.e. they've never heard of us, they're not expecting our call)" ){
+					window.commission = window.commission + 1;
+				}
+
+				updateCommission(window.commission);
+			}
+			
 		}
 
 		//salary edit modal page
@@ -806,46 +892,93 @@ $(document).ready(function(){
 		}		
 	}
 
-	//save recommendation
-	function saveRecommendation(index, recommendation){
-		var has_recommendations = hasRecommendations("recommendations", index);
-		if(has_recommendations){
-			updateRecommendationAnswers(index, recommendation);
-		}
-		else{
-			var chosen_recommendations = getPageValue("recommendations", "recommendations");
-
-			if(chosen_recommendations){
-				var recommendations = JSON.parse(chosen_recommendations).recommendations;				
-				recommendations.splice(index, 0, recommendation);
+	//update commission
+	function updateCommission(commission_value){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		if(json){
+			if(hasPageAnswers("commission")){
+				for(var i = 0; i < json.length; i++){
+					var json_item = JSON.parse(json[i]);
+					if(json_item.page == "commission"){						
+						json_item.commission = commission_value;
+						json[i] = JSON.stringify(json_item);
+						localStorage.removeItem("commission_calculator");
+						window.items = json;
+					}
+				}
 			}
 			else
 			{
-				var recommendations = [];
-				recommendations.push(recommendation);
+				var commission_item = {
+					"page": "commission",
+					"commission": commission_value
+				};
+				window.items.push(JSON.stringify(commission_item));
 			}
-			
-			updateRecommendationAnswers(index, recommendation, recommendations);
+		}
+		else{
+			var commission_item = {
+				"page": "commission",
+				"commission": commission_value
+			};
+			window.items.push(JSON.stringify(commission_item));
+		}
+
+		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+	}
+
+	//save recommendation
+	function saveRecommendation(index, recommendation){
+		var has_recommendations = hasPageAnswers("recommendations");
+		if(has_recommendations){
+			if(hasRecommendations("recommendations", index)){
+				updateRecommendationAnswers(index, recommendation);
+				
+			}
+			else{
+				var chosen_recommendations = getPageValue("recommendations", "recommendations");
+				var chosen_titles = getPageValue("recommendations", "titles");
+
+				var recommendations = JSON.parse(chosen_recommendations).recommendations;
+				var titles = JSON.parse(chosen_recommendations).titles;
+				recommendations.splice(index, 0, recommendation["description"]);
+				titles.splice(index, 0, recommendation["title"]);
+				updateRecommendationAnswers(index, recommendation, recommendations, titles);
+			}
+		}
+		else{
+			var recommendations = [];
+			var titles = [];
+			titles.push(recommendation["title"]);
+			recommendations.push(recommendation["description"]);
+			updateRecommendationAnswers(index, recommendation, recommendations, titles);
 		}
 	}
 
 	//update recommendation answer
-	function updateRecommendationAnswers(index, recommendation, recommendations_all = null){
+	function updateRecommendationAnswers(index, recommendation, recommendations_all = null, titles_all = null){
 		var localstorage = localStorage.getItem("commission_calculator");
 		var json = JSON.parse(localstorage);
 		if(json){
-			if(hasRecommendations("recommendations", index)){
+			if(hasPageAnswers("recommendations")){
 				for(var i = 0; i < json.length; i++){
 					var json_item = JSON.parse(json[i]);
 					if(json_item.page == "recommendations"){
-						if(recommendations_all)
-							var recommendations_temp = recommendations_all;
+						var recommendations_temp, titles_temp;
+						if(recommendations_all){
+							recommendations_temp = recommendations_all;
+							titles_temp = titles_all;
+						}
 						else{
-							var recommendations_temp = json_item.recommendations;
-							recommendations_temp[index] = recommendation;
+							recommendations_temp = json_item.recommendations;
+							titles_temp = json_item.titles;
+							recommendations_temp[index] = recommendation["description"];
+							titles_temp[index] = recommendation["title"];
 						}
 
 						json_item.recommendations = recommendations_temp;
+						json_item.titles = titles_temp;
 						json[i] = JSON.stringify(json_item);
 						localStorage.removeItem("commission_calculator");
 						window.items = json;
@@ -853,21 +986,32 @@ $(document).ready(function(){
 				}
 			}
 			else{
+				var titles = [];
+				var recomendation_descriptions = [];
+				titles.push(recommendation["title"]);
+				recomendation_descriptions.push(recommendation["description"]);
+
 				var recommendations_item = {
 					"page": "recommendations",
-					"recommendations": recommendations_all
+					"titles": titles,
+					"recommendations": recomendation_descriptions
 				};
+				
 				window.items.push(JSON.stringify(recommendations_item));
 			}			
 		}
 		else{
-			if(recommendations_all){
-				var recommendations_item = {
-					"page": "recommendations",
-					"recommendations": recommendations_all
-				};
-				window.items.push(JSON.stringify(recommendations_item));
-			}
+			var titles = [];
+			var recomendation_descriptions = [];
+			titles.push(recommendation["title"]);
+			recomendation_descriptions.push(recommendation["description"]);
+
+			var recommendations_item = {
+				"page": "recommendations",
+				"titles": titles,
+				"recommendations": recomendation_descriptions
+			};
+			window.items.push(JSON.stringify(recommendations_item));
 		}
 
 		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
@@ -879,8 +1023,8 @@ $(document).ready(function(){
 		var found_flag = false;
 		if(json){//if localStorage has data
 			for(var i = 0; i < json.length; i++){
-				var json_item = JSON.parse(json[i]);
-				if(json_item.page == page_num && index <= json_item.recommendations.length && json_item.recommendations[index] != ""){
+				var json_item = JSON.parse(json[i]);	
+				if(json_item.page == page_num && (index < json_item.recommendations.length && json_item.recommendations[index] !== undefined) ){
 					found_flag = true;
 				}
 			}
@@ -891,26 +1035,26 @@ $(document).ready(function(){
 
 	//save chosen feature
 	function saveFeature(index, feature){		
-		var has_features = hasFeatures("features", index);
+		var has_features = hasPageAnswers("features");
 		if(has_features){
-			updateFeatureAnswers(index, feature);
-		}
-		else{
-			var chosen_features = getPageValue("features", "features");
-			if(chosen_features){
+			console.log("features page exists");
+			if(hasFeatures("features", index)){
+				console.log("findex exists");
+				updateFeatureAnswers(index, feature);
+			}
+			else{
+				console.log("feature totally");
+				var chosen_features = getPageValue("features", "features");
 				var features = JSON.parse(chosen_features).features;				
 				features.splice(index, 0, feature);
+				updateFeatureAnswers(index, feature, features);
 			}
-			else
-			{
-				var features = [];
-				features.push(feature);
-			}
-
+		}
+		else{
+			console.log("NEW feature");
+			var features = [];
+			features.push(feature);			
 			updateFeatureAnswers(index, feature, features);
-			
-			/*window.items.push(JSON.stringify(item));
-			localStorage.setItem("commission_calculator", JSON.stringify(window.items));*/
 		}
 	}
 
@@ -919,31 +1063,43 @@ $(document).ready(function(){
 		var localstorage = localStorage.getItem("commission_calculator");
 		var json = JSON.parse(localstorage);
 		if(json){
-			for(var i = 0; i < json.length; i++){
-				var json_item = JSON.parse(json[i]);
-				if(json_item.page == "features"){
-					if(features_all)
-						var features_temp = features_all;
-					else{
-						var features_temp = json_item.features;
-						features_temp[index] = feature;
-					}					
+			if(hasPageAnswers("features")){
+				for(var i = 0; i < json.length; i++){
+					var json_item = JSON.parse(json[i]);
+					if(json_item.page == "features"){
+						if(features_all)
+							var features_temp = features_all;
+						else{
+							var features_temp = json_item.features;
+							features_temp[index] = feature;
+						}					
 
-					json_item.features = features_temp;
-					json[i] = JSON.stringify(json_item);
-					localStorage.removeItem("commission_calculator");
-					window.items = json;
+						json_item.features = features_temp;
+						json[i] = JSON.stringify(json_item);
+						localStorage.removeItem("commission_calculator");
+						window.items = json;
+					}
 				}
 			}
-		}
-		else{
-			if(features_all){
+			else{
+				var temp = [];
+				temp.push(feature);
 				var features_item = {
 					"page": "features",
-					"features": features_all
+					"features": temp
 				};
 				window.items.push(JSON.stringify(features_item));
 			}
+		}
+		else{
+			var temp = [];
+			temp.push(feature);
+
+			var features_item = {
+				"page": "features",
+				"features": features_all.length > 0 ? features_all: temp
+			};
+			window.items.push(JSON.stringify(features_item));
 		}
 
 		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
@@ -956,7 +1112,7 @@ $(document).ready(function(){
 		if(json){//if localStorage has data
 			for(var i = 0; i < json.length; i++){
 				var json_item = JSON.parse(json[i]);
-				if(json_item.page == page_num && index < json_item.features.length){
+				if(json_item.page == page_num && (index < json_item.features.length && json_item.features[index] !== undefined) ){
 					found_flag = true;
 				}
 			}
@@ -971,8 +1127,7 @@ $(document).ready(function(){
 		var processed_steps = 0;
 
 		var chosen_features = getPageValue("features", "features");
-		console.log("chosen_features");
-		console.log(chosen_features);
+
 		if(chosen_features){
 			var features = JSON.parse(chosen_features).features;
 			processed_steps = features.length;
