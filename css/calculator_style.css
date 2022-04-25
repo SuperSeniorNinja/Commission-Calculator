@@ -222,6 +222,12 @@ input:focus{
 .page25 .header_line{
 	margin-bottom: 0px;
 }
+.page25 .base_salary{
+	text-align: center;
+}
+.page25 .button_div .edit_salary_btn{
+	margin-right: 50px;
+}
 /*Edit Salary Modal*/
 #salary_edit_modal{
 	top: 20%;

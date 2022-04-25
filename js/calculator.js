@@ -6,6 +6,10 @@ $(document).ready(function(){
 	window.browsing_history = [];
 	window.current_page = getCurrentPage();
 	var multiple_pages = [11, 3, 26] // set pages for multiple options
+	var commission = window.commission = 5; //by default, 5
+	var base_salary = window.base_salary = 4000;
+	window.revenue_per_deal;
+	window.deals;
 
 	//when back arrow is clicked
 	$('.back_div, .back_btn').on('click', function () {
@@ -35,8 +39,7 @@ $(document).ready(function(){
 		
 		//consider multiple choice case here
 		var option_dom = $(this);
-		var target_page;
-		var commission = window.commission = 5; //by default, 5
+		var target_page;		
 		console.log(question);
 		console.log(chosen_answer);
 			
@@ -362,12 +365,16 @@ $(document).ready(function(){
 				if(chosen_answer == "High cost of living location"){					
 					temp["title"] = "+$2,000";
 					temp["description"] = `+$2,000`; //salary recommendation
-					saveFeature(4, "Base Pay +$2,000");
+					var temp_price = parseFloat(base_salary) + 2000;
+					base_salary = window.base_salary = temp_price;
+					saveFeature(4, "Base Pay " + formatPrice(base_salary));
 				}
 				else{
 					temp["title"] = "+$1,000";
 					temp["description"] = `+$1,000`; //salary recommendation
-					saveFeature(4, "Base Pay +$1,000");
+					var temp_price = parseFloat(base_salary) + 1000;
+					base_salary = window.base_salary = temp_price;
+					saveFeature(4, "Base Pay " + formatPrice(base_salary));
 				}
 				recommendation = temp;
 				saveRecommendation(4, recommendation);
@@ -381,7 +388,9 @@ $(document).ready(function(){
 					var temp = [];
 					temp["title"] = "+$500";
 					temp["description"] = `+$500`; //salary recommendation
-					saveFeature(4, "Base Pay +$500");
+					var temp_price = parseFloat(base_salary) + 500;
+					base_salary = window.base_salary = temp_price;
+					saveFeature(4, "Base Pay " + formatPrice(base_salary));
 
 					recommendation = temp;
 					saveRecommendation(4, recommendation);
@@ -395,17 +404,16 @@ $(document).ready(function(){
 			if(window.current_page == 23){
 				var recommendation = [];
 				var temp = [];
-				
+				var subtract = 500;
 				if(chosen_answer == "Over $100k"){
-					temp["title"] = "subtract $1,000";
-					temp["description"] = `subtract $1,000`; //salary recommendation
-					saveFeature(4, "Base Pay subtract $1,000");
+					subtract = 1000;					
 				}
-				else{
-					temp["title"] = "subtract $500";
-					temp["description"] = `subtract $500`; //salary recommendation
-					saveFeature(4, "Base Pay subtract $500");
-				}
+				
+				var temp_price = parseFloat(base_salary) - subtract;
+				base_salary = window.base_salary = temp_price;
+				temp["title"] = "subtract " + formatPrice(subtract);
+				temp["description"] = "subtract " + formatPrice(subtract);
+				saveFeature(4, "Base Pay " + formatPrice(base_salary));
 
 				recommendation = temp;
 				saveRecommendation(4, recommendation);
@@ -413,27 +421,53 @@ $(document).ready(function(){
 			}
 
 			if(window.current_page == 24){
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(25);
-				return;
+				var subtract = -250;
+				var temp = [];
+				temp["title"] = "subtract $250";
+				temp["description"] = "subtract $250";
+
+				if(chosen_answer == "Our industry is complex and can be difficult to master. Some prior experience in our industry is a must."){
+					var subtract = 500;
+					temp["title"] = "Add $500";
+					temp["description"] = "Add $500";
+				}
+				var temp_price = parseFloat(base_salary) + subtract;
+				base_salary = window.base_salary = temp_price;
+
+				$(".page25 .base_salary").val(formatPrice(base_salary));
+
+				recommendation = temp;
+				saveRecommendation(4, recommendation);
+				target_page = 25;
 			}
 
 			if(window.current_page == 28){ //choose one
 				target_page = 29;
+				//set profit/revenue from the saved feature value
+				var profit_or_revenue = IsProfitRevenue();
+
+				$(".page29 .div_question1 label span").html(profit_or_revenue);
+
 				if(chosen_answer == "This is an existing sales role and we have past sales data available")
 				{
 					//check if commission frequncy/one-time commission is chosen
-					if(checkPageValue(12, "One-time commission")){
+					if(checkPageValue("features", "One-time commission")){
 						$(".page29 .answer_div .average_revenue").val(10000);
 						$(".page29 .answer_div .div_question3").hide();
 					}
-					else if(checkPageValue(12, "Recurring commission (capped)")){
-						
-					}
-					else{						
-					}
+					/*else if(checkPageValue("features","Recurring commission (capped)")){
+						$(".page29 .div_question1 label span").html(profit_or_revenue);
+					}*/
 				}
-				else{
+				else if(chosen_answer == "Our company is new but we have previous experience selling this product"){
+					//check if commission frequncy/one-time commission is chosen
+					if(checkPageValue("features", "One-time commission")){
+						$(".page29 .answer_div .average_revenue").val(10000);
+						$(".page29 .answer_div .div_question3").hide();
+					}
+					else /*if(checkPageValue("features","Recurring commission (capped)"))*/{
+						$(".page29 .div_question1 label span").html(profit_or_revenue);
+					}
 				}
 
 				
@@ -466,6 +500,65 @@ $(document).ready(function(){
 	  numeral: true,
 	  numeralThousandsGroupStyle: 'thousand'
 	}));
+
+	/*$(".average_revenue_profit, .average_revenue, .salary").on("keyup", function(){
+
+	});*/	
+	(function($){
+        $.fn.extend({
+            donetyping: function(callback,timeout){
+                timeout = timeout || 1e3; // 1 second default timeout
+                var timeoutReference,
+                    doneTyping = function(el){
+                        if (!timeoutReference) return;
+                        timeoutReference = null;
+                        callback.call(el);
+                    };
+                return this.each(function(i,el){
+                    var $el = $(el);
+                    // Chrome Fix (Use keyup over keypress to detect backspace)
+                    // thank you @palerdot
+                    $el.is(':input') && $el.on('keyup keypress paste',function(e){
+                        // This catches the backspace button in chrome, but also prevents
+                        // the event from triggering too preemptively. Without this line,
+                        // using tab/shift+tab will make the focused element fire the callback.
+                        if (e.type=='keyup' && e.keyCode!=8) return;
+                        
+                        // Check if timeout has been set. If it has, "reset" the clock and
+                        // start over again.
+                        if (timeoutReference) clearTimeout(timeoutReference);
+                        timeoutReference = setTimeout(function(){
+                            // if we made it here, our timeout has elapsed. Fire the
+                            // callback
+                            doneTyping(el);
+                        }, timeout);
+                    }).on('blur',function(){
+                        // If we can, fire the event since we're leaving the field
+                        doneTyping(el);
+                    });
+                });
+            }
+        });
+    })(jQuery);
+
+	$('#salary_edit_modal .salary').donetyping(function(){
+		var edit_salary_value = $(this).val();
+		edit_salary_value = numberFormat(edit_salary_value);
+		if(parseFloat(edit_salary_value) < 3000)
+		{
+			alert("Base salary is minimum $3,000");
+			$(this).val("3,000");
+		}
+    });
+
+	//edit salary modal confirm button click
+	$("#salary_edit_modal button").on("click", function(){
+		var edit_salary_value = $('#salary_edit_modal .salary').val();
+		var edit_salary_number_only = numberFormat(edit_salary_value);
+		window.base_salary = base_salary = edit_salary_number_only;
+		$(".page25 .base_salary").val(formatPrice(edit_salary_number_only));
+		$('#salary_edit_modal').modal('hide');
+	});
 
 
 	//page37 add a tier
@@ -661,6 +754,13 @@ $(document).ready(function(){
 		$('#salary_edit_modal').modal('show');
 	});
 
+	//Custom Configurator confirm button
+	$(".page32 .edit_commission_calculator").on("click", function() {
+		var average_deals = $(".page32 .average_deals").val();
+		var average_revenue = $(".page32 .average_revenue").val();
+
+	});
+
 	//Trigger recommendation modal
 	$(".page34 .question_icon").on("click", function(){
 		//get recommendation type
@@ -725,17 +825,27 @@ $(document).ready(function(){
 			return;
 		}
 
+		if(window.current_page == 25){
+			goToPage(28);
+			return;
+		}
+
 		if(window.current_page == 29){
 			//hide sidebar + body and show only result page
 			$(".questions_section").hide();
 			$(".result_section").show();
 			//get recommended commission percent
-			var info_json = JSON.parse(getPageValue(29, "commission_percent"));
-			var commission_percent = parseInt(info_json.commission_percent);
-			var deals = parseInt(info_json.average_rep);
-			var deal_revenue = parseInt(numberFormat(info_json.deal_revenue));
+			var commission_percent = parseFloat(getPageValue("commission", "commission"));
+			var info_json = JSON.parse(getPageValue(29, ""));
+			var deals = window.deals = parseInt(info_json.average_rep);
+			var deal_revenue = window.revenue_per_deal = parseInt(numberFormat(info_json.deal_revenue));
+
 			$(".result_section .page31 .average_revenue").val(commission_percent);
 			
+			//determine revenue/profit
+			var profit_or_revenue = IsProfitRevenue();
+			$(".page31 .pink_txt").html(profit_or_revenue);
+
 			//highlight the commission percent on the table
 			$(".result_section .caculator_configurator tr.active").removeClass("active");
 			var index = commission_percent + 1;
@@ -767,18 +877,34 @@ $(document).ready(function(){
 
 		if(window.current_page == 31){
 			//get recommended commission percent
-			var info_json = JSON.parse(getPageValue(29, "commission_percent"));
-			var commission_percent = parseInt(info_json.commission_percent);
+			var commission_percent = parseFloat(getPageValue("commission", "commission"));
 			$(".recommended_percent").html(commission_percent);
 			//highlight the commission percent on the table
 			$(".result_section .page32 tr.active").removeClass("active");
 			var index = commission_percent + 1;
 			$(".result_section .page32 tr").eq(index).addClass("active");
+			//determine revenue/profit
+			var profit_or_revenue = IsProfitRevenue();
+			$(".page32 .pink_txt").html(profit_or_revenue);
 		}
 
 		goToNextPage();
 	});
 
+	//determine profit/revenue
+	function IsProfitRevenue(){
+		var result = "profit"; //we set profit by default
+		var chosen_features = getPageValue("features", "features");
+		if(chosen_features){
+			var features = JSON.parse(chosen_features).features;
+			if(features && 1 in features){
+				var feature_value = features[1];
+				result = feature_value.split(" ")[2];	
+			}			
+		}
+		
+		return result;
+	}
 	//save chosen option with page number to LocalStorage
 	async function saveToLocalStorage(page_num, recommendation = ""){
 		var question = $(".page" + window.current_page + " .header_line .page_title").text();
@@ -862,7 +988,6 @@ $(document).ready(function(){
 			item["deal_revenue"] = $(".average_revenue_profit").val();
 			item["average_rep"] = $(".average_rep").val();
 			item["percentage_cancel"] = $(".percentage_cancel").val();
-			item["commission_percent"] = 5;
 		}
 
 		//page33: determine bonuses
@@ -887,7 +1012,10 @@ $(document).ready(function(){
 		}
 		else{
 			console.log("need to add a new one");
-			window.items.push(JSON.stringify(item));
+			window.items = localStorage.getItem("commission_calculator");
+			var json = JSON.parse(window.items);
+			json.push(JSON.stringify(item));
+			window.items = json;
 			localStorage.setItem("commission_calculator", JSON.stringify(window.items));
 		}		
 	}
@@ -920,6 +1048,42 @@ $(document).ready(function(){
 		else{
 			var commission_item = {
 				"page": "commission",
+				"commission": commission_value
+			};
+			window.items.push(JSON.stringify(commission_item));
+		}
+
+		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+	}
+
+	//update configuration
+	function updateConfiguration(key, value){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		if(json){
+			if(hasPageAnswers("commission")){
+				for(var i = 0; i < json.length; i++){
+					var json_item = JSON.parse(json[i]);
+					if(json_item.page == "commission"){						
+						json_item.commission = commission_value;
+						json[i] = JSON.stringify(json_item);
+						localStorage.removeItem("commission_calculator");
+						window.items = json;
+					}
+				}
+			}
+			else
+			{
+				var commission_item = {
+					"page": "configuration",
+					"commission": commission_value
+				};
+				window.items.push(JSON.stringify(commission_item));
+			}
+		}
+		else{
+			var commission_item = {
+				"page": "configuration",
 				"commission": commission_value
 			};
 			window.items.push(JSON.stringify(commission_item));
@@ -1043,15 +1207,13 @@ $(document).ready(function(){
 				updateFeatureAnswers(index, feature);
 			}
 			else{
-				console.log("feature totally");
 				var chosen_features = getPageValue("features", "features");
-				var features = JSON.parse(chosen_features).features;				
+				var features = JSON.parse(chosen_features).features;
 				features.splice(index, 0, feature);
 				updateFeatureAnswers(index, feature, features);
 			}
 		}
 		else{
-			console.log("NEW feature");
 			var features = [];
 			features.push(feature);			
 			updateFeatureAnswers(index, feature, features);
@@ -1230,20 +1392,36 @@ $(document).ready(function(){
 	function checkPageValue(page_num, check_value){
 		var localstorage = localStorage.getItem("commission_calculator");
 		var json = JSON.parse(localstorage);
+		var found_flag = false;
 		if(json){//if localStorage has data
 			for(var i = 0; i < json.length; i++){
 				var json_item = JSON.parse(json[i]);
+				//check_value = check_value/*.replace(/\s/g, "")*/;
+				if(json_item.page == page_num){
+					if(page_num == "features")
+					{	
+						if(json_item.features){
+							for(var k = 0; k < json_item.features.length; k++){
+								if(json_item.features[k] = check_value)
+									found_flag = true;
+							}	
+						}						
+					}
+					else{
+						//remove white space in the string
+						var saved_answer = json_item.answer/*.replace(/\s/g, "")*/;
+						if(!saved_answer)
+							continue;
 
-				//remove white space in the string
-				var saved_answer = json_item.answer/*.replace(/\s/g, "")*/;
-				check_value = check_value/*.replace(/\s/g, "")*/;
-
-				if(json_item.page == page_num && saved_answer.toLowerCase() == check_value.toLowerCase())
-					return true;
+						if(saved_answer.toLowerCase() == check_value.toLowerCase())
+							found_flag = true;
+					}
+				}		
 			}
+			return found_flag;
 		}
 		else
-			return false;
+			return found_flag;
 	}
 
 	//get certain page value of certain key
@@ -1321,4 +1499,6 @@ $(document).ready(function(){
 		var active_page = $(".current_page").val()
 		return parseInt(active_page);
 	}
+
+	
 });

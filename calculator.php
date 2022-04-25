@@ -7,7 +7,7 @@
 
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 <div class="container calculator_container row">
-	<input type="hidden" name="num_page" class="current_page" value="22">
+	<input type="hidden" name="num_page" class="current_page" value="28">
 	<div class="questions_section row">
 		<div class="col-12 col-md-3 col-sm-12 calculator_sidebar">
 			<div class="progressbar">
@@ -525,7 +525,7 @@
 			</div>
 
 			<!-- just below page 23 -->
-			<div class="page24 step row active">
+			<div class="page24 step row">
 				<div class="header_line">
 					<!-- <label class="page_title">No title</label> -->
 					<label class="sub_header">Choose all that apply.</label>
@@ -551,11 +551,11 @@
 			</div>
 
 			<!-- We recommend a base salary of around -->
-			<div class="page25 step row ">
+			<div class="page25 step row">
 				<div class="header_line">
 					<label class="page_title">We recommend a base salary of around</label>
 					<div class="input_div">
-						<input type="text" name="salary" class="base_salary" value="$4,000" />
+						<input type="text" name="salary" class="base_salary" value="$4,000" readonly="" />
 						<span>per month</span>
 					</div>
 					<label class="sub_header">Due to:</label>
@@ -579,11 +579,11 @@
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Need for experienced reps </label>
 					</div>
-				</div>
-				<div class="button_div">
-					<button class="edit_salary_btn" data-toggle="modal" data-target="#salary_edit_modal">Edit salary</button>
-					<button class="next_btn">Next</button>
-				</div>
+					<div class="button_div">
+						<button class="edit_salary_btn" data-toggle="modal" data-target="#salary_edit_modal">Edit salary</button>
+						<button class="next_btn">Next</button>
+					</div>
+				</div>				
 			</div>
 
 			<!-- Determine commission values -->
@@ -605,7 +605,7 @@
 			</div>
 
 			<!-- choose one -->
-			<div class="page28 step row ">
+			<div class="page28 step row active">
 				<div class="header_line">
 					<label class="page_title">Choose one:</label>	
 				</div>
@@ -2441,7 +2441,7 @@
 	      </div>
 	      <div class="modal-body">
 	        <div class="input_div">				
-				<span>$<input type="text" name="salary" class="salary"/></span>				
+				<span>$<input type="text" name="salary" class="salary" /></span>				
 			</div>
 	      </div>
 	      <div class="modal-footer">
