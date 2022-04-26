@@ -835,10 +835,20 @@ $(document).ready(function(){
 			$(".questions_section").hide();
 			$(".result_section").show();
 			//get recommended commission percent
-			var commission_percent = parseFloat(getPageValue("commission", "commission"));
+			var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
 			var info_json = JSON.parse(getPageValue(29, ""));
 			var deals = window.deals = parseInt(info_json.average_rep);
 			var deal_revenue = window.revenue_per_deal = parseInt(numberFormat(info_json.deal_revenue));
+
+			saveConfiguration("deals", deals);
+			saveConfiguration("deal_revenue", deal_revenue);
+			saveConfiguration("commission", commission_percent);
+			saveConfiguration("base_salary", window.base_salary);
+			saveConfiguration("cancel_percentage", $(".percentage_cancel").val());
+			saveConfiguration("deal_variation", 20);
+			saveConfiguration("commission_variation", 1);
+			saveConfiguration("commission_modifier", 0);
+			saveConfiguration("recommendation_variance", 60);
 
 			$(".result_section .page31 .average_revenue").val(commission_percent);
 			
@@ -877,7 +887,7 @@ $(document).ready(function(){
 
 		if(window.current_page == 31){
 			//get recommended commission percent
-			var commission_percent = parseFloat(getPageValue("commission", "commission"));
+			var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
 			$(".recommended_percent").html(commission_percent);
 			//highlight the commission percent on the table
 			$(".result_section .page32 tr.active").removeClass("active");
@@ -1013,7 +1023,15 @@ $(document).ready(function(){
 		else{
 			console.log("need to add a new one");
 			window.items = localStorage.getItem("commission_calculator");
-			var json = JSON.parse(window.items);
+			if(window.items){
+				var json = JSON.parse(window.items);
+				json.push(JSON.stringify(item));
+			}
+
+			//var json = JSON.parse(window.items);
+			var json = [];
+			console.log("item");
+			console.log(item);
 			json.push(JSON.stringify(item));
 			window.items = json;
 			localStorage.setItem("commission_calculator", JSON.stringify(window.items));
@@ -1057,15 +1075,20 @@ $(document).ready(function(){
 	}
 
 	//update configuration
-	function updateConfiguration(key, value){
+	function saveConfiguration(key, value){
 		var localstorage = localStorage.getItem("commission_calculator");
 		var json = JSON.parse(localstorage);
+		var configuration_array = [];
+		var temp = [];
 		if(json){
-			if(hasPageAnswers("commission")){
+			if(hasPageAnswers("configuration")){
+				var configuration = getPageValue("configuration");
 				for(var i = 0; i < json.length; i++){
 					var json_item = JSON.parse(json[i]);
-					if(json_item.page == "commission"){						
-						json_item.commission = commission_value;
+					if(json_item.page == "configuration"){
+
+						json_item[`${key}`] = value;
+
 						json[i] = JSON.stringify(json_item);
 						localStorage.removeItem("commission_calculator");
 						window.items = json;
@@ -1074,22 +1097,32 @@ $(document).ready(function(){
 			}
 			else
 			{
-				var commission_item = {
-					"page": "configuration",
-					"commission": commission_value
+				var configuration_item = {
+					"page": "configuration"
 				};
-				window.items.push(JSON.stringify(commission_item));
+				configuration_item[`${key}`] = value;
+				
+				window.items.push(JSON.stringify(configuration_item));
 			}
 		}
 		else{
-			var commission_item = {
-				"page": "configuration",
-				"commission": commission_value
+			var configuration_item = {
+				"page": "configuration"
 			};
-			window.items.push(JSON.stringify(commission_item));
+			configuration_item[`${key}`] = value;
+			
+			window.items.push(JSON.stringify(configuration_item));
 		}
 
 		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+	}
+
+	var arr = [];
+	function insert(name, number) {
+	    arr.push({
+	        name: name,
+	        number: number
+	    });
 	}
 
 	//save recommendation
@@ -1378,6 +1411,7 @@ $(document).ready(function(){
 		var localstorage = localStorage.getItem("commission_calculator");
 		var json = JSON.parse(localstorage);
 		if(json){//if localStorage has data
+			console.log(json[0]);
 			for(var i = 0; i < json.length; i++){
 				var json_item = JSON.parse(json[i]);
 				if(json_item.page == page_num /*&& json_item.answer != ""*/)
