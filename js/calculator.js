@@ -479,6 +479,52 @@ $(document).ready(function(){
 		}		
 	});
 	
+	//page31 commission minus/plus
+	$('.page31').on('click', '.commission_percent_control_div img', function() {
+		var commission_direction = $(this).data("direction");		
+		var current_commission_value = parseInt($(".page31 .commission_percent").val());
+		if(commission_direction == "plus")
+			current_commission_value = current_commission_value + 1;
+		else
+			current_commission_value = current_commission_value - 1;
+
+		if(current_commission_value < 5){
+			current_commission_value = 5;
+			$(".page31 .explanation_for_min_exceed").show();
+		}
+		else
+			$(".page31 .explanation_for_min_exceed").hide();
+		
+		//update current commission value visually
+		$(".page31 .commission_percent").val(current_commission_value);
+		//update commission result table based on new commission
+		$(".result_section .page31 tbody tr")[0].children[0].innerText = current_commission_value + "%";
+		
+		InitCommissionTable(31, getConfiguration("deals"), getConfiguration("deal_revenue"), current_commission_value, deal_variation = 20, 
+		 getConfiguration("commission_variation"), commission_modifier = 0, recommendation_variance = 60);
+	});
+
+	//page31 editcommission/advanced options button
+	$('.page31').on('click', '.edit_commission_calculator, .advanced_options_btn', function() {
+		//get recommended commission percent
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+		$(".recommended_percent").html(commission_percent);
+
+		$(".page32 .average_deals").val(getConfiguration("deals"));
+		$(".page32 .average_revenue").val(formatPrice(getConfiguration("deal_revenue")));			
+		$(".page32 .deal_variation").val(getConfiguration("deal_variation"));
+		$(".page32 .commission_variation").val(getConfiguration("commission_variation"));
+		$(".page32 .commission_modifier").val(getConfiguration("commission_modifier"));
+		$(".page32 .recommendation_variance").val(getConfiguration("recommendation_variance"));
+
+		InitCommissionTable(32, getConfiguration("deals"), getConfiguration("deal_revenue"), commission_percent, deal_variation = 20, 
+		getConfiguration("commission_variation"), commission_modifier = 0, recommendation_variance = 60);
+		
+		goToPage(32);
+		return;
+	});
+	
+
 	//Advanced calculator configurator
 	$(".result_section .sidebar_option .average_deals").on("keyup", function() {		
 		var average_deals = $(".sidebar_option .average_deals").val();
@@ -728,6 +774,68 @@ $(document).ready(function(){
 		$(".commission_tier tr td").eq(26).find(".second_half .row label").eq(2).find("label").html(formatPrice(third_year_compensation));
 	}
 
+	//page31, custom configurator commission table
+	function InitCommissionTable(page_id, deals, deal_revenue, commission_percent, deal_variation = 20, 
+		commission_variation = 1, commission_modifier = 0, recommendation_variance = 60){
+		$(".result_section .page" + page_id + " .commission_percent").val(commission_percent);
+			
+		//determine revenue/profit
+		var profit_or_revenue = IsProfitRevenue();
+		$(".page" + page_id + " .pink_txt").html(profit_or_revenue);
+
+		//highlight the commission percent on the table
+		$(".result_section .page" + page_id + " tr.active").removeClass("active");
+		var index = commission_percent + 1;
+
+		$(".result_section .page" + page_id + " tr").eq(index).addClass("active");
+
+		//calculate table based on deal revenue
+		if(page_id != 31){
+			//highlight the deals column
+			$(".result_section .page" + page_id + " tr .active").removeClass("active");
+			var tr_doms = $(".result_section .page" + page_id + " tr");
+			var index = parseInt(deals) + 1;
+			for(var i = 0; i < tr_doms.length; i++){
+				//tr_doms[i].children[index].classList.add('active');
+				tr_doms.eq(i)[0].children[index].classList.add("active");
+			}
+
+			var tr_doms_2 = $(".result_section .page" + page_id + " tbody tr");
+			for(var i = 0; i < tr_doms_2.length; i++){
+				var td_doms_2 = tr_doms_2[i].children;
+				for(j = 2; j < td_doms_2.length; j++){
+					var index = j - 1;
+					//average_revenue * percent_num * number_of_deals/100
+					if(deal_variation == 20)
+						var price = parseInt(deal_revenue * index * (i + 1) * commission_variation / 100);
+					else
+						var price = parseInt(deal_revenue * index * (i + 1) * commission_variation * deal_variation / 100);
+
+					td_doms_2[j].innerText = formatPrice(price);
+				}
+			}
+
+			var td_doms_3 = $(".result_section .page" + page_id + " tbody tr td:first-child");
+			for(var k = 0; k < td_doms_3.length; k++){
+				td_doms_3.eq(k).html(commission_variation*(k + 1) + "%");
+			}
+		}
+		else{
+			$(".result_section .page" + page_id + " tbody tr")[0].children[0].innerText = commission_percent + "%";
+			var tr_doms_2 = $(".result_section .page" + page_id + " tbody tr td");
+			for(j = 2; j < tr_doms_2.length; j++){
+				var index = j - 1;
+				//average_revenue * percent_num * number_of_deals/100
+				if(deal_variation == 20)
+					var price = parseInt(deal_revenue * index * commission_percent * commission_variation / 100);
+				else
+					var price = parseInt(deal_revenue * index * commission_percent * commission_variation * deal_variation / 100);
+
+				tr_doms_2[j].innerText = formatPrice(price);
+			}
+		}		
+	}
+
 	//Advanced calculator configur ator:average deal revenue/profit
 	$(".result_section .sidebar_option .average_revenue").on("keyup", function() {	
 		var average_revenue = $(".sidebar_option .average_revenue").val();
@@ -740,7 +848,7 @@ $(document).ready(function(){
 				for(j = 2; j < td_doms.length; j++){
 					var index = j - 1;
 					//average_revenue * percent_num * number_of_deals/100
-					var price = parse9Int(average_revenue * index * (i + 1) / 100);
+					var price = parseInt(average_revenue * index * (i + 1) / 100);
 					td_doms[j].innerText = formatPrice(price);
 				}
 			}
@@ -749,16 +857,62 @@ $(document).ready(function(){
 			return;
 	});
 
+	//when commission variation is being changed
+	$(".result_section .page32 .sidebar_advanced_option .commission_variation").on("keyup", function() {
+		var commission_variation = $(".result_section .page32 .sidebar_advanced_option .commission_variation").val();
+		var deals = $(".page32 .sidebar_option .average_deals").val();
+		var deal_revenue = numberFormat($(".page32 .sidebar_option .average_revenue").val());
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+
+		InitCommissionTable(32, deals, deal_revenue, commission_percent, deal_variation = 20, 
+		commission_variation, commission_modifier = 0, recommendation_variance = 60);
+	});
+
+	//when deal variation is being changed
+	$(".result_section .page32 .sidebar_advanced_option .deal_variation").on("keyup", function() {
+		var deal_variation = $(this).val();
+		var deals = $(".page32 .sidebar_option .average_deals").val();
+		var deal_revenue = numberFormat($(".page32 .sidebar_option .average_revenue").val());
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+
+		InitCommissionTable(32, deals, deal_revenue, commission_percent, deal_variation);
+	});
+
+	//when commission modifier is being changed
+	$(".result_section .page32 .sidebar_advanced_option .commission_modifier").on("keyup", function() {
+		var commission_modifier = parseInt($(this).val());
+		var deal_variation = $(".result_section .page32 .sidebar_advanced_option .deal_variation").val();
+		var deals = $(".page32 .sidebar_option .average_deals").val();
+		var deal_revenue = numberFormat($(".page32 .sidebar_option .average_revenue").val());
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+		commission_percent += commission_modifier;
+
+		InitCommissionTable(32, deals, deal_revenue, commission_percent, deal_variation);
+	});
+
 	//when edit salary button is clicked, we show modal
 	$(".page25 .edit_salary_btn").on("click", function() {
 		$('#salary_edit_modal').modal('show');
 	});
 
 	//Custom Configurator confirm button
-	$(".page32 .edit_commission_calculator").on("click", function() {
+	$(".page32 .confirm_commission_configuration").on("click", function() {
 		var average_deals = $(".page32 .average_deals").val();
 		var average_revenue = $(".page32 .average_revenue").val();
+		var deal_variation = $(".page32 .deal_variation").val();
+		var commission_variation = $(".page32 .commission_variation").val();
+		var commission_modifier = $(".page32 .commission_modifier").val();
+		var recommendation_variance = $(".page32 .recommendation_variance").val();
+		
+		saveConfiguration("deals", average_deals);
+		saveConfiguration("deal_revenue", average_revenue);
+		saveConfiguration("deal_variation", deal_variation);
+		saveConfiguration("commission_variation", commission_variation);
+		saveConfiguration("commission_modifier", commission_modifier);
+		saveConfiguration("recommendation_variance", recommendation_variance);
 
+
+		goToPrevPage();
 	});
 
 	//Trigger recommendation modal
@@ -850,52 +1004,26 @@ $(document).ready(function(){
 			saveConfiguration("commission_modifier", 0);
 			saveConfiguration("recommendation_variance", 60);
 
-			$(".result_section .page31 .average_revenue").val(commission_percent);
-			
-			//determine revenue/profit
-			var profit_or_revenue = IsProfitRevenue();
-			$(".page31 .pink_txt").html(profit_or_revenue);
-
-			//highlight the commission percent on the table
-			$(".result_section .caculator_configurator tr.active").removeClass("active");
-			var index = commission_percent + 1;
-			$(".result_section .caculator_configurator tr").eq(index).addClass("active");
-
-			//highlight the deals column
-			$(".result_section .caculator_configurator tr .active").removeClass("active");
-			var tr_doms = $(".result_section .caculator_configurator tr");
-			var index = parseInt(deals) + 1;
-			for(var i = 0; i < tr_doms.length; i++){
-				tr_doms[i].children[index].classList.add('active');
-			}
-
-			//calculate table based on deal revenue
-			var tr_doms_2 = $(".result_section .caculator_configurator tbody tr");
-			for(var i = 0; i < tr_doms_2.length; i++){
-				var td_doms_2 = tr_doms_2[i].children;
-				for(j = 2; j < td_doms_2.length; j++){
-					var index = j - 1;
-					//average_revenue * percent_num * number_of_deals/100
-					var price = parseInt(deal_revenue * index * (i + 1) / 100);
-					td_doms_2[j].innerText = formatPrice(price);
-				}
-			}
+			InitCommissionTable(31, deals, deal_revenue, commission_percent);			
 
 			goToPage(31);
 			return;
 		}
 
 		if(window.current_page == 31){
-			//get recommended commission percent
+			/*//get recommended commission percent
 			var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
 			$(".recommended_percent").html(commission_percent);
-			//highlight the commission percent on the table
-			$(".result_section .page32 tr.active").removeClass("active");
-			var index = commission_percent + 1;
-			$(".result_section .page32 tr").eq(index).addClass("active");
-			//determine revenue/profit
-			var profit_or_revenue = IsProfitRevenue();
-			$(".page32 .pink_txt").html(profit_or_revenue);
+
+			$(".page32 .average_deals").val(getConfiguration("deals"));
+			$(".page32 .average_revenue").val(formatPrice(getConfiguration("deal_revenue")));			
+			$(".page32 .deal_variation").val(getConfiguration("deal_variation"));
+			$(".page32 .commission_variation").val(getConfiguration("commission_variation"));
+			$(".page32 .commission_modifier").val(getConfiguration("commission_modifier"));
+			$(".page32 .recommendation_variance").val(getConfiguration("recommendation_variance"));
+
+			InitCommissionTable(32, getConfiguration("deals"), getConfiguration("deal_revenue"), commission_percent, deal_variation = 20, 
+			getConfiguration("commission_variation"), commission_modifier = 0, recommendation_variance = 60);*/
 		}
 
 		goToNextPage();
@@ -1117,12 +1245,27 @@ $(document).ready(function(){
 		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
 	}
 
-	var arr = [];
-	function insert(name, number) {
-	    arr.push({
-	        name: name,
-	        number: number
-	    });
+	//get configuration
+	function getConfiguration(key){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		var configuration_array = [];
+		var temp = [];
+		if(json){
+			if(hasPageAnswers("configuration")){
+				var configuration = getPageValue("configuration");
+				for(var i = 0; i < json.length; i++){
+					var json_item = JSON.parse(json[i]);
+					if(json_item.page == "configuration" && key in json_item){
+						return json_item[`${key}`];
+					}
+				}
+			}
+			else
+				return false;
+		}
+		else
+			return false;
 	}
 
 	//save recommendation
@@ -1411,7 +1554,6 @@ $(document).ready(function(){
 		var localstorage = localStorage.getItem("commission_calculator");
 		var json = JSON.parse(localstorage);
 		if(json){//if localStorage has data
-			console.log(json[0]);
 			for(var i = 0; i < json.length; i++){
 				var json_item = JSON.parse(json[i]);
 				if(json_item.page == page_num /*&& json_item.answer != ""*/)

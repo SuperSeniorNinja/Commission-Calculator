@@ -7,7 +7,7 @@
 
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 <div class="container calculator_container row">
-	<input type="hidden" name="num_page" class="current_page" value="28">
+	<input type="hidden" name="num_page" class="current_page" value="29">
 	<div class="questions_section row">
 		<div class="col-12 col-md-3 col-sm-12 calculator_sidebar">
 			<div class="progressbar">
@@ -605,7 +605,7 @@
 			</div>
 
 			<!-- choose one -->
-			<div class="page28 step row active">
+			<div class="page29 step row ">
 				<div class="header_line">
 					<label class="page_title">Choose one:</label>	
 				</div>
@@ -626,7 +626,7 @@
 			</div>
 
 			<!-- Commission Frequncy chosen results option pages -->
-			<div class="page29 step row">
+			<div class="page29 step row active">
 				<!-- <div class="header_line">
 					<label class="page_title">We recommend a base salary of around</label>				
 					<label class="sub_header">Due to:</label>
@@ -634,7 +634,7 @@
 				<div class="answer_div col-12 col-md-8  col-sm-12">
 					<div class="div_section div_question1">
 						<div class="row">
-							<label>What's your average monthly <span>revenue / profit</span> per customer?</label>
+							<label>What's your average monthly <span>profit</span> per customer?</label>
 						</div>
 						<div class="row">
 							<div class="input_div">							
@@ -1043,10 +1043,40 @@
 						Back
 					</label>
 				</div>
-				<div class="row">
+				<!-- <div class="row">
 					<label>We recommend a commission of</label>
-					<span><input type="number" name="average_revenue" class="average_revenue" readonly/>% of <span class="pink_txt">revenue</span></span>
+					<span><input type="number" name="commission_percent" class="commission_percent" readonly/>% of <span>revenue</span></span>
 					<span class="subheader">Here's how much the rep will earn depending on how good (or bad) of a month they have:</span>
+				</div> -->
+				<div class="row commission_percent_control_div">
+					<label>We recommend a commission of</label>
+					<div class="flex_div">
+						<img class="commission_minus" data-direction="minus" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>" style="">
+						<input type="number" name="commission_percent" class="commission_percent" readonly/>
+						<img class="commission_plus" data-direction="plus" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>" style="">
+					</div>
+					<label>% of <span class="pink_txt">revenue</span></label>
+					<div class="explanation_for_min_exceed">
+						<span class="red_txt">Maximum recommended value reached.<br>
+						Click “Advanced Options” if you need to change inputs. </span>
+					</div>					
+					<label class="subheader">Here's how much the rep will earn depending on how good (or bad) of a month they have:</label>
+				</div>
+				<div class="switch_div">
+					<div class="row">
+						<div class="col-6 col-md-6 col-xs-12 text_div">
+							<label>Commission</label>
+						</div>
+						<div class="col-6 col-md-6 col-xs-12 text_div">
+							<label>Revenue</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6 col-md-6 col-xs-12 switch_item black_bg">
+						</div>
+						<div class="col-6 col-md-6 col-xs-12 switch_item red_bg">
+						</div>
+					</div>												
 				</div>
 				<table>
 					<thead>
@@ -1093,277 +1123,13 @@
 							<td>$800</td>
 							<td>$900</td>
 							<td>$1000</td>
-						</tr>
-						<tr>
-							<td>2%</td>
-							<td>0</td>
-							<td>$200</td>
-							<td>$400</td>
-							<td>$600</td>
-							<td>$800</td>
-							<td>$1000</td>
-							<td>$1200</td>
-							<td>$1400</td>
-							<td>$1600</td>
-							<td>$1800</td>
-							<td>$2000</td>
-						</tr>
-						<tr>
-							<td>3%</td>
-							<td>0</td>
-							<td>$300</td>
-							<td>$600</td>
-							<td>$900</td>
-							<td>$1200</td>
-							<td>$1500</td>
-							<td>$1800</td>
-							<td>$2100</td>
-							<td>$2400</td>
-							<td>$2700</td>
-							<td>$3000</td>
-						</tr>
-						<tr>
-							<td>4%</td>
-							<td>0</td>
-							<td>$400</td>
-							<td>$800</td>
-							<td>$1200</td>
-							<td>$1600</td>
-							<td>$2000</td>
-							<td>$2400</td>
-							<td>$2800</td>
-							<td>$3200</td>
-							<td>$3600</td>
-							<td>$4000</td>
-						</tr>
-						<tr>
-							<td>5%</td>
-							<td>0</td>
-							<td>$500</td>
-							<td>$1000</td>
-							<td>$1500</td>
-							<td>$2000</td>
-							<td>$2500</td>
-							<td>$3000</td>
-							<td>$3500</td>
-							<td>$4000</td>
-							<td>$4500</td>
-							<td>$5000</td>
-						</tr>
-						<tr>
-							<td>6%</td>
-							<td>0</td>
-							<td>$600</td>
-							<td>$1200</td>
-							<td>$1800</td>
-							<td>$2400</td>
-							<td>$3000</td>
-							<td>$3600</td>
-							<td>$4200</td>
-							<td>$4800</td>
-							<td>$5400</td>
-							<td>$6000</td>
-						</tr>
-						<tr>
-							<td>7%</td>
-							<td>0</td>
-							<td>$700</td>
-							<td>$1400</td>
-							<td>$2100</td>
-							<td>$2800</td>
-							<td>$3500</td>
-							<td>$4200</td>
-							<td>$4900</td>
-							<td>$5600</td>
-							<td>$6300</td>
-							<td>$7000</td>
-						</tr>
-						<tr>
-							<td>8%</td>
-							<td>0</td>
-							<td>$800</td>
-							<td>$1600</td>
-							<td>$2400</td>
-							<td>$3200</td>
-							<td>$4000</td>
-							<td>$4800</td>
-							<td>$5600</td>
-							<td>$6400</td>
-							<td>$7200</td>
-							<td>$8000</td>
-						</tr>
-						<tr>
-							<td>9%</td>
-							<td>0</td>
-							<td>$900</td>
-							<td>$1800</td>
-							<td>$2700</td>
-							<td>$3600</td>
-							<td>$4500</td>
-							<td>$5400</td>
-							<td>$6300</td>
-							<td>$7200</td>
-							<td>$8100</td>
-							<td>$9000</td>
-						</tr>
-						<tr>
-							<td>10%</td>
-							<td>0</td>
-							<td>$1000</td>
-							<td>$2000</td>
-							<td>$3000</td>
-							<td>$4000</td>
-							<td>$5000</td>
-							<td>$6000</td>
-							<td>$7000</td>
-							<td>$8000</td>
-							<td>$9000</td>
-							<td>$10000</td>
-						</tr>
-						<tr>
-							<td>11%</td>
-							<td>0</td>
-							<td>$1100</td>
-							<td>$2200</td>
-							<td>$3300</td>
-							<td>$4400</td>
-							<td>$5500</td>
-							<td>$6600</td>
-							<td>$7700</td>
-							<td>$8800</td>
-							<td>$9900</td>
-							<td>$11000</td>
-						</tr>
-						<tr>
-							<td>12%</td>
-							<td>0</td>
-							<td>$1200</td>
-							<td>$2400</td>
-							<td>$3600</td>
-							<td>$4800</td>
-							<td>$6000</td>
-							<td>$7200</td>
-							<td>$9000</td>
-							<td>$10800</td>
-							<td>$12000</td>
-							<td>$13200</td>
-						</tr>
-						<tr>
-							<td>13%</td>
-							<td>0</td>
-							<td>$1300</td>
-							<td>$2600</td>
-							<td>$3900</td>
-							<td>$5200</td>
-							<td>$6500</td>
-							<td>$7800</td>
-							<td>$9100</td>
-							<td>$10400</td>
-							<td>$11700</td>
-							<td>$13000</td>
-						</tr>
-						<tr>
-							<td>14%</td>
-							<td>0</td>
-							<td>$1400</td>
-							<td>$2800</td>
-							<td>$4200</td>
-							<td>$5600</td>
-							<td>$7000</td>
-							<td>$8400</td>
-							<td>$9800</td>
-							<td>$11200</td>
-							<td>$12600</td>
-							<td>$14000</td>
-						</tr>
-						<tr>
-							<td>15%</td>
-							<td>0</td>
-							<td>$1500</td>
-							<td>$3000</td>
-							<td>$4500</td>
-							<td>$6000</td>
-							<td>$7500</td>
-							<td>$9000</td>
-							<td>$10500</td>
-							<td>$12000</td>
-							<td>$13500</td>
-							<td>$15000</td>
-						</tr>
-						<tr>
-							<td>16%</td>
-							<td>0</td>
-							<td>$1600</td>
-							<td>$3200</td>
-							<td>$4800</td>
-							<td>$6400</td>
-							<td>$8000</td>
-							<td>$9600</td>
-							<td>$11200</td>
-							<td>$12800</td>
-							<td>$14400</td>
-							<td>$16000</td>							
-						</tr>
-						<tr>
-							<td>17%</td>
-							<td>0</td>
-							<td>$1700</td>
-							<td>$3400</td>
-							<td>$5100</td>
-							<td>$6800</td>
-							<td>$8500</td>
-							<td>$10200</td>
-							<td>$11900</td>
-							<td>$13600</td>
-							<td>$15300</td>
-							<td>$17000</td>							
-						</tr>
-						<tr>
-							<td>18%</td>
-							<td>0</td>
-							<td>$1800</td>
-							<td>$3600</td>
-							<td>$5400</td>
-							<td>$7200</td>
-							<td>$9000</td>
-							<td>$10800</td>
-							<td>$12600</td>
-							<td>$14400</td>
-							<td>$16200</td>
-							<td>$18000</td>							
-						</tr>
-						<tr>
-							<td>19%</td>
-							<td>0</td>
-							<td>$1900</td>
-							<td>$3800</td>
-							<td>$5700</td>
-							<td>$7600</td>
-							<td>$9500</td>
-							<td>$11400</td>
-							<td>$13300</td>
-							<td>$15200</td>
-							<td>$17100</td>
-							<td>$19000</td>							
-						</tr>
-						<tr>
-							<td>20%</td>
-							<td>0</td>
-							<td>$2000</td>
-							<td>$4000</td>
-							<td>$6000</td>
-							<td>$8000</td>
-							<td>$10000</td>
-							<td>$12000</td>
-							<td>$14000</td>
-							<td>$16000</td>
-							<td>$18000</td>
-							<td>$20000</td>							
-						</tr>
+						</tr>						
 					</tbody>
 				</table>
 				<div class="button_div row">
-					<button class="col-12 col-md-3 col-xs-12 edit_commission_calculator next_btn">Edit commission values</button>
+					<button class="col-12 col-md-1 col-xs-12 good_btn next_btn">Looks good</button>
+					<button class="col-12 col-md-1 col-xs-12 edit_commission_calculator ">Edit commission values</button>
+					<button class="col-12 col-md-1 col-xs-12 advanced_options_btn">Advanced options</button>
 				</div>
 			</div>
 
@@ -1727,7 +1493,7 @@
 				<div class="col-md-3 row">
 					<div class="button_div">
 						<button class="col-12 col-md-3 col-xs-12 back_btn">Back</button>
-						<button class="col-12 col-md-3 col-xs-12 edit_commission_calculator">Confirm</button>
+						<button class="col-12 col-md-3 col-xs-12 confirm_commission_configuration">Confirm</button>
 					</div>
 				</div>				
 			</div>
