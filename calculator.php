@@ -3,11 +3,27 @@
 	wp_enqueue_style( 'calculator-style1', CC__PLUGIN_URI . 'css/bootstrap.min.css', false, '1.0', 'all');
 	wp_enqueue_style( 'calculator-style2', CC__PLUGIN_URI . 'css/calculator_style.css', false, '1.0', 'all' );
 	wp_enqueue_style( 'calculator-style3', CC__PLUGIN_URI . 'vendor/chart/chart.css', false, '1.0', 'all' );
+ 
+/*
+ * @example Safe usage: $current_user = wp_get_current_user();
+ * if ( ! ( $current_user instanceof WP_User ) ) {
+ *     return;
+ * }
+ */
+
+global $current_user;
+$current_user = wp_get_current_user();
+$user_id = $current_user->ID;
+$user_login = $current_user->user_login;
+$user_email = $current_user->user_email;
 ?>
 
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 <div class="container calculator_container row">
-	<input type="hidden" name="num_page" class="current_page" value="29">
+	<input type="hidden" name="userid" class="user_id" value="<?php echo $user_id; ?>">
+	<input type="hidden" name="user_login" class="user_login" value="<?php echo $user_login; ?>">
+	<input type="hidden" name="user_email" class="user_email" value="<?php echo $user_email; ?>">
+	<input type="hidden" name="num_page" class="current_page" value="34">
 	<div class="questions_section row">
 		<div class="col-12 col-md-3 col-sm-12 calculator_sidebar">
 			<div class="progressbar">
@@ -31,7 +47,7 @@
 				</label>
 			</div>
 			
-			<div class="page1  step row">
+			<div class="page1  step row ">
 				<div class="header_line">
 					<label class="page_title">Choose Compensation Format</label>
 				</div>
@@ -251,7 +267,7 @@
 			</div>
 
 			<!-- if user already chose rep responsibilities -->
-			<div class="page9 step row">
+			<div class="page9 step row ">
 				<div class="header_line">
 					<label class="page_title">Based on the job responsibilities you selected,
 					consider adding some of these bonuses:</label>
@@ -551,7 +567,7 @@
 			</div>
 
 			<!-- We recommend a base salary of around -->
-			<div class="page25 step row">
+			<div class="page25 step row active">
 				<div class="header_line">
 					<label class="page_title">We recommend a base salary of around</label>
 					<div class="input_div">
@@ -605,7 +621,7 @@
 			</div>
 
 			<!-- choose one -->
-			<div class="page29 step row ">
+			<div class="page28 step row ">
 				<div class="header_line">
 					<label class="page_title">Choose one:</label>	
 				</div>
@@ -626,7 +642,7 @@
 			</div>
 
 			<!-- Commission Frequncy chosen results option pages -->
-			<div class="page29 step row active">
+			<div class="page29 step row">
 				<!-- <div class="header_line">
 					<label class="page_title">We recommend a base salary of around</label>				
 					<label class="sub_header">Due to:</label>
@@ -658,7 +674,7 @@
 						</div>
 						<div class="row">
 							<div class="input_div">
-								<input type="text" name="percentage_cancel" class="percentage_cancel"/ value="10%" min="1">
+								<input type="text" name="percentage_cancel" class="percentage_cancel"/ value="10" min="1">%
 							</div>
 						</div>
 					</div>
@@ -1513,7 +1529,7 @@
 					<div class="col-12 col-md-12 col-xs-12">
 						<label class="sub_title">1. Determine Amount</label>
 						<div class="row bonus_row">
-							<span><input type="number" name="bonus2" class="bonus2" placeholder="$(number)" required=""> per 
+							<span><input type="number" name="bonus2" class="bonus2 bonus_input" placeholder="$(number)" required=""> per 
 							<select class="bonus2_period" required="">
 								<option>(select one)</option>
 								<option>Month</option>
@@ -1524,7 +1540,7 @@
 							for achieving outbound prospecting targets  <span class="small_text">(e.g. monthly bonus if averaging over 30 new records per day)</span></span>
 						</div>
 						<div class="row bonus_row">
-							<span><input type="number" name="bonus3" class="bonus3" placeholder="$(number)" required=""> per 
+							<span><input type="number" name="bonus3" class="bonus3 bonus_input" placeholder="$(number)" required=""> per 
 							<select class="bonus3_period" required="">
 								<option>(select one)</option>
 								<option>Month</option>
@@ -1533,10 +1549,10 @@
 								<option>Occurrence</option>
 							</select>
 							for outbound prospecting performance  <span class="small_text">(e.g. $100 per qualified appointment scheduled)</span></span>
-						</div>
-						<div class="row add_bonus_div">
-							<label><span class="">+</span>Add bonus</label>
-						</div>
+						</div>						
+					</div>
+					<div class="row add_bonus_div">
+						<label><span class="">+</span>Add bonus</label>
 					</div>
 				</div>
 				<div class="row adjust_base">
@@ -1565,7 +1581,7 @@
 							<span>NEW: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 							<label class="new_bonus_slider">$3,500 </label>&nbsp;&nbsp;<span>per month</span>
 						</div>
-						<div class="col-12 col-md-9 col-xs-12">
+						<div class="col-12 col-md-9 col-xs-12 bonus_preview_div">
 							<span>+$500 bonus per month for achieving outbound prospecting targets</span><br>
 							<span>+$100 bonus per occurence for outbound prospecting performance</span>
 						</div>
@@ -1581,7 +1597,7 @@
 			</div>
 
 			<!-- Your compensation structure is complete! -->
-			<div class="page34  step row caculator_configurator">
+			<div class="page34  step row caculator_configurator active">
 				<div class="back_div">
 					<label>
 						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
@@ -1595,17 +1611,17 @@
 					<div class="col-12 col-md-6 col-xs-12 left_half">
 						<div class="row">
 							<label class="sub_title">format</label>
-							<span class="small_text">Salary + Commission + Bonuses &nbsp;<img class="question_icon" data-type="format" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
+							<span><span class="small_text format_text">Salary + Comimission</span>&nbsp;<img class="question_icon" data-type="format" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
 						</div>
 						<div class="row">
 							<label class="sub_title">Base Salary</label>
-							<span class="small_text">$5,000 per month &nbsp;<img class="question_icon" data-type="base salary" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
+							<span class="small_text"><span class="base_salary">$5,000</span> per month &nbsp;<img class="question_icon" data-type="base salary" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
 						</div>
 						<div class="row">
 							<label class="sub_title">Commission Percentage</label>
-							<span class="small_text">5% of revenue &nbsp;<img class="question_icon" data-type="commission percentage" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
+							<span class="small_text"><span class="commission_percent">5</span>% of <span class="isProfitRevenue">revenue</span> &nbsp;<img class="question_icon" data-type="commission percentage" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
 						</div>
-						<div class="row">
+						<div class="row bonus_row">
 							<label class="sub_title">Bonuses</label>
 							<ul>
 								<img class="question_icon extra_icon" data-type="bonus" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>">
@@ -1621,7 +1637,7 @@
 						</div>
 						<div class="row save_div ">
 							<div class="col-12 col-md-3 col-xs-12">
-								<button>Save</button>
+								<button class="save_btn">Save</button>
 							</div>
 							<div class="col-12 col-md-9 col-xs-12">
 								<span class="small_text">Configuration for future editing</span>
@@ -1629,7 +1645,7 @@
 						</div>
 						<div class="row share_div ">
 							<div class="col-12 col-md-3 col-xs-12">
-								<button>Share</button>
+								<button class="share_btn">Share</button>
 							</div>
 							<div class="col-12 col-md-9 col-xs-12">
 								<span class="small_text">Your structure with others</span>
@@ -1746,7 +1762,7 @@
 			</div>
 
 			<!-- Commission Tiers-->
-			<div class="page37  step row">
+			<div class="page37 step row">
 				<div class="back_div">
 					<label>
 						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
@@ -1757,7 +1773,7 @@
 					<label>Commission Tiers</label>
 				</div>
 				<div class="row sub_title">
-					<span>Add commission tiers below. Each tier must be a lower commission than the prior tier. 
+					<span>Add commission tiers below. Each tier must be a lower commission than the prior tier. <br>
 					Select the “Unlimited” time period on your lowest, final tier to finish adding tiers.</span>
 				</div>
 				<div class="container">
@@ -1792,10 +1808,10 @@
 						</div>
 						<div class="col-12 col-md-12 col-xs-12">
 							<div class="row add_tier_div">
-								<label><span class="plus_icon">+</span><span>&nbsp;Add tier</span></label>
+								<label><span class="plus_icon">+</span><span>&nbsp;Add tier</span> </label>
 							</div>
 							<div class="row calculate_trigger_div">
-								<label><span class="plus_icon">+</span><span>&nbsp;Calculate</span></label>
+								<label><span>Calculate</span></label>
 							</div>
 						</div>
 					</div>
@@ -1816,7 +1832,7 @@
 						</div>												
 					</div>
 					<div class="row table_div">
-						<table id="commission_tier" class="light_red_bg commission_tier">
+						<table id="commission_tier3" class="light_red_bg commission_tier">
 							<tbody>
 								<tr>
 									<td class="year_total">
@@ -2190,6 +2206,848 @@
 					</div>
 				</div>
 			</div>
+
+			<!-- Determining Commission Cap-->
+			<div class="page38  step row ">
+				<div class="back_div">
+					<label>
+						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
+						Back
+					</label>
+				</div>				
+				<div class="row header_title">
+					<label>Determining Commission Cap</label>
+				</div>
+				<div class="row sub_title">
+					<span>Since another rep is responsible for accounts after the initial sale, the original sales rep shouldn’t receive unlimited commissions. <br>
+					Most companies pay these commissions for the first 12 months then pass them off to the rep mananing the accounts. </span>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-12 col-md-12 col-xs-12">
+							 <label class="sub_title">How long should reps receive their monthly <label class="commission_percent">10</label>% commission for each sale?</label>
+						</div>
+						<div class="col-12 col-md-12 col-xs-12">
+							 <select class="tier_period38" name="tier_period38">
+								<option>(select time period)</option>
+								<option>Unlimited</option>
+								<?php
+								for($i = 1; $i < 36; $i++){ ?>
+									<option><?php echo $i; ?></option>
+								<?php } ?>
+							</select> <label>months </label>
+							<span class="small_text">(or until customer cancels )</span>						
+						</div>
+					</div>
+					<div class="switch_div">
+						<div class="row">
+							<div class="col-6 col-md-6 col-xs-12 text_div">
+								<label>Commission</label>
+							</div>
+							<div class="col-6 col-md-6 col-xs-12 text_div">
+								<label>Revenue</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 col-md-6 col-xs-12 switch_item black_bg">
+							</div>
+							<div class="col-6 col-md-6 col-xs-12 switch_item red_bg">
+							</div>
+						</div>												
+					</div>
+					<div class="row table_div">
+						<table id="commission_tier1" class="light_red_bg commission_tier">
+							<tbody>
+								<tr>
+									<td class="year_total">
+										<div class="first_half">
+											<div class="row"><label>YEAR 1 TOTAL</label></div>
+											<div class="row"><span>100 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label class="total_commission">$35,000</label> commission</label><br>
+											<label><label class="total_compensation">$83,000</label> total compensation</label></div>
+										</div>
+									</td>
+									<!-- <td class="empty_td">
+										<div class="first_half">
+										</div>
+										<div class="second_half">
+										</div>
+									</td> -->
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 1</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>0</label> / month</div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 2</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 3</label></div>
+											<div class="row"><span>13 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 4</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 5</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 6</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 7</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 8</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 9</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 10</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 11</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 12</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="year_total">
+										<div class="first_half">
+											<div class="row"><label>YEAR 2 TOTAL</label></div>
+											<div class="row"><span>100 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$35,000</label> commission</label><br>
+											<label><label>$83,000</label> total compensation</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 13</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>0</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 14</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 15</label></div>
+											<div class="row"><span>13 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 16</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 17</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 18</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 19</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 20</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 21</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 22</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 23</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 24</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="year_total">
+										<div class="first_half">
+											<div class="row"><label>YEAR 3 TOTAL</label></div>
+											<div class="row"><span>100 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$35,000</label> commission</label><br>
+											<label><label>$83,000</label> total compensation</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 25</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>0</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 26</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 27</label></div>
+											<div class="row"><span>13 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 28</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 29</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 30</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 31</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 32</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 33</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 34</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 35</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 36</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="col-12 col-md-12 col-xs-12 row">
+					<div class="button_div">
+						<!-- <button class="col-12 col-md-1 col-xs-12 faq_btn pull-left">FAQs</button> -->
+						<button class="col-12 col-md-1 col-xs-12 next_btn">Confirm</button>
+						<!-- <button class="col-12 col-md-2 col-xs-12 skip_btn pull-right">Continue without adding tiers</button> -->
+					</div>
+				</div>
+			</div>
+
+			<div class="page39  step row ">
+				<div class="back_div">
+					<label>
+						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
+						Back
+					</label>
+				</div>				
+				<div class="row header_title">
+					<label>Projections for the first three years are below</label>
+				</div>
+				<div class="row sub_title">
+					<span>Projections assume all months are average (<span class="customer_number">35</span> new customers per month at <span class="churn_number">10</span>% churn)<br>
+					If commission numbers seem too high in the second or third year, you should consider adding tiers to lower the commission value after a given time period (e.g. one year)</span>
+				</div>
+				<div class="container">
+					<div class="switch_div">
+						<div class="row">
+							<div class="col-6 col-md-6 col-xs-12 text_div">
+								<label>Commission</label>
+							</div>
+							<div class="col-6 col-md-6 col-xs-12 text_div">
+								<label>Revenue</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 col-md-6 col-xs-12 switch_item black_bg">
+							</div>
+							<div class="col-6 col-md-6 col-xs-12 switch_item red_bg">
+							</div>
+						</div>												
+					</div>
+					<div class="row table_div">
+						<table id="commission_tier2" class="light_red_bg commission_tier">
+							<tbody>
+								<tr>
+									<td class="year_total">
+										<div class="first_half">
+											<div class="row"><label>YEAR 1 TOTAL</label></div>
+											<div class="row"><span>100 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label class="total_commission">$35,000</label> commission</label><br>
+											<label><label class="total_compensation">$83,000</label> total compensation</label></div>
+										</div>
+									</td>
+									<!-- <td class="empty_td">
+										<div class="first_half">
+										</div>
+										<div class="second_half">
+										</div>
+									</td> -->
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 1</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>0</label> / month</div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 2</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 3</label></div>
+											<div class="row"><span>13 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 4</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 5</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 6</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 7</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 8</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 9</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 10</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 11</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 12</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="year_total">
+										<div class="first_half">
+											<div class="row"><label>YEAR 2 TOTAL</label></div>
+											<div class="row"><span>100 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$35,000</label> commission</label><br>
+											<label><label>$83,000</label> total compensation</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 13</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>0</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 14</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 15</label></div>
+											<div class="row"><span>13 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 16</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 17</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 18</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 19</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 20</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 21</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 22</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 23</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 24</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="year_total">
+										<div class="first_half">
+											<div class="row"><label>YEAR 3 TOTAL</label></div>
+											<div class="row"><span>100 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$35,000</label> commission</label><br>
+											<label><label>$83,000</label> total compensation</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 25</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>0</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 26</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 27</label></div>
+											<div class="row"><span>13 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 28</label></div>
+											<div class="row"><span>5 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 29</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 30</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 31</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 32</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$1,750</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 33</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,000</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 34</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,250</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 35</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+									<td>
+										<div class="first_half">
+											<div class="row"><label>Month 36</label></div>
+											<div class="row"><span>9 active<br> customers</span></div>
+										</div>
+										<div class="second_half">
+											<div class="row"><label><label>$2,500</label> / month</label></div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="col-12 col-md-12 col-xs-12 row">
+					<div class="button_div">
+						<button class="col-12 col-md-1 col-xs-12 next_btn">Looks good</button>
+						<button class="col-12 col-md-1 col-xs-12 add_tiers_btn pull-right">Add tiers </button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -2223,9 +3081,13 @@
 	    <!-- Modal content-->
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <label class="modal-title">We recommend this <label class="type_replace">base salary</label> because:</label>
+	        <label class="modal-title"><span class="title_description">We recommend you pay commission as a</span><br> <b class="type_replace">base salary</b></label>
+
 	      </div>
 	      <div class="modal-body">
+	      	<div class="row">
+	      		<span class="show_for_multiple hidden">Such as:</span>
+	      	</div>	      	
 	      	<ul>
 	        	<li>Reps must work on-site in a city with a high cost of living</li>
 	        	<li>Your company has a history of high-earning, commissioned sales rep and a proven path to earning over $100k</li>
@@ -2238,7 +3100,7 @@
 	//load scripts
 	wp_enqueue_script( 'calculator-script1', CC__PLUGIN_URI . 'js/bootstrap.min.js', array ( 'jquery' ), 1.0, true);
 	wp_enqueue_script( 'calculator-script2', CC__PLUGIN_URI . 'js/cleave.min.js', array ( 'jquery' ), 1.0, true);
-	wp_enqueue_script( 'calculator-script4', CC__PLUGIN_URI . 'js/calculator.js', array ( 'jquery' ), 1.0, true);
+	// wp_enqueue_script( 'calculator-script4', CC__PLUGIN_URI . 'js/calculator.js', array ( 'jquery' ), 1.0, true);
 	wp_enqueue_script( 'calculator-script3', CC__PLUGIN_URI . 'vendor/chart/chart.js', array ( 'jquery' ), 1.0, true);
 	
 ?>
