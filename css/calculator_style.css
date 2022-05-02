@@ -45,6 +45,7 @@
 	border: 1px solid #000;
 	padding: 0px;
 	width: 90%;
+    margin: 0 auto;
 	/*width: 100%;*/
 }
 .calculator_container .page1 .answer_div .row label{
@@ -196,12 +197,23 @@
     border: 1px solid #000;
     margin-top: 70px;
 }
-.step button:focus, #salary_edit_modal button:focus, .page31 .button_div button:focus, .page33 .button_div button{
+.step button:focus, #salary_edit_modal button:focus, .page31 .button_div button:focus, .page33 .button_div button, button:focus{
 	outline: none;
 }
-.step button:hover, .step .button_div .next_btn:hover, #salary_edit_modal button:hover, .page31 .button_div button:hover, .page32 .button_div button:hover{
+.step button:hover, .step .button_div .next_btn:hover, 
+#salary_edit_modal button:hover, .page31 .button_div button:hover, .page32 .button_div button:hover{
 	background-color: #000 !important;
 	color: #fff !important;
+	cursor: pointer;
+}
+#share_modal button:hover{
+	background-color: unset;
+	color: #000;
+	border: 1px solid #000;
+}
+#share_modal button{
+	background-color: #000;
+	color: #fff;
 	cursor: pointer;
 }
 .page25 .input_div{
@@ -756,13 +768,13 @@ input:focus{
 .page34 .button_div{
 	margin-top: 112px;
 }
-#recommendation_modal .modal-content{
+#recommendation_modal .modal-content, #share_modal .modal-content{
 	background: #E3E3E3;
 }
-#recommendation_modal .modal-header {
+#recommendation_modal .modal-header, #share_modal .modal-header {
 	justify-content: center;
 }
-#recommendation_modal .modal-header label{
+#recommendation_modal .modal-header label, #share_modal .modal-header label{
 	font-family: 'Montserrat-Regular';
 	font-style: normal;
 	font-weight: 400;
@@ -770,24 +782,34 @@ input:focus{
 	line-height: 34px;
 	text-align: center;
 }
-#recommendation_modal .modal-dialog{
+#recommendation_modal .modal-dialog, #share_modal .modal-dialog{
 	width: 617px;
 }
-#recommendation_modal .modal-header{
+#recommendation_modal .modal-header, #share_modal .modal-header{
 	padding-bottom: 0px;
 	margin-bottom: 51px;
 }
-#recommendation_modal .modal-body{
+#recommendation_modal .modal-body, #share_modal .modal-body{
 	padding-top: 0px;
 }
 #recommendation_modal .modal-content{
 	height: 649px;
 	width: 617px;
 }
-#recommendation_modal .modal-header{
+#share_modal .share_link{
+	border: none;
+	width: 75%;
+}
+#share_modal button{
+	width: 24%;
+}
+#share_modal .modal-content{
+	height: 400px;
+}
+#recommendation_modal .modal-header, #share_modal .modal-header{
 	padding-top: 48px;
 }
-#recommendation_modal .modal-body ul
+#recommendation_modal .modal-body ul, #share_modal .modal-body ul
 {
 	font-family: 'Open Sans';
 	font-style: normal;
@@ -898,23 +920,23 @@ input:focus{
 .page34 .right_half .save_div div:last-child, .page34 .right_half .share_div div:last-child{
 	padding: 27px 0px;
 }
-#recommendation_modal .modal-body .row{
+#recommendation_modal .modal-body .row, #share_modal .modal-body .row{
 	text-align: center;
     font-size: 20px;
     font-style: italic;
     margin-bottom: 20px;
 }
-#recommendation_modal{
+#recommendation_modal, #share_modal{
 	max-width: none;
 }
 .page35 .container, .page36 .container{
 	width: 80%;
 	margin: 0 auto;
 }
-#recommendation_modal .modal-title .title_description{
+#recommendation_modal .modal-title .title_description, #share_modal .modal-title .title_description{
 	font-size: 20px;
 }
-#recommendation_modal .modal-header label{
+#recommendation_modal .modal-header label, #share_modal .modal-header label{
 	line-height: 50px;
 }
 .step .switch_div, .page36 .switch_div, .page37 .switch_div, .page31 .switch_div{
@@ -1161,16 +1183,17 @@ input[type=number] {
 	.page34 .button_div{
 		margin-top: 0px;
 	}
-	#recommendation_modal .modal-header label{
+	#recommendation_modal .modal-header label, #share_modal .modal-header label{
 		font-size: 20px;
 	}
-	#recommendation_modal .modal-content{
+	#recommendation_modal .modal-content, #share_modal .modal-content{
 		height: auto;
 	}
-	#recommendation_modal .modal-dialog, #recommendation_modal .modal-content, #recommendation_modal{
+	#recommendation_modal .modal-dialog, #recommendation_modal .modal-content, #recommendation_modal,
+	#share_modal .modal-dialog, #share_modal .modal-content, #share_modal{
 		width: auto;
 	}
-	#recommendation_modal .modal-header{
+	#recommendation_modal .modal-header, #share_modal .modal-header{
 		margin-bottom: 50px;
 	}	
 	.step .sub_title, .page35 .header_title label{

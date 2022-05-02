@@ -23,7 +23,7 @@ $user_email = $current_user->user_email;
 	<input type="hidden" name="userid" class="user_id" value="<?php echo $user_id; ?>">
 	<input type="hidden" name="user_login" class="user_login" value="<?php echo $user_login; ?>">
 	<input type="hidden" name="user_email" class="user_email" value="<?php echo $user_email; ?>">
-	<input type="hidden" name="num_page" class="current_page" value="34">
+	<input type="hidden" name="num_page" class="current_page" value="25">
 	<div class="questions_section row">
 		<div class="col-12 col-md-3 col-sm-12 calculator_sidebar">
 			<div class="progressbar">
@@ -1611,20 +1611,20 @@ $user_email = $current_user->user_email;
 					<div class="col-12 col-md-6 col-xs-12 left_half">
 						<div class="row">
 							<label class="sub_title">format</label>
-							<span><span class="small_text format_text">Salary + Comimission</span>&nbsp;<img class="question_icon" data-type="format" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
+							<span><span class="small_text format_text">Salary + Comimission</span>&nbsp;<img class="question_icon" data-type="format" src="<?php echo plugins_url('/img/help-web-button.png', __FILE__); ?>"></span>
 						</div>
 						<div class="row">
 							<label class="sub_title">Base Salary</label>
-							<span class="small_text"><span class="base_salary">$5,000</span> per month &nbsp;<img class="question_icon" data-type="base salary" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
+							<span class="small_text"><span class="base_salary">$5,000</span> per month &nbsp;<img class="question_icon" data-type="base salary" src="<?php echo plugins_url('/img/help-web-button.png', __FILE__); ?>"></span>
 						</div>
 						<div class="row">
 							<label class="sub_title">Commission Percentage</label>
-							<span class="small_text"><span class="commission_percent">5</span>% of <span class="isProfitRevenue">revenue</span> &nbsp;<img class="question_icon" data-type="commission percentage" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
+							<span class="small_text"><span class="commission_percent">5</span>% of <span class="isProfitRevenue">revenue</span> &nbsp;<img class="question_icon" data-type="commission percentage" src="<?php echo plugins_url('/img/help-web-button.png', __FILE__); ?>"></span>
 						</div>
 						<div class="row bonus_row">
 							<label class="sub_title">Bonuses</label>
 							<ul>
-								<img class="question_icon extra_icon" data-type="bonus" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>">
+								<img class="question_icon extra_icon" data-type="bonus" src="<?php echo plugins_url('/img/help-web-button.png', __FILE__); ?>">
 								<li><span class="small_text">+$500 bonus per month for acheiving outbound prospecting targets</span></li>
 								<li><span class="small_text">+$100 bonus per occurence for outbound prospecting performance</span></li>
 							</ul>							
@@ -1633,7 +1633,7 @@ $user_email = $current_user->user_email;
 					<div class="col-12 col-md-6 col-xs-12 right_half">
 						<div class="row">
 							<label class="sub_title">Terms</label>
-							<span class="small_text">Comissions are earned a maximum of once per customer &nbsp;<img class="question_icon" data-type="term" src="<?php echo plugins_url('/img/help-web-button 1.png', __FILE__); ?>"></span>
+							<span class="small_text">Comissions are earned a maximum of once per customer &nbsp;<img class="question_icon" data-type="term" src="<?php echo plugins_url('/img/help-web-button.png', __FILE__); ?>"></span>
 						</div>
 						<div class="row save_div ">
 							<div class="col-12 col-md-3 col-xs-12">
@@ -3092,6 +3092,24 @@ $user_email = $current_user->user_email;
 	        	<li>Reps must work on-site in a city with a high cost of living</li>
 	        	<li>Your company has a history of high-earning, commissioned sales rep and a proven path to earning over $100k</li>
 	        </ul>
+	      </div>
+	    </div>
+    </div>
+</div>
+
+<!-- Share modal -->
+<div id="share_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <label class="modal-title">Here is your share link.</label>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="input-group">
+			  <input type="text" class="share_link" readonly="" value="">
+			  <button type="button">Copy</button>
+			</div>
 	      </div>
 	    </div>
     </div>

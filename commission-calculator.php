@@ -72,7 +72,9 @@
          /*$res = stripslashes($data[0]);
          $json = json_decode($res, true);*/
 
-         $total_data_string = json_encode($data);
+         //remove slashes in the json data
+
+         $total_data_string = json_encode($data, JSON_UNESCAPED_SLASHES);
 
          //save data to custom table in DB
          global $wpdb;
@@ -103,6 +105,59 @@
     add_action('wp_ajax_nopriv_data_custom_ajax', 'data_custom_ajax');
     add_action('wp_ajax_data_custom_ajax', 'data_custom_ajax');
 
+   
+   //when collaborator/co-worker is trying share link.
+   add_action('parse_request', 'my_custom_url_handler');
+
+	function my_custom_url_handler() {
+	   $request_uri = $_SERVER["REQUEST_URI"];
+	   $user_id;
+	   if( isset($_GET["user_id"]) && strpos( $request_uri, "/share/?" ) !== false) {
+		   $user_id = $_GET["user_id"];
+
+		   //save data to custom table in DB
+	      global $wpdb;
+			$table = $wpdb->prefix.'calculator';
+			$data = array('user_id' => $user_id, 'user_login' => $user_login, 'user_email' => $user_email, 'data' => $total_data_string);
+			$format = array('%d','%s','%s','%s');
+			//check if this user data already exists. If yes, we update. Otherwise, add a new row
+			$query = "SELECT * FROM $table WHERE user_id = %d";
+			$result = $wpdb->get_results(sprintf($query, $user_id));
+
+			//extract information
+			$user_id = $result[0]->user_id;
+			$user_login = $result[0]->user_login;
+			$user_email = $result[0]->user_email;
+			$data = $result[0]->data;
+			$json_data = json_decode($data, true);
+			//var_dump($json_data); exit();
+
+			//load styles for the share 
+			/*wp_enqueue_style( 'calculator-style1', CC__PLUGIN_URI . 'css/bootstrap.min.css', false, '1.0', 'all');
+			wp_enqueue_style( 'calculator-style2', CC__PLUGIN_URI . 'css/calculator_style.css', false, '1.0', 'all' );
+			wp_enqueue_style( 'calculator-style3', CC__PLUGIN_URI . 'vendor/chart/chart.css', false, '1.0', 'all' );*/
+			//Here we load/include share page for the visitor
+			//require_once( ABSPATH . '/wp-includes/pluggable.php' );
+			//require_once( CC__PLUGIN_DIR . 'test.php');
+
+			wp_enqueue_script( 'calculator-script4', CC__PLUGIN_URI . 'js/calculator.js', array ( 'jquery' ), 1.0, true);
+	    	$protocol = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
+	     
+	 		// Output admin-ajax.php URL with same protocol as current pag
+	 		$params = array(
+				'ajaxurl' =>  admin_url( 'admin-ajax.php', $protocol ),
+				'data' => $json_data,
+				'user_id' => $user_id,
+				'user_login' => $user_login,
+				'user_email' => $user_email,
+			);
+
+	 		wp_localize_script( 'calculator-script4', 'ajax_obj', $params);
+		}
+	}
+
+   
+	//echo $user_id;exit();
 	/*require_once( CC__PLUGIN_URI . 'class.CC.php' );
 	require_once( CC__PLUGIN_URI . 'class.CC-widget.php' );
 	require_once( CC__PLUGIN_DIR . 'class.CC-rest-widget.php' );*/

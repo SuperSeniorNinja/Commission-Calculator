@@ -10,6 +10,7 @@ $(document).ready(function(){
 	var base_salary = window.base_salary = 4000;
 	window.revenue_per_deal;
 	window.deals;
+	window.user_id;
 
 	//when back arrow is clicked
 	$('.back_div, .back_btn').on('click', function () {
@@ -1019,7 +1020,7 @@ $(document).ready(function(){
 		if(hasPageAnswers("user")){
 			for(var i = 0; i < json.length; i++){
 				var json_item = JSON.parse(json[i]);
-				if(json_item.page == "user"){						
+				if(json_item.page == "user"){
 					json_item.user_id = user_id;
 					json_item.user_login = user_login;
 					json_item.user_email = user_email;
@@ -1069,8 +1070,16 @@ $(document).ready(function(){
 
 	//share user data/configuration
 	$(".page34 .share_btn").on("click", function(){
-		console.log("share data");
-		
+		var user_id = $(".user_id").val();
+		var share_link = window.location.origin + "/share?user_id=" + user_id;
+		$("#share_modal .share_link").val(share_link);
+		$("#share_modal").modal("show");
+	});
+
+	//Copy share link
+	$("#share_modal button").on("click", function(){
+		$("#share_modal .share_link").select();
+		document.execCommand("Copy");
 	});
 
 	//page33 bonus description when bonus amount/time period changes
@@ -1420,15 +1429,15 @@ $(document).ready(function(){
 		}
 		else{
 			console.log("need to add a new one");
-			window.items = localStorage.getItem("commission_calculator");
-			/*if(window.items){
+			if (localStorage.getItem('commission_calculator') !== null){
+				window.items = localStorage.getItem("commission_calculator");
 				var json = JSON.parse(window.items);
 				json.push(JSON.stringify(item));
-			}*/
-
-			var json = JSON.parse(window.items);
-			json.push(JSON.stringify(item));
-			window.items = json;
+				window.items = json;
+			}
+			else
+				window.items.push(JSON.stringify(item));
+			
 			localStorage.setItem("commission_calculator", JSON.stringify(window.items));
 			return;
 		}		
@@ -2026,5 +2035,27 @@ $(document).ready(function(){
 		return parseInt(active_page);
 	}
 
-	
+	//share page JS
+	if(window.location.href.includes("share/?user_id=")){
+		var data = ajax_obj.data;
+		var user_id = ajax_obj.user_id;
+		var user_login = ajax_obj.user_login;
+		var user_email = ajax_obj.user_email;
+		console.log("data");
+		console.log(data);
+
+		var json_data = [];
+		for(var i = 0; i < data.length; i++){
+			var array_data = data[i];
+			var formatted__string = JSON.stringify(array_data);
+	    	var str = formatted__string.replace(/\\/g, '');
+	    	str = str.replace(/^[“”"]+|[“”"]+$/g, "");
+			json_data[i] = str;
+		}
+		
+		localStorage.removeItem("commission_calculator");
+		//put DATA from DB to localStorage and show the corresponding result to the shared user.
+		window.items = json_data;
+		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+	}
 });
