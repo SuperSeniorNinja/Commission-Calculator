@@ -40,6 +40,9 @@
 	display: block;
 	/*display: revert;*/
 }
+.disabled{
+	pointer-events: none;
+}
 .calculator_container{
 	max-width: none !important;
 	border: 1px solid #000;

@@ -2037,7 +2037,7 @@ $(document).ready(function(){
 
 	//share page JS
 	if(window.location.href.includes("share/?user_id=")){
-		var data = ajax_obj.data;
+		/*var data = ajax_obj.data;
 		var user_id = ajax_obj.user_id;
 		var user_login = ajax_obj.user_login;
 		var user_email = ajax_obj.user_email;
@@ -2056,6 +2056,41 @@ $(document).ready(function(){
 		localStorage.removeItem("commission_calculator");
 		//put DATA from DB to localStorage and show the corresponding result to the shared user.
 		window.items = json_data;
-		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+		localStorage.setItem("commission_calculator", JSON.stringify(window.items));*/
+
+		var bonus_data = getPageValue("bonuses", "bonuses");
+		var bonus_periods = JSON.parse(bonus_data).periods;
+		var bonus_bonuses = JSON.parse(bonus_data).bonuses;		
+
+		var bonus_html = ``;
+		for(var i = 0; i < bonus_periods.length; i++){
+			if(i == 0){
+				bonus_html += `<li><span class="small_text">+$`+bonus_bonuses[i]+` bonus per `+ bonus_periods[i]+` for acheiving outbound prospecting targets</span></li>`;	
+			}
+			else
+				bonus_html += `<li><span class="small_text">+$`+bonus_bonuses[i]+` bonus per `+ bonus_periods[i]+` for outbound prospecting performance</span></li>`;				
+		}
+
+		var new_bonus_data = getPageValue(33, 33);
+		var new_bonus = JSON.parse(new_bonus_data).new_bonus;
+
+		var base_salary = getConfiguration("base_salary") ? getConfiguration("base_salary") : 4000;
+		base_salary = parseFloat(base_salary) - parseFloat(new_bonus);
+		window.base_salary = base_salary;
+		
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+		var chosen_features = getPageValue("features", "features");
+		if(chosen_features){
+			var features = JSON.parse(chosen_features).features;
+			format = features[0];
+			$(".page34 .left_half .format_text").text(format);
+
+		}			
+
+		$(".page34 .base_salary").text(formatPrice(base_salary));
+		$(".page34 .commission_percent").text(commission_percent);
+		$(".page34 .bonus_row ul li").remove();
+		$(".page34 .bonus_row ul").append(bonus_html);
+		$(".page34 .isProfitRevenue").html(IsProfitRevenue());
 	}
 });
