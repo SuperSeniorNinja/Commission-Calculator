@@ -14,7 +14,6 @@ $(document).ready(function(){
 
 	//when back arrow is clicked
 	$('.back_div, .back_btn').on('click', function () {
-		console.log("back button is clicked");
 		goToPrevPage();
 	});
 
@@ -40,15 +39,13 @@ $(document).ready(function(){
 		
 		//consider multiple choice case here
 		var option_dom = $(this);
-		var target_page;		
-		console.log(question);
-		console.log(chosen_answer);
+		var target_page;
+
 			
 		//check if this page is for muiltple or single choice
 		if(multiple_pages.includes(window.current_page)) {//if multiple choices
 			//if it is already chosen, we unclick it.
 			if($(this).hasClass("active")){
-				console.log("need to be removed");
 				$(this).removeClass("active");
 				//if no active answer is chosen, we deactivate next button.
 				if($(".page" + window.current_page + " .answer_div .active").length == 0)
@@ -622,8 +619,6 @@ $(document).ready(function(){
 			total_month_period += parseInt(time_period_doms[i].value);
 		
 		var available_month_period = 36 - total_month_period;
-		console.log("here");
-		console.log(available_month_period);
 		var option_html = `<option>(select time period)</option><option>Unlimited</option>`;
 		for(var j = 1; j <= available_month_period; j++){
 			option_html += `<option>` + j + `</option>`;
@@ -709,7 +704,6 @@ $(document).ready(function(){
 					percents.push(percent_doms[i].value);
 			}
 		}
-		console.log(percents);
 		InitCommissionTierTable(37, 500, percents);
 	});
 
@@ -739,15 +733,15 @@ $(document).ready(function(){
 					while(percents.length < 36)
 						percents.push(percent_doms[i].value);
 				}
-			}			
-			console.log(percents);
+			}
+
 			InitCommissionTierTable(37, 500, percents);
 		}
 	});
 
 	//page 37 <!-- Commission Tiers-->
 	function InitCommissionTierTable(page_id, deal = 500, percents = null, months = null, number_of_deals_month = 5){
-		console.log("here I am");
+
 		var deal_size = deal;
 		var number_of_deals = number_of_deals_month;
 		var month_commission = [];
@@ -950,8 +944,6 @@ $(document).ready(function(){
 	$(".page34 .question_icon").on("click", function(){
 		//get recommendation type
 		var type = $(this).data("type");
-		console.log("type");
-		console.log(type);
 		var header_text = "We recommend you Compensation Format as a";
 		$("#recommendation_modal .type_replace").html(type);
 
@@ -1007,8 +999,6 @@ $(document).ready(function(){
 
 	//save user data/configuration
 	$(".page34 .save_btn").on("click", function(){
-		
-		console.log("save data");
 		var total_data = localStorage.getItem("commission_calculator");
 		var user_id = $(".user_id").val();
 		var user_login = $(".user_login").val();
@@ -1057,9 +1047,7 @@ $(document).ready(function(){
                 user_email: user_email
             },
             cache: false,
-            success: function(data){                    
-                console.log("data");
-                console.log(data);
+            success: function(data){            	
                 if(data.response == "updated")
                 	alert("User data is successfully updated");
                 else
@@ -1324,12 +1312,9 @@ $(document).ready(function(){
 		var answers = [];
 		var answer;
 		if($(".page" + window.current_page + " .answer_div .active").length > 1){
-			var active_options = $(".page" + window.current_page + " .answer_div .active label");
-			console.log("active_options");
-			console.log(active_options);
+			var active_options = $(".page" + window.current_page + " .answer_div .active label");			
 			for(var i = 0; i < active_options.length; i++){
 				answer = active_options[i]/*.innerText.trim()*/;
-				console.log(answer);
 				answers.push(answer);
 			}
 		}
@@ -1421,14 +1406,10 @@ $(document).ready(function(){
 		//check if the user has already chosen answers for this page. If already exists, we update, not add a new one.
 		var has_page_answers = hasPageAnswers(window.current_page);
 		
-		console.log("item");
-		console.log(item);
 		if(has_page_answers){
-			console.log("page answer exists. need to update it.");
 			updatePageAnswers(window.current_page, answers, recommendation);
 		}
 		else{
-			console.log("need to add a new one");
 			if (localStorage.getItem('commission_calculator') !== null){
 				window.items = localStorage.getItem("commission_calculator");
 				var json = JSON.parse(window.items);
@@ -1733,9 +1714,7 @@ $(document).ready(function(){
 	function saveFeature(index, feature){
 		var has_features = hasPageAnswers("features");
 		if(has_features){
-			console.log("features page exists");
 			if(hasFeatures("features", index)){
-				console.log("findex exists");
 				updateFeatureAnswers(index, feature);
 			}
 			else{

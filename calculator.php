@@ -17,13 +17,12 @@ $user_id = $current_user->ID;
 $user_login = $current_user->user_login;
 $user_email = $current_user->user_email;
 ?>
-
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-<div class="container calculator_container row">
+<div class="calculator_container row">
 	<input type="hidden" name="userid" class="user_id" value="<?php echo $user_id; ?>">
 	<input type="hidden" name="user_login" class="user_login" value="<?php echo $user_login; ?>">
 	<input type="hidden" name="user_email" class="user_email" value="<?php echo $user_email; ?>">
-	<input type="hidden" name="num_page" class="current_page" value="25">
+	<input type="hidden" name="num_page" class="current_page" value="1">
 	<div class="questions_section row">
 		<div class="col-12 col-md-3 col-sm-12 calculator_sidebar">
 			<div class="progressbar">
@@ -47,13 +46,13 @@ $user_email = $current_user->user_email;
 				</label>
 			</div>
 			
-			<div class="page1  step row ">
+			<div class="page1  step row active">
 				<div class="header_line">
 					<label class="page_title">Choose Compensation Format</label>
 				</div>
 				<div class="answer_div col-12 col-md-6  col-sm-12">
 					<div class="row">
-						<label>This tool was designed to created base Salary + Commission plans.</label>
+						<label>This tool was designed to create base Salary + Commission plans.</label>
 					</div>
 					<div class="row">
 						<label>This is a guaranteed base salary plus a performance incentive such as a percentage of revenue or profit, or fixed bonuses.</label>
@@ -412,7 +411,7 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!--Do sales reps negotiate prices with customers?  -->
-			<div class="page16 step row">
+			<div class="page16 step row ">
 				<div class="header_line">
 					<label class="page_title">Do sales reps negotiate prices with customers?</label>
 				</div>
@@ -567,7 +566,7 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!-- We recommend a base salary of around -->
-			<div class="page25 step row active">
+			<div class="page25 step row ">
 				<div class="header_line">
 					<label class="page_title">We recommend a base salary of around</label>
 					<div class="input_div">

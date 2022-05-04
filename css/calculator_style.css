@@ -33,6 +33,29 @@
   font-style: normal;
   font-display: block;
 }
+/*fix conflict between mother theme*/
+html, body, #page{
+	background: unset !important;
+}
+.site-footer .footer-widgets{
+	padding-bottom: 0px !important;
+	margin-top: 4rem;
+}
+header{
+	background: url(http://irc.dev.citytechhq.net/wp-content/uploads/2021/02/background-index-1.jpg);
+}
+#content{
+	max-width: 100%;
+}
+.outside-container{
+	margin-top: 7%;
+}
+footer{
+	display: none;
+}
+
+/*end of style conflict*/
+
 .calculator_body .step{
 	display: none;
 }
@@ -43,6 +66,7 @@
 .disabled{
 	pointer-events: none;
 }
+
 .calculator_container{
 	max-width: none !important;
 	border: 1px solid #000;
