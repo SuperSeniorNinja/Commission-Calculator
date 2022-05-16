@@ -105,6 +105,22 @@ $user_email = $current_user->user_email;
 					</div>
 				</div>
 			</div> -->
+			<div class="page2 step recommendation_page row">
+				<div class="answer_div col-12 col-md-6  col-sm-12">
+					<div class="headline1">
+						<label>We recommend paying commission as a:</label>
+					</div>
+					<div class="headline2">
+						<label>Percentage of profit</label>
+					</div>
+					<div class="headline3">
+						<label>This incentivizes sales reps to negotiate the best deals, and makes commission more reflective of negotiation performance and deal quality.</label>
+					</div>
+				</div>
+				<div class="button_div">
+					<button class="arrow_next_btn" data-next="">Go to next page<img class="next_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>"></button>
+				</div>
+			</div>
 
 			<!-- commission_types/prospecting -->
 			<div class="page3 step row ">
@@ -112,33 +128,41 @@ $user_email = $current_user->user_email;
 					<label class="page_title">Check all that apply:</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
-					<div class="answer_option col-12 col-md-12 col-sm-12">
+					<!-- <div class="answer_option_div">
+						<img src="<?php echo plugins_url('/img/tick.png', __FILE__); ?>" class="active_tick">
+						<div class="answer_option col-12 col-md-12 col-sm-12">
+							<label>Reps will have consistent inbound leads </label>
+							<span class="hidden">(commission -1)</span>
+						</div>
+					</div> -->
+					<div class="answer_option col-md-12">
 						<label>Reps will have consistent inbound leads </label>
-						<span class="hidden">(commission -1)</span>
+						<!-- <span class="hidden">(commission -1)</span> -->
 					</div>
+					
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Most sales will come from outbound prospecting or cold outreach</label>
-						<span class="hidden">(commission +1)</span>
+						<!-- <span class="hidden">(commission +1)</span> -->
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Most outbound leads are warm (e.g. old customers, referrals, they're familiar with us, etc.)</label>
-						<span class="hidden">(commission -1)</span>
+						<!-- <span class="hidden">(commission -1)</span> -->
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Most outbound leads are cold (i.e. they've never heard of us, they're not expecting our call)</label>
-						<span class="hidden">(commission +1)</span>
+						<!-- <span class="hidden">(commission +1)</span> -->
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Leads and contact information are not provided to the rep; they have to find this on their own.</label>
-						<span class="hidden">(commission +1)</span>
+						<!-- <span class="hidden">(commission +1)</span> -->
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>We have access to high quality, accurate, up to date contact information for leads, allowing sales reps to connect directly with decision makers</label>
-						<span class="hidden">(commission -1)</span>
+						<!-- <span class="hidden">(commission -1)</span> -->
 					</div>
 				</div>
 				<div class="button_div">
-					<button class="next_btn">Next</button>
+					<button class="next_btn">Confirm selection</button>
 				</div>
 			</div>
 
@@ -215,7 +239,7 @@ $user_email = $current_user->user_email;
 					</div>
 				</div>
 				<div class="button_div">
-					<button class="next_btn">Next</button>
+					<button class="next_btn">Confirm selection</button>
 				</div>
 			</div>
 
@@ -250,7 +274,7 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!-- Do you want to incentivize reps for beneficial activities and milestones, or just sales? -->
-			<div class="page8 step row">
+			<div class="page8 step row ">
 				<div class="header_line">
 					<label class="page_title">Do you want to incentivize reps for beneficial activities and milestones, or just sales?</label>
 					<label class="sub_header">You may want to consider adding fixed bonuses to encourage important behaviors or success signals, such as a $100 bonus for appointments with new customers. </label>
@@ -273,7 +297,7 @@ $user_email = $current_user->user_email;
 					<label class="sub_header">Click each bonus for information and examples</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
-					<div class="answer_option col-12 col-md-12 col-sm-12">
+					<!-- <div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>KPI attainment bonus for outbound prospecting</label>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
@@ -281,7 +305,7 @@ $user_email = $current_user->user_email;
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>KPI attainment bonus for inbound prospecting</label>
-					</div>
+					</div> -->
 				</div>
 				<div class="button_div">
 					<button class="next_btn">Finished adding bonuses</button>
@@ -291,21 +315,21 @@ $user_email = $current_user->user_email;
 			<!-- if user did not choose rep responsibilities -->
 			<div class="page10 step row">
 				<div class="header_line">
-					<label class="page_title">Here are some examples of common fixed bonuses. </label>
+					<label class="page_title">Here are some examples of common fixed bonuses. </label><br>
 					<label class="sub_header">Click each bonus for information and examples</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">					
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>KPI attainment bonus for outbound prospecting</label>
+						<label>Bonus for outbound prospecting</label>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Performance bonus for outbound prospecting</label>
+						<label>Bonus for inbound leads</label>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>KPI attainment bonus for inbound prospecting</label>
+						<label>Bonus for closing</label>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>All other bonuses.....</label>
+						<label>Management bonus</label>
 					</div>
 				</div>
 				<div class="button_div">
@@ -333,27 +357,38 @@ $user_email = $current_user->user_email;
 					</div>
 				</div>
 				<div class="button_div">
-					<button class="next_btn">Next</button>
+					<button class="next_btn">Confirm Selection</button>
 				</div>
 			</div>
 
-			<!-- Choose Commission Frequncy -->
-			<!-- <div class="page12 step row ">
-				<div class="header_line">
-					<label class="page_title">Choose Commission Frequency</label>
-				</div>
+			<!-- Bonus recommendation page -->
+			<div class="page12 step bonus_recommendation_page row ">
 				<div class="answer_div col-12 col-md-8  col-sm-12">
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>One-time commission</label>
+					<div class="headline1">
+						<label>Consider adding a:</label>
 					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Recurring commission (capped)</label>
+					<div class="headline2">
+						<label>NameOfBonus</label>
 					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Recurring commission (uncapped)</label>
+					<div class="headline3">
+						<label>Such as:</label>
 					</div>
-				</div>
-			</div> -->
+					<div class="headline4">
+						<ul>
+							<li>Sample bonus -- e.g. sample bonus explanation</li>
+							<li>Sample bonus -- e.g. sample bonus explanation</li>
+							<li>Sample bonus -- e.g. sample bonus explanation</li>
+						</ul>
+					</div>
+					<div class="headline5">
+						<label>If you want to add this bonus, click "Add bonus" below. You can set value and edit bonuses once your structure is more complete. </label>
+					</div>
+					<div class="button_div">
+						<button class="arrow_next_btn" data-next="">Don't add bonus</button>
+						<button class="arrow_next_btn" data-next="">Add bonus</button>
+					</div>
+				</div>				
+			</div>
 
 			<!-- How do customers pay for products? -->
 			<div class="page13 step row">
@@ -540,33 +575,32 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!-- just below page 23 -->
-			<div class="page24 step row">
+			<div class="page24 step row ">
 				<div class="header_line">
 					<!-- <label class="page_title">No title</label> -->
-					<label class="sub_header">Choose all that apply.</label>
+					<label class="page_title">Choose all that apply.</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Our company, product or service is well-known in our industry</label>
-						<span class="hidden">(subtract $250)</span>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Reps work less than 8 hours per day on average</label>
-						<span class="hidden">(subtract $250)</span>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Reps are given benefits such as insurance and 401k</label>
-						<span class="hidden">(subtract $250)</span>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Our industry is complex and can be difficult to master. Some prior experience in our industry is a must.</label>
-						<span class="hidden">(add $500)</span>
 					</div>
+				</div>
+				<div class="button_div">
+					<button class="next_btn">Confirm selection</button>
 				</div>
 			</div>
 
 			<!-- We recommend a base salary of around -->
-			<div class="page25 step row ">
+			<div class="page25 step row">
 				<div class="header_line">
 					<label class="page_title">We recommend a base salary of around</label>
 					<div class="input_div">
@@ -576,7 +610,7 @@ $user_email = $current_user->user_email;
 					<label class="sub_header">Due to:</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
-					<div class="answer_option col-12 col-md-12 col-sm-12">
+					<div class="answer_option col-12 col-md-12 col-sm-12 active">
 						<label>On-site work</label>
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
@@ -620,7 +654,7 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!-- choose one -->
-			<div class="page28 step row ">
+			<div class="page28 step row">
 				<div class="header_line">
 					<label class="page_title">Choose one:</label>	
 				</div>
@@ -641,7 +675,7 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!-- Commission Frequncy chosen results option pages -->
-			<div class="page29 step row">
+			<div class="page29 step row ">
 				<!-- <div class="header_line">
 					<label class="page_title">We recommend a base salary of around</label>				
 					<label class="sub_header">Due to:</label>
@@ -653,7 +687,7 @@ $user_email = $current_user->user_email;
 						</div>
 						<div class="row">
 							<div class="input_div">							
-								<span>$<input type="text" name="average_revenue_profit" class="average_revenue_profit" value="500" min="1" /></span>
+								<span>$<input type="text" name="average_revenue_profit" class="average_revenue_profit" min="1" /></span>
 							</div>
 						</div>
 					</div>
@@ -663,7 +697,7 @@ $user_email = $current_user->user_email;
 						</div>
 						<div class="row">
 							<div class="input_div">							
-								<input type="number" name="average_rep" class="average_rep"/ value="5" min="1">
+								<input type="number" name="average_rep" class="average_rep"/ min="1">
 							</div>
 						</div>
 					</div>
@@ -673,16 +707,65 @@ $user_email = $current_user->user_email;
 						</div>
 						<div class="row">
 							<div class="input_div">
-								<input type="text" name="percentage_cancel" class="percentage_cancel"/ value="10" min="1">%
+								<input type="text" name="percentage_cancel" class="percentage_cancel"/ min="1">%
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="button_div">
-					<button class="next_btn">Confirm</button>
+					<button class="arrow_next_btn" data-next="">Confirm</button>
+				</div>
+			</div>			
+
+			<!-- Determine Bonuses -->
+			<div class="page277 step row">
+				<div class="header_line">
+					<label class="page_title">Determine Commission Values</label>	
+				</div>
+				<div class="section">
+					<label class="sub_header">1. Determine Amount</label>
+					<div class="row">
+						<input type="number" name="bonus1" class="bonus1" placeholder="💲(number)" />
+						bonus per 
+						<select>
+							<option>(select one)</option>
+							<option>Month</option>
+							<option>Quarter</option>
+							<option>Year</option>
+							<option>Occurrence</option>
+						</select>
+						for achieving outbound prospecting targets  (e.g. monthly bonus if averaging over 30 new records per day)
+					</div>
+				</div>
+				<div class="answer_div col-12 col-md-8  col-sm-12">
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>On-site work</label>
+					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>High cost of living state</label>					
+					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Well known in our industry</label>					
+					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Under 8hr work days</label>
+					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Benefits (insurance, 401k)</label>
+					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Need for experienced reps </label>
+					</div>
+				</div>
+				<div class="button_div">
+					<button class="edit_salary_btn" data-toggle="modal" data-target="#salary_edit_modal">Edit salary</button>
+					<button class="next_btn">Next</button>
 				</div>
 			</div>
-
+		</div>
+	</div>
+	<div class="result_section hidden">
+		<div class="col-12 col-md-12 col-sm-12 calculator_body">
 			<!-- commision percentage color overlaied table -->
 			<div class="page30 step row  caculator_configurator">
 				<table>
@@ -999,57 +1082,11 @@ $user_email = $current_user->user_email;
 						</tr>
 					</tbody>
 				</table>
-			</div>
-
-			<!-- Determine Bonuses -->
-			<div class="page277 step row">
-				<div class="header_line">
-					<label class="page_title">Determine Commission Values</label>	
-				</div>
-				<div class="section">
-					<label class="sub_header">1. Determine Amount</label>
-					<div class="row">
-						<input type="number" name="bonus1" class="bonus1" placeholder="💲(number)" />
-						bonus per 
-						<select>
-							<option>(select one)</option>
-							<option>Month</option>
-							<option>Quarter</option>
-							<option>Year</option>
-							<option>Occurrence</option>
-						</select>
-						for achieving outbound prospecting targets  (e.g. monthly bonus if averaging over 30 new records per day)
-					</div>
-				</div>
-				<div class="answer_div col-12 col-md-8  col-sm-12">
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>On-site work</label>
-					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>High cost of living state</label>					
-					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Well known in our industry</label>					
-					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Under 8hr work days</label>
-					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Benefits (insurance, 401k)</label>
-					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Need for experienced reps </label>
-					</div>
-				</div>
-				<div class="button_div">
-					<button class="edit_salary_btn" data-toggle="modal" data-target="#salary_edit_modal">Edit salary</button>
-					<button class="next_btn">Next</button>
+				<div class="button_div row">
+					<button class="col-12 col-md-1 col-xs-12 faq_btn">FAQs</button>
+					<button class="col-12 col-md-1 col-xs-12 good_btn arrow_next_btn" data-next="">Looks good</button>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="result_section hidden">
-		<div class="col-12 col-md-12 col-sm-12 calculator_body">
 			<!-- commision percentage color overlaied table -->
 			<div class="page31 step row caculator_configurator">
 				<div class="back_div">
@@ -1075,7 +1112,7 @@ $user_email = $current_user->user_email;
 						<span class="red_txt">Maximum recommended value reached.<br>
 						Click “Advanced Options” if you need to change inputs. </span>
 					</div>					
-					<label class="subheader">Here's how much the rep will earn depending on how good (or bad) of a month they have:</label>
+					<label class="subheader col-md-10">Here's how much the rep will earn depending on how good (or bad) of a month they have:</label>
 				</div>
 				<div class="switch_div">
 					<div class="row">
@@ -1091,7 +1128,7 @@ $user_email = $current_user->user_email;
 						</div>
 						<div class="col-6 col-md-6 col-xs-12 switch_item red_bg">
 						</div>
-					</div>												
+					</div>
 				</div>
 				<table>
 					<thead>
@@ -1142,7 +1179,7 @@ $user_email = $current_user->user_email;
 					</tbody>
 				</table>
 				<div class="button_div row">
-					<button class="col-12 col-md-1 col-xs-12 good_btn next_btn">Looks good</button>
+					<button class="col-12 col-md-1 col-xs-12 good_btn arrow_next_btn">Looks good</button>
 					<button class="col-12 col-md-1 col-xs-12 edit_commission_calculator ">Edit commission values</button>
 					<button class="col-12 col-md-1 col-xs-12 advanced_options_btn">Advanced options</button>
 				</div>
@@ -1589,20 +1626,20 @@ $user_email = $current_user->user_email;
 				<div class="col-12 col-md-12 col-xs-12 row">
 					<div class="button_div">
 						<button class="col-12 col-md-3 col-xs-12 faq_btn">FAQs</button>
-						<button class="col-12 col-md-3 col-xs-12 next_btn">Finish</button>
+						<button class="col-12 col-md-3 col-xs-12 arrow_next_btn" data-next="34">Finish</button>
 						<button class="col-12 col-md-3 col-xs-12 skip_btn">Skip</button>
 					</div>
 				</div>				
 			</div>
 
 			<!-- Your compensation structure is complete! -->
-			<div class="page34  step row caculator_configurator active">
+			<div class="page34  step row caculator_configurator">
 				<div class="back_div">
 					<label>
 						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
 						Back
 					</label>
-				</div>				
+				</div>
 				<div class="row header_title">
 					<label>Your compensation structure is complete!</label>
 				</div>
@@ -1675,8 +1712,8 @@ $user_email = $current_user->user_email;
 						<div class="col-12 col-md-12 col-xs-12">
 							<label class="sub_title">1. Determine Amount</label>
 							<div class="row bonus_row">
-								<span><input type="number" name="temp_salary1" class="temp_salary1" placeholder="$(number)" required=""> Determine Temporary Salary boost  
-								<input type="number" name="month_number1" class="month_number1" placeholder="(number, 1-99)" required="">
+								<span><input type="number" name="temp_salary1" class="temp_salary1" placeholder="$(number)" required=""> temporary salary bonus that ends in month number
+								<input type="number" name="month_number1" class="month_number1" placeholder="(number, 1-99)" required="" max="99">
 								and decreases by 
 								<input type="number" name="temp_salary2" class="temp_salary2" placeholder="$0.00" required="">
 								 each month.
@@ -1701,21 +1738,21 @@ $user_email = $current_user->user_email;
 					</div>
 					<div class="row bar_div">						
 						<!-- bar chart -->
-						<div id="bar_div_commission">
+						<div id="edit_temporary_salary_boost">
 						</div>
 					</div>
 				</div>
 				<div class="col-12 col-md-12 col-xs-12 row">
-					<div class="button_div">
-						<button class="col-12 col-md-3 col-xs-12 faq_btn pull-left">FAQs</button>
-						<button class="col-12 col-md-3 col-xs-12 next_btn">Finish</button>
-						<button class="col-12 col-md-3 col-xs-12 skip_btn pull-right">Skip</button>
+					<div class="button_div flex_div">
+						<button class="col-12 col-md-3 col-xs-12 faq_btn">FAQs</button>
+						<button class="col-12 col-md-3 col-xs-12 arrow_next_btn" data-next="33">Finish</button>
+						<button class="col-12 col-md-3 col-xs-12 arrow_next_btn" data-next="33">Skip</button>
 					</div>
 				</div>
 			</div>
 
 			<!-- RAMP UP -->
-			<div class="page36 step row">
+			<div class="page36 step row ">
 				<div class="back_div">
 					<label>
 						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
@@ -1727,7 +1764,9 @@ $user_email = $current_user->user_email;
 				</div>
 				<div class="container">
 					<div class="row">
-						<span>Since your company isn't already selling this product, it will take some extra time for reps to get acclimated and fill a healthy sales pipeline. Here’s what that ramp up may look like:</span>
+						<div class="col-md-8 col-xs-12">
+							<span>Since your company isn't already selling this product, it will take some extra time for reps to get acclimated and fill a healthy sales pipeline. Here’s what that ramp up may look like:</span>
+						</div>
 					</div>
 					<div class="switch_div">
 						<div class="row">
@@ -1747,15 +1786,15 @@ $user_email = $current_user->user_email;
 					</div>
 					<div class="row bar_div">						
 						<!-- bar chart -->
-						<div id="bar_div_ramp">
+						<div id="bar_div_ramp" class="barchart">
 						</div>
 					</div>
 				</div>
 				<div class="col-12 col-md-12 col-xs-12 row">
-					<div class="button_div">
-						<button class="col-12 col-md-3 col-xs-12 faq_btn pull-left">FAQs</button>
-						<button class="col-12 col-md-3 col-xs-12 next_btn">Finish</button>
-						<button class="col-12 col-md-3 col-xs-12 skip_btn pull-right">Skip</button>
+					<div class="button_div flex_div">
+						<button class="col-12 col-md-3 col-xs-12 faq_btn">FAQs</button>
+						<button class="col-12 col-md-3 col-xs-12 arrow_next_btn" data-next="">Next</button>
+						<button class="col-12 col-md-3 col-xs-12 skip_btn">See more ramp up scenarios</button>
 					</div>
 				</div>
 			</div>
@@ -2200,7 +2239,7 @@ $user_email = $current_user->user_email;
 				<div class="col-12 col-md-12 col-xs-12 row">
 					<div class="button_div">
 						<button class="col-12 col-md-3 col-xs-12 faq_btn pull-left">FAQs</button>
-						<button class="col-12 col-md-3 col-xs-12 next_btn">Confirm</button>
+						<button class="col-12 col-md-3 col-xs-12 arrow_next_btn">Confirm</button>
 						<button class="col-12 col-md-3 col-xs-12 skip_btn pull-right">Continue without adding tiers</button>
 					</div>
 				</div>
@@ -3042,8 +3081,119 @@ $user_email = $current_user->user_email;
 				</div>
 				<div class="col-12 col-md-12 col-xs-12 row">
 					<div class="button_div">
-						<button class="col-12 col-md-1 col-xs-12 next_btn">Looks good</button>
+						<button class="col-12 col-md-1 col-xs-12 arrow_next_btn">Looks good</button>
 						<button class="col-12 col-md-1 col-xs-12 add_tiers_btn pull-right">Add tiers </button>
+					</div>
+				</div>
+			</div>
+
+			<!-- temporary salary boost explanation -->
+			<div class="page40 step row ">
+				<div class="back_div">
+					<label>
+						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
+						Back
+					</label>
+				</div>	
+				<div class="answer_div col-12 col-md-6  col-sm-12">
+					<div class="headline1">
+						<label>Candidates tend to downplay ramp-up while interviewing, thinking they’ll reach peak earnings quicker. Then, when the first few months are tougher and they earn less than expected, they quit. Hiring, training, then needing to rehire is a large setback.</label>
+					</div>
+					<div class="headline5">
+						<label>You can try to avoid this by adding a temporary salary boost.</label>
+					</div>
+					<div class="button_div flex_div">
+						<button class="arrow_next_btn" data-next="33">Add temporary salary boost</button>
+						<button class="arrow_next_btn" data-next="41">Don't add a boost</button>
+					</div>
+				</div>				
+			</div>
+
+			<!-- Recommended temporary salary boost -->
+			<div class="page41 step row ">
+				<div class="back_div">
+					<label>
+						<img class="back_icon" src="<?php echo plugins_url('/img/menu_arrow_prev.png', __FILE__); ?>">
+						Back
+					</label>
+				</div>				
+				<div class="row header_title">
+					<label>Add Temporary Salary boost</label>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 col-xs-12">
+							<span>We recommend a six month salary boost that begins at 50% of the rep’s base salary.<br>
+							This boost decreases each month before dissappearing after the sixth month. </span>
+						</div>						
+					</div>
+					<div class="row">
+						<div class="col-md-4 col-xs-12 month_block_div">
+							<div class="col-md-2 col-12 month_block">
+								<label class="headline1">
+									Month1
+								</label>
+								<label class="headline2">
+									$2,000
+								</label>
+							</div>
+							<div class="col-md-2 col-12 month_block">
+								<label class="headline1">
+									Month2
+								</label>
+								<label class="headline2">
+									$1,500
+								</label>
+							</div>
+							<div class="col-md-2 col-12 month_block">
+								<label class="headline1">
+									Month3
+								</label>
+								<label class="headline2">
+									$1,000
+								</label>
+							</div>
+							<div class="col-md-2 col-12 month_block">
+								<label class="headline1">
+									Month4
+								</label>
+								<label class="headline2">
+									$750
+								</label>
+							</div>
+							<div class="col-md-2 col-12 month_block">
+								<label class="headline1">
+									Month5
+								</label>
+								<label class="headline2">
+									$500
+								</label>
+							</div>
+							<div class="col-md-2 col-12 month_block">
+								<label class="headline1">
+									Month6
+								</label>
+								<label class="headline2">
+									$250
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 col-12">
+							<div class="bar_div">
+								<!-- bar chart -->
+								<div id="add_temporary_salary_boost" class="barchart">
+								</div>
+							</div>
+						</div>						
+					</div>
+				</div>
+				<div class="col-12 col-md-12 col-xs-12 row">
+					<div class="button_div flex_div">
+						<button class="col-12 col-md-3 col-xs-12 faq_btn">FAQs</button>
+						<button class="col-12 col-md-3 col-xs-12 arrow_next_btn" data-next="">Keep this salary boost</button>
+						<button class="col-12 col-md-3 col-xs-12 arrow_next_btn" data-next="35">Edit salary boost</button>
 					</div>
 				</div>
 			</div>

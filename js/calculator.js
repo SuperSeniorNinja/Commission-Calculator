@@ -5,13 +5,21 @@ $(document).ready(function(){
 	window.items = [];
 	window.browsing_history = [];
 	window.current_page = getCurrentPage();
-	var multiple_pages = [11, 3, 26] // set pages for multiple options
+	var multiple_pages = [5, 11, 3, 26, 24]; // set pages for multiple options
 	var commission = window.commission = 5; //by default, 5
-	var base_salary = window.base_salary = 4000;
+	var base_salary = getConfiguration("base_salary") ? getConfiguration("base_salary") : 4000;
 	window.revenue_per_deal;
 	window.deals;
 	window.user_id;
-
+	var default_sidebar_menus = [
+		["Salary + Commission", 1], 
+		["Choose Commission Types (1/2)", 16], 
+		["Choose Commission Types (2/2)", 5], 
+		["Choose Commission Frequency", 13],
+		["Choose Base Pay", 20],
+		["Determine Commission Values", 28]
+	];
+ 
 	//when back arrow is clicked
 	$('.back_div, .back_btn').on('click', function () {
 		goToPrevPage();
@@ -31,8 +39,22 @@ $(document).ready(function(){
 		$(this).find("span").hide();
 	});
 
+	//finished adding bonus
+	$(".step .finished_add_bonus").on("click", function() {
+		updateProgress(30);
+	});
+
+	//sidebar menu navigation
+	$('.calculator_sidebar').on('click', '.selection_sidebar li', function() {
+		var target_page = $(this).data("target");
+		$(".selection_sidebar .active").removeClass("active");
+		$(this).addClass("active");
+		goToPage(target_page, target_page);
+		return;
+	});
+
 	//when an answer option is chosen
-	$(".step .answer_div .answer_option").on("click", function() {
+	$('.step').on('click', '.answer_div .answer_option', function() {
 		var question = $(this).parent().parent().find("div label").eq(0).text();
 		var chosen_answer = $(this).find("label").text();
 		var recommendation = '';
@@ -43,16 +65,17 @@ $(document).ready(function(){
 
 			
 		//check if this page is for muiltple or single choice
-		if(multiple_pages.includes(window.current_page)) {//if multiple choices
+		if(multiple_pages.includes(getCurrentPage())) {//if multiple choices
 			//if it is already chosen, we unclick it.
 			if($(this).hasClass("active")){
 				$(this).removeClass("active");
 				//if no active answer is chosen, we deactivate next button.
 				if($(".page" + window.current_page + " .answer_div .active").length == 0)
-					$(".page" + window.current_page + " .button_div .next_btn").disabled = "disabled";
+					$(".page" + window.current_page + " .button_div .next_btn").attr("disabled", "disabled");
 			}
 			else{
 				$(this).addClass("active");
+				$(".page" + window.current_page + " .button_div .next_btn").removeAttr("disabled");
 			}
 		}
 		else{
@@ -72,36 +95,20 @@ $(document).ready(function(){
 					commission = commission + 1;
 
 				window.commission = commission;
-				target_page = 8;
 				updateCommission(commission);
-			}
 
-			//What are the rep's responsibilities?
-			if(window.current_page == 5){
-				saveFeature(2, "Bonuses");
+				var chosen_responsibility_answers_doms = getPageValue("5", "5");
+				var chosen_responsibilities = JSON.parse(chosen_responsibility_answers_doms).answer;
 
-				if(chosen_answer == "Managing Sales Reps"){					
-					target_page = 6;
-				}
-				else if(chosen_answer == "Closing"){
-					var temp = [];
-					temp.push("Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%.");
-					temp.push("Bonus for follow up task completion -- e.g. monthly bonus for exceeding daily follow-up task completion target of 95%");
-					temp.push("Bonus KPI contest winner -- e.g. bonus to whichever sales rep has the highest average deal size this quarter");
-
-					var recommendation = [];
-					recommendation["title"] = `Bonus for closing`;
-					recommendation["description"] = temp;
-					saveFeature(2, "Bonus for closing");
-					saveRecommendation(1, recommendation);
-					/*target_page = 26;*/
+				if(chosen_responsibilities.length == 2)
 					target_page = 8;
+				else{
+					var second_responsibility = chosen_responsibilities[2];
+					target_page = getTargetPageJobResponsibilities(second_responsibility);
 				}
-				else if(chosen_answer == "Managing Accounts")
-					target_page = 4;
-				else if(chosen_answer == "Prospecting")
-					target_page = 3;
 			}
+
+			
 
 			//Do managed reps earn commissions?
 			if(window.current_page == 6){
@@ -142,13 +149,51 @@ $(document).ready(function(){
 				if(chosen_answer == "Add bonuses"){
 					//if user already chose rep responsibilities
 					if(hasPageAnswers(5)){
+						var chosen_responsibilities = getPageValue("5", "5");
+						var chosen_answers = JSON.parse(chosen_responsibilities).answer;
+						var bonus_html = ``;
+						for(var i = 0; i < chosen_answers.length; i++){
+							var chosen_responsibility = chosen_answers[i].toLowerCase();
+
+							if(chosen_responsibility == "prospecting"){
+								var page_3_answers = getPageValue("3", "3");
+								var chosen_3_answers = JSON.parse(page_3_answers).answer;
+
+								if(chosen_3_answers.includes("Most sales will come from outbound prospecting or cold outreach")){
+									var bonus_name = "Bonus for outbound prospecting";
+									bonus_html += `
+									<div class="answer_option col-12 col-md-12 col-sm-12">
+										<label>`+ bonus_name +`</label>
+									</div>`;
+								}
+								if(chosen_3_answers.includes("Reps will have consistent inbound leads")){
+									var bonus_name = "Bonus for inbound leads";
+									bonus_html += `
+									<div class="answer_option col-12 col-md-12 col-sm-12">
+										<label>`+ bonus_name +`</label>
+									</div>`;
+								}
+							}
+							else if(chosen_responsibility == "closing")
+								var bonus_name = "Bonus for closing";
+							else if(chosen_responsibility == "managing sales reps")
+								var bonus_name = "Management bonus";
+
+							if(chosen_responsibility != "managing accounts" && chosen_responsibility != "prospecting")
+								bonus_html += `
+								<div class="answer_option col-12 col-md-12 col-sm-12">
+									<label>`+ bonus_name +`</label>
+								</div>`;
+						}
+						$(".page9 .answer_div").append(bonus_html);
 						target_page = 9;
 					}
 					else{
 						target_page = 10;
-					}				
+					}
 				}
 				else{
+					updateProgress(30);
 					target_page = 11;
 				}
 			}
@@ -171,20 +216,59 @@ $(document).ready(function(){
 					Bonus for response time (e.g. monthly bonus for average response time under 10 minutes)`;
 				else
 					recommendation = `All other bonuses.....`;*/
-
+				var bonus_example_html;
 				var temp = [];
-				temp.push("Sample bonus -- e.g. sample bonus explanation");
-				temp.push("Sample bonus -- e.g. sample bonus explanation");
-				temp.push("Sample bonus -- e.g. sample bonus explanation");
+
+				if(chosen_answer == "Bonus for outbound prospecting"){
+					bonus_example_html = `
+						<li>Bonus for outreach volume target -- e.g. monthly bonus for contacting 30+ new accounts per day, on average</li>
+						<li>Bonus for outreach quality target -- e.g. monthly bonus for exceeding target lead-to-close ratio of 10%</li>
+						<li>Bonus per performance -- e.g. $100 for each scheduled qualified appointment</li>
+					`;
+
+					temp.push("Bonus for outreach volume target -- e.g. monthly bonus for contacting 30+ new accounts per day, on average");
+					temp.push("Bonus for outreach quality target -- e.g. monthly bonus for exceeding target lead-to-close ratio of 10%");
+					temp.push("Bonus per performance -- e.g. $100 for each scheduled qualified appointment");
+				}
+				else if(chosen_answer == "Bonus for inbound leads"){
+					bonus_example_html = `
+						<li>Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%</li>
+						<li>Bonus for response time target -- e.g. monthly bonus for exceeding target response time of under 10 minutes</li>
+					`;
+
+					temp.push("Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%");
+					temp.push("Bonus for response time target -- e.g. monthly bonus for exceeding target response time of under 10 minutes");
+				}
+				else if(chosen_answer == "Management bonus"){
+					bonus_example_html = `
+						<li>Commission share -- e.g. managing sales rep earns 5% of all commissions earned by managed reps</li>
+						<li>Bonus for managed rep's KPI attainment -- e.g. monthly bonus for each KPI target managed rep's exceed</li>
+					`;
+
+					temp.push("Commission share -- e.g. managing sales rep earns 5% of all commissions earned by managed reps");
+					temp.push("Bonus for managed rep's KPI attainment -- e.g. monthly bonus for each KPI target managed rep's exceed");
+				}
+				else{
+					bonus_example_html = `
+						<li>Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%</li>
+						<li>Bonus for follow up task completion -- e.g. monthly bonus for exceeding daily follow-up task completion target of 95%</li>
+						<li>Bonus KPI contest winner -- e.g. bonus to whichever sales rep has the highest average deal size this quarter</li>
+					`;
+
+					temp.push("Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%");
+					temp.push("Bonus for follow up task completion -- e.g. monthly bonus for exceeding daily follow-up task completion target of 95%");
+					temp.push("Bonus KPI contest winner -- e.g. bonus to whichever sales rep has the highest average deal size this quarter");
+				}
+
+				$(".page12 .headline2 label").text(chosen_answer);
+				$(".page12 .headline4 ul").html(bonus_example_html);
+				
 				var recommendation = [];
-				recommendation["title"] = `NameOfBonus`;
+				recommendation["title"] = chosen_answer;
 				recommendation["description"] = temp;
 				saveRecommendation(1, recommendation);
-				target_page = 13;
-			}	
-
-			if(window.current_page == 11){
-				target_page = 13;
+				target_page = 12;
+				$(".page12 .arrow_next_btn").attr("data-next", 11);
 			}
 
 			/*Choose Commission Frequency*/
@@ -204,9 +288,17 @@ $(document).ready(function(){
 					accounting for any previous refunds or changes.`;
 					recommendation = temp;
 					saveRecommendation(2, recommendation);
-				}
 
-				target_page = 20;
+					$(".recommendation_page .headline1 label").text(`We recommend you pay a:`);
+					$(".recommendation_page .headline2 label").text(recommendation["title"]);
+					$(".recommendation_page .headline3 label").text(recommendation["description"]);
+					target_page = 2;
+					$(".arrow_next_btn").attr("data-next", 20);
+
+					updateProgress(50);
+				}
+				else
+					target_page = 14;
 			}
 
 			/*Who is responsible for continued sales and health of the account after the initial sale?*/
@@ -220,9 +312,17 @@ $(document).ready(function(){
 					rate or you can pay in tiers, such as 10% for the customer's first year and 5% after that.`;
 					recommendation = temp;
 					saveRecommendation(2, recommendation);
-				}
 
-				target_page = 20;
+					$(".recommendation_page .headline1 label").text(`We recommend you pay a:`);
+					$(".recommendation_page .headline2 label").text(recommendation["title"]);
+					$(".recommendation_page .headline3 label").text(recommendation["description"]);
+					target_page = 2;
+					$(".arrow_next_btn").attr("data-next", 20);
+
+					updateProgress(50);
+				}
+				else
+					target_page = 15;
 			}
 
 			/*Select one below page14*/
@@ -233,9 +333,7 @@ $(document).ready(function(){
 					temp["title"] = "Recurring commission (Capped)";
 					temp["description"] = `These commissions continue accruing after each customer renews. Pay 
 					commissions to the original sales rep for a year or so, then commissions should go to the 
-					rep(s) actively managing the account. Commissions stop if the account cancels.`;
-					
-					
+					rep(s) actively managing the account. Commissions stop if the account cancels.`;										
 				}
 				else if(chosen_answer == "Variable"){
 					saveFeature(3, "One-time commission");
@@ -251,9 +349,15 @@ $(document).ready(function(){
 					after which commissions should go to the rep(s) actively managing the account. `;
 				}
 
+				$(".recommendation_page .headline1 label").text(`We recommend you pay a:`);
+				$(".recommendation_page .headline2 label").text(temp["title"]);
+				$(".recommendation_page .headline3 label").text(temp["description"]);
+				target_page = 2;
+				$(".arrow_next_btn").attr("data-next", 20);
+				updateProgress(50);
+
 				recommendation = temp;
 				saveRecommendation(2, recommendation);
-				target_page = 20;
 
 				/*saveToLocalStorage(window.current_page, recommendation);
 				//Check if "Commission Only" chosen, if yes skip page19 and go to 20
@@ -274,11 +378,22 @@ $(document).ready(function(){
 					recommendation["description"] = `This incentivizes sales reps to negotiate the best deals, 
 					and makes commission more reflective of negotiation performance and deal quality.`;
 					saveRecommendation(0, recommendation);
-					target_page = 5;
+					target_page = 2;
+					updateProgress(20);
+					$(".arrow_next_btn").attr("data-next", 5);
 				}
 				else{
-					target_page = 17;
-				}
+					saveFeature(1, "Commission On Revenue");
+					var recommendation = [];
+					recommendation["title"] = `Percentage of Revenue`;
+					recommendation["description"] = `If your sales can't impact profit margins on each deal, 
+					then it's best to pay based on revenue. This will incentivize sales reps to sell as much as possible.`;
+					target_page = 17;			
+				}				
+				
+				$(".recommendation_page .headline1 label").text(`We recommend paying commission as a:`);
+				$(".recommendation_page .headline2 label").text(recommendation["title"]);
+				$(".recommendation_page .headline3 label").text(recommendation["description"]);
 
 				saveToLocalStorage(window.current_page, recommendation);
 				goToPage(target_page);
@@ -295,11 +410,22 @@ $(document).ready(function(){
 					recommendation["description"] = `This will incentivize sales reps to maintain good profit 
 					margins and keep an eye on expenses, making their goals more aligned with the company goals.`;
 					saveRecommendation(0, recommendation);
-					target_page = 5;
+					target_page = 2;
+					updateProgress(20);
+					$(".arrow_next_btn").attr("data-next", 5);				
 				}
 				else{
+					saveFeature(1, "Commission On Revenue");
+					var recommendation = [];
+					recommendation["title"] = `Percentage of Revenue`;
+					recommendation["description"] = `If your sales can't impact profit margins on each deal, 
+					then it's best to pay based on revenue. This will incentivize sales reps to sell as much as possible.`;
 					target_page = 18;
 				}
+
+				$(".recommendation_page .headline1 label").text(`We recommend paying commission as a:`);
+				$(".recommendation_page .headline2 label").text(recommendation["title"]);
+				$(".recommendation_page .headline3 label").text(recommendation["description"]);
 
 				saveToLocalStorage(window.current_page, recommendation);
 				goToPage(target_page);
@@ -323,28 +449,17 @@ $(document).ready(function(){
 					then it's best to pay based on revenue. This will incentivize sales reps to sell as much as possible.`;
 				}
 
-				target_page = 5;
+				$(".recommendation_page .headline1 label").text(`We recommend paying commission as a:`);
+				$(".recommendation_page .headline2 label").text(recommendation["title"]);
+				$(".recommendation_page .headline3 label").text(recommendation["description"]);
+
+				$(".arrow_next_btn").attr("data-next", 5);
+				target_page = 2;
+				updateProgress(20);
+
 				saveRecommendation(0, recommendation);
 				saveToLocalStorage(window.current_page, recommendation);
 				goToPage(target_page);
-				return;
-
-
-				if(chosen_answer == "Yes")
-					recommendation = `We recommend you pay commission as a:
-
-					Percentage of profit
-
-					This will incentivize sales reps towards the highest profit margins, but make sure your sales reps still keep the customer's best interests in mind.`;
-				else
-					recommendation = `We recommend you pay commission as a:
-
-					Percentage of revenue
-
-					If your sales can't impact profit margins on each deal, then it's best to pay based on revenue. This will incentivize sales reps to sell as much as possible.`;
-					
-				saveToLocalStorage(window.current_page, recommendation);
-				goToPage(2);
 				return;
 			}
 
@@ -365,6 +480,8 @@ $(document).ready(function(){
 					temp["title"] = "+$2,000";
 					temp["description"] = `+$2,000`; //salary recommendation
 					var temp_price = parseFloat(base_salary) + 2000;
+					if(temp_price < 3000)
+						temp_price = 3000;
 					base_salary = window.base_salary = temp_price;
 					saveFeature(4, "Base Pay " + formatPrice(base_salary));
 				}
@@ -372,12 +489,14 @@ $(document).ready(function(){
 					temp["title"] = "+$1,000";
 					temp["description"] = `+$1,000`; //salary recommendation
 					var temp_price = parseFloat(base_salary) + 1000;
+					if(temp_price < 3000)
+						temp_price = 3000;
 					base_salary = window.base_salary = temp_price;
 					saveFeature(4, "Base Pay " + formatPrice(base_salary));
 				}
 				recommendation = temp;
 				saveRecommendation(4, recommendation);
-				target_page = 24;
+				target_page = 22;
 			}
 
 			/*Do reps have a clear, proven path to sales success? In other words, have other reps succeeded in this role before? */
@@ -388,6 +507,8 @@ $(document).ready(function(){
 					temp["title"] = "+$500";
 					temp["description"] = `+$500`; //salary recommendation
 					var temp_price = parseFloat(base_salary) + 500;
+					if(temp_price < 3000)
+						temp_price = 3000;
 					base_salary = window.base_salary = temp_price;
 					saveFeature(4, "Base Pay " + formatPrice(base_salary));
 
@@ -409,6 +530,8 @@ $(document).ready(function(){
 				}
 				
 				var temp_price = parseFloat(base_salary) - subtract;
+				if(temp_price < 3000)
+					temp_price = 3000;
 				base_salary = window.base_salary = temp_price;
 				temp["title"] = "subtract " + formatPrice(subtract);
 				temp["description"] = "subtract " + formatPrice(subtract);
@@ -416,10 +539,10 @@ $(document).ready(function(){
 
 				recommendation = temp;
 				saveRecommendation(4, recommendation);
-				target_page = 24;
+				target_page = 24;				
 			}
 
-			if(window.current_page == 24){
+			/*if(window.current_page == 24){
 				var subtract = -250;
 				var temp = [];
 				temp["title"] = "subtract $250";
@@ -430,47 +553,101 @@ $(document).ready(function(){
 					temp["title"] = "Add $500";
 					temp["description"] = "Add $500";
 				}
-				var temp_price = parseFloat(base_salary) + subtract;
-				base_salary = window.base_salary = temp_price;
+				var temp_price = parseFloat(base_salary) + subtract;				
+				if(temp_price < 3000)
+					temp_price = 3000;
 
+				base_salary = window.base_salary = temp_price;
 				$(".page25 .base_salary").val(formatPrice(base_salary));
 				saveFeature(4, "Base Pay " + formatPrice(base_salary));
 
 				recommendation = temp;
 				saveRecommendation(4, recommendation);
 				target_page = 25;
-			}
+				console.log("hello");
+
+				updateProgress(60);return;
+			}*/
 
 			if(window.current_page == 28){ //choose one
 				target_page = 29;
 				//set profit/revenue from the saved feature value
-				var profit_or_revenue = IsProfitRevenue();
+				var profit_or_revenue = IsProfitRevenue().toLowerCase();
 
 				$(".page29 .div_question1 label span").html(profit_or_revenue);
 
 				if(chosen_answer == "This is an existing sales role and we have past sales data available")
-				{
+				{						
+					
 					//check if commission frequncy/one-time commission is chosen
 					if(checkPageValue("features", "One-time commission")){
-						$(".page29 .answer_div .average_revenue").val(10000);
 						$(".page29 .answer_div .div_question3").hide();
+						$(".page29 .arrow_next_btn").attr("data-next", 30);
+						$(".page30 .arrow_next_btn").attr("data-next", 31);
+						$(".page31 .commission_percent_control_div .subheader").text(`
+							Here's how much the rep will earn depending on how good (or bad) of a month they have.
+						`);
+						$(".page31 .commission_percent_control_div .subheader").css("font-size", "24px");
+						$(".page31 .advanced_options_btn").show();
+						$(".page31 .arrow_next_btn").attr("data-next", 33);
 					}
-					/*else if(checkPageValue("features","Recurring commission (capped)")){
-						$(".page29 .div_question1 label span").html(profit_or_revenue);
-					}*/
+					else/* if(checkPageValue("features","Recurring commission (capped)"))*/{
+						$(".page29 .answer_div .div_question3").show();
+						$(".page29 .arrow_next_btn").attr("data-next", 30);
+						$(".page30 .arrow_next_btn").attr("data-next", 31);
+						var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+						if(commission_percent < 5)
+							commission_percent = 5;
+						$(".page31 .commission_percent_control_div .subheader").text(`
+							Here's how much the rep will earn depending on how good (or bad) of a month they have.
+							The middle column shows projected commission for month 8 if every month is average, with `+commission_percent+`% churn. 
+							Columns to the left show increasingly worse month 8 projections due to below-average performance.
+							Columns to the right show increasingly higher month 8 projections due to above-average performance.
+							Actual month 8 numbers will be lower than these projections due to varying learning curves and ramp-up times
+						`);
+						$(".page31 .commission_percent_control_div .subheader").css("font-size", "20px");
+						$(".page31 .advanced_options_btn").show();
+						$(".page31 .edit_commission_calculator").hide();
+						$(".page31 .arrow_next_btn").attr("data-next", 39);
+						$(".page39 .arrow_next_btn").attr("data-next", 33);
+						$(".page37 .arrow_next_btn").attr("data-next", 33);
+						var default_percents = [];
+						for(var i = 0; i < 36; i++){
+							default_percents[i] = 5;
+						}
+						InitCommissionTierTable(39, getConfiguration("deal_revenue"), default_percents);
+					}
 				}
-				else if(chosen_answer == "Our company is new but we have previous experience selling this product"){
-					//check if commission frequncy/one-time commission is chosen
-					if(checkPageValue("features", "One-time commission")){
-						$(".page29 .answer_div .average_revenue").val(10000);
-						$(".page29 .answer_div .div_question3").hide();
-					}
-					else /*if(checkPageValue("features","Recurring commission (capped)"))*/{
-						$(".page29 .div_question1 label span").html(profit_or_revenue);
-					}
-				}
+				/*else if(chosen_answer == "Our company is new and we have no experience selling this product"){
 
-				
+				}*/
+				else{
+					//check if commission frequncy/one-time commission is chosen
+					$(".page29 .div_question1 label span").html(profit_or_revenue);
+
+					if(checkPageValue("features", "One-time commission")){
+						// $(".page29 .answer_div .average_revenue_profit").val("10,000");
+						$(".page29 .answer_div .div_question3").hide();
+						$(".page29 .arrow_next_btn").attr("data-next", 31);
+						$(".page31 .commission_percent_control_div .subheader").text(`
+							It will take time for sales to increase to peak volumes (we'll address this next). But once your rep is trained and sales are running smoothly,
+							this is what your commissions will look like depending on how good (or bad) of a month the sales rep has.
+						`);
+						$(".page31 .commission_percent_control_div .subheader").css("font-size", "20px");
+						$(".page31 .advanced_options_btn").hide();
+						$(".page31 .arrow_next_btn").attr("data-next", 36);
+						$(".page36 .arrow_next_btn").attr("data-next", 40);
+					}
+					else{
+						console.log("capped or uncapped");
+						$(".page29 .answer_div .div_question3").show();
+						// $(".page29 .answer_div .average_revenue_profit").val(500);
+						// $(".page29 .answer_div .percentage_cancel").val(10);
+						$(".page29 .arrow_next_btn").attr("data-next", 30);
+						$(".page30 .arrow_next_btn").attr("data-next", 36);
+						$(".page36 .arrow_next_btn").attr("data-next", 40);
+					}
+				}				
 			}
 
 			saveToLocalStorage(window.current_page, recommendation);
@@ -507,7 +684,10 @@ $(document).ready(function(){
 	//page31 editcommission/advanced options button
 	$('.page31').on('click', '.edit_commission_calculator, .advanced_options_btn', function() {
 		//get recommended commission percent
-		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+		if(commission_percent < 5)
+			commission_percent = 5;
+
 		$(".recommended_percent").html(commission_percent);
 
 		$(".page32 .average_deals").val(getConfiguration("deals"));
@@ -704,7 +884,7 @@ $(document).ready(function(){
 					percents.push(percent_doms[i].value);
 			}
 		}
-		InitCommissionTierTable(37, 500, percents);
+		InitCommissionTierTable(37, getConfiguration("deal_revenue"), percents);
 	});
 
 	//User input; must be below recommended number in commission tier percent input
@@ -735,7 +915,7 @@ $(document).ready(function(){
 				}
 			}
 
-			InitCommissionTierTable(37, 500, percents);
+			InitCommissionTierTable(37, getConfiguration("deal_revenue"), percents);
 		}
 	});
 
@@ -839,7 +1019,7 @@ $(document).ready(function(){
 		else{
 			$(".result_section .page" + page_id + " tbody tr")[0].children[0].innerText = commission_percent + "%";
 			var tr_doms_2 = $(".result_section .page" + page_id + " tbody tr td");
-			for(j = 2; j < tr_doms_2.length; j++){
+			for(j = 2; j < tr_doms_2.length; j++){				
 				var index = j - 1;
 				//average_revenue * percent_num * number_of_deals/100
 				if(deal_variation == 20)
@@ -878,7 +1058,9 @@ $(document).ready(function(){
 		var commission_variation = $(".result_section .page32 .sidebar_advanced_option .commission_variation").val();
 		var deals = $(".page32 .sidebar_option .average_deals").val();
 		var deal_revenue = numberFormat($(".page32 .sidebar_option .average_revenue").val());
-		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+		if(commission_percent < 5)
+			commission_percent = 5;
 
 		InitCommissionTable(32, deals, deal_revenue, commission_percent, deal_variation = 20, 
 		commission_variation, commission_modifier = 0, recommendation_variance = 60);
@@ -889,7 +1071,9 @@ $(document).ready(function(){
 		var deal_variation = $(this).val();
 		var deals = $(".page32 .sidebar_option .average_deals").val();
 		var deal_revenue = numberFormat($(".page32 .sidebar_option .average_revenue").val());
-		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+		if(commission_percent < 5)
+			commission_percent = 5;
 
 		InitCommissionTable(32, deals, deal_revenue, commission_percent, deal_variation);
 	});
@@ -900,8 +1084,10 @@ $(document).ready(function(){
 		var deal_variation = $(".result_section .page32 .sidebar_advanced_option .deal_variation").val();
 		var deals = $(".page32 .sidebar_option .average_deals").val();
 		var deal_revenue = numberFormat($(".page32 .sidebar_option .average_revenue").val());
-		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
 		commission_percent += commission_modifier;
+		if(commission_percent < 5)
+			commission_percent = 5;
 
 		InitCommissionTable(32, deals, deal_revenue, commission_percent, deal_variation);
 	});
@@ -1137,160 +1323,481 @@ $(document).ready(function(){
 	});*/
 
 	//When the next button is clicked for muiltiple choices
-	$(".step .next_btn").on("click", function() {
-		if(window.current_page == 1 || multiple_pages.includes(window.current_page) || window.current_page == 25 || window.current_page == 29 || window.current_page == 33) {//if multiple choices			
-			saveToLocalStorage(window.current_page);
-		}
-
-		if(window.current_page == 1){
-			goToPage(16);
-			return;
-		}
-		
-		if(window.current_page == 3){
-			goToPage(8);
-			return;
-		}
-
-		if(window.current_page == 25){
-			goToPage(28);
-			return;
-		}
-
-		if(window.current_page == 29){
-			//hide sidebar + body and show only result page
-			$(".questions_section").hide();
-			$(".result_section").show();
-			//get recommended commission percent
-			var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
-			var info_json = JSON.parse(getPageValue(29, ""));
-			var deals = window.deals = parseInt(info_json.average_rep);
-			var deal_revenue = window.revenue_per_deal = parseInt(numberFormat(info_json.deal_revenue));
-
-			saveConfiguration("deals", deals);
-			saveConfiguration("deal_revenue", deal_revenue);
-			saveConfiguration("commission", commission_percent);
-			saveConfiguration("base_salary", window.base_salary);
-			saveConfiguration("cancel_percentage", $(".percentage_cancel").val());
-			saveConfiguration("deal_variation", 20);
-			saveConfiguration("commission_variation", 1);
-			saveConfiguration("commission_modifier", 0);
-			saveConfiguration("recommendation_variance", 60);
-
-			InitCommissionTable(31, deals, deal_revenue, commission_percent);			
-
-			goToPage(31);
-			return;
-		}
-
-		if(window.current_page == 31){
-			//hide sidebar + body and show only result page
-			$(".questions_section").hide();
-			$(".result_section").show();
-
-			var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;			
-			$(".page38 .commission_percent").text(commission_percent);
-
-			//InitCommissionTierTable(38, 500, percents);
-			//Based on capped/uncapped status
-			var cappted_status;
-			if(checkPageValue("features","Recurring commission (capped)")){
-				goToPage(38);
+	$(".step .next_btn, .step .arrow_next_btn").on("click", function(e) {
+		window.current_page = getCurrentPage();
+		if(e.target.className.includes("arrow_next_btn")){
+			var next_page_id_from_recommendation = e.target.dataset.next;
+			var target_page;
+			if(window.current_page == 12){
+				var chosen_responsibility_answers_doms = getPageValue("5", "5");
+				var chosen_responsibilities = JSON.parse(chosen_responsibility_answers_doms).answer;
+				if(chosen_responsibilities.length == 2)
+					target_page = next_page_id_from_recommendation;
+				else{
+					var third_responsibility = chosen_responsibilities[2];
+					target_page = getTargetPageJobResponsibilities(third_responsibility);
+				}
 			}
 			else{
-				var customer_number = getConfiguration("deals");
-				var churn_number = getConfiguration("cancel_percentage");
-				$(".page39 .customer_number").text(customer_number);
-				$(".page39 .churn_number").text(churn_number);
-				goToPage(39);
-			}
-			return;
-		}
+				if(window.current_page == 29){
+					var visible_inputs_doms = $(".page29 input:visible");
+					for(var i = 0; i < visible_inputs_doms.length; i++){
+						if(visible_inputs_doms.eq(i).val() == ""){
+							alert("All inputs are required.");
+							return;
+						}
+					}
 
-		if(window.current_page == 33){
-			//hide sidebar + body and show only result page
-			$(".questions_section").hide();
-			$(".result_section").show();
+					saveToLocalStorage(window.current_page);
+					//hide sidebar + body and show only result page
+					$(".questions_section").hide();
+					$(".result_section").show();
+					//get recommended commission percent
+					var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+					if(commission_percent < 5)
+						commission_percent = 5;
+					$(".page31 .commission_percent").val(commission_percent);
 
-			var bonus_amount_doms = $(".page33 input[type='number']");
-			var period_doms = $(".page33 select");
-			var bonuses = [];
-			var periods = [];
-			var bonus_html = ``;
-			for(var i = 0; i < bonus_amount_doms.length; i++){
-				periods.push(period_doms[i].value);
-				bonuses.push(bonus_amount_doms[i].value);
-				if(i == 0){
-					bonus_html += `<li><span class="small_text">+$`+bonus_amount_doms[i].value+` bonus per `+period_doms[i].value+` for acheiving outbound prospecting targets</span></li>`;	
+					var info_json = JSON.parse(getPageValue(29, ""));
+					// var deals = window.deals = parseInt(info_json.average_rep);
+					//var deal_revenue = window.revenue_per_deal = parseInt(numberFormat(info_json.deal_revenue));
+					var deal_revenue = window.revenue_per_deal = parseInt(numberFormat($(".page29 .average_revenue_profit").val()));
+					var deals = window.deals = parseInt($(".page29 .average_rep").val());
+
+					saveConfiguration("deals", deals);
+					saveConfiguration("deal_revenue", deal_revenue);
+					saveConfiguration("commission", commission_percent);
+					saveConfiguration("base_salary", window.base_salary);
+					saveConfiguration("cancel_percentage", $(".percentage_cancel").val() ? $(".percentage_cancel").val() : 10);
+					saveConfiguration("deal_variation", 20);
+					saveConfiguration("commission_variation", 1);
+					saveConfiguration("commission_modifier", 0);
+					saveConfiguration("recommendation_variance", 60);
+
+					InitCommissionTable(next_page_id_from_recommendation, deals, deal_revenue, commission_percent);
+					updateProgress(80);
+					//$(".page" + next_page_id_from_recommendation + " .arrow_next_btn").attr("data-next", 36);
 				}
-				else
-					bonus_html += `<li><span class="small_text">+$`+bonus_amount_doms[i].value+` bonus per `+period_doms[i].value+` for outbound prospecting performance</span></li>`;				
+
+				if(window.current_page == 36){
+					//$(".page" + next_page_id_from_recommendation + " .arrow_next_btn").eq(0).attr("data-next", 33);
+					$(".page" + next_page_id_from_recommendation + " .arrow_next_btn").eq(1).attr("data-next", 41);
+				}
+
+				target_page = next_page_id_from_recommendation;
 			}
 
-			var new_bonus = $("#revenue_range").val();
-			var base_salary = getConfiguration("base_salary") ? getConfiguration("base_salary") : 4000;
-			base_salary = parseFloat(base_salary) - parseFloat(new_bonus);
-			window.base_salary = base_salary;
-			saveConfiguration("base_salary", base_salary);
-			var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
-			var chosen_features = getPageValue("features", "features");
-			if(chosen_features){
-				var features = JSON.parse(chosen_features).features;
-				format = features[0];
-				$(".page34 .left_half .format_text").text(format);
+			//commission precent recommendation
+			if(target_page == 31){
+				var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+				if(commission_percent < 5)
+					commission_percent = 5;
+				$(".page31 .commission_percent").val(commission_percent);
 
-			}			
+				var info_json = JSON.parse(getPageValue(29, ""));
+				var deals = window.deals = parseInt(info_json.average_rep);
+				var deal_revenue = window.revenue_per_deal = parseInt(numberFormat(info_json.deal_revenue));
+				InitCommissionTable(target_page, deals, deal_revenue, commission_percent);
 
-			$(".page34 .base_salary").text(formatPrice(base_salary));
-			$(".page34 .commission_percent").text(commission_percent);
-			$(".page34 .bonus_row ul li").remove();
-			$(".page34 .bonus_row ul").append(bonus_html);
-			$(".page34 .isProfitRevenue").html(IsProfitRevenue());
-
-			saveBonuses(bonuses, periods);
-			goToPage(34);
-			return;
-		}
-		//go to determination bonus page
-		if(window.current_page == 38){
-			//hide sidebar + body and show only result page
-			$(".questions_section").hide();
-			$(".result_section").show();
-
-			goToPage(33);
-			return;
-		}
-
-		if(window.current_page == 39){
-			//hide sidebar + body and show only result page
-			$(".questions_section").hide();
-			$(".result_section").show();
-
-			goToPage(33);
-			return;
-		}
-
-		if(window.current_page == 37){
-			//hide sidebar + body and show only result page
-			$(".questions_section").hide();
-			$(".result_section").show();
-
-			var time_period_doms = $(".page37 [name='tier_period']");
-			var percent_doms = $(".page37 [name='tier_percent']");
-			var percents = [];
-			var months = [];
-			for(var i = 0; i < time_period_doms.length; i++){
-				percents.push(percent_doms[i].value);
-				months.push(time_period_doms[i].value);
+				$(".page31 .arrow_next_btn").attr("data-next", 38);
+				if(checkPageValue("features","Recurring commission (capped)")){
+					$(".page31 .arrow_next_btn").attr("data-next", 38);
+				}
+				else{
+					var customer_number = getConfiguration("deals");
+					var churn_number = getConfiguration("cancel_percentage");
+					$(".page39 .customer_number").text(customer_number);
+					$(".page39 .churn_number").text(churn_number);
+					$(".page31 .arrow_next_btn").attr("data-next", 39);
+				}
 			}
 
-			saveTiers(percents, months);
-			goToPage(33);
+			//Recommended temporary salary boost
+			if(target_page == 41){
+				let dataaaa = {
+				    dataValues: [
+				    	[2000, 1000, 4000], [1500, 500, 4000], [1000, 800, 4000], [750, 1700,4000],
+				    	[500, 2000, 4000], [250, 1500, 4000], [0, 1200, 4000], [0, 1200,4000],
+				    	[0, 800, 4000], [0, 1900, 4000], [0, 900, 4000], [0, 2300,4000]
+				    	], // for a normal bar chart use multiple arrays with 1 value in each array
+				    legend: ["BOOST", "COMMISSION", "BASE" ], // for stacked bar charts
+				    legendColors: ["rgba(54, 61, 230, 0.21)", "rgba(230, 75, 54, 0.21)", "rgba(50, 50, 55, 0.21)"], // bar colors
+				    barLabels: ["MONTH 1", "MONTH 2", "MONTH 3", "MONTH 4", "MONTH 5", "MONTH 6", "MONTH 7", "MONTH 8",
+				     "MONTH 9", "MONTH 10", "MONTH 11", "MONTH 12"], // x-axis labels
+				    labelColors: ["black"] // x-axis label colors
+				  };
+
+				let options = {
+				    chartWidth: "60%", // use valid css sizing
+				    chartHeight: "60%", // use valid css sizing
+				    chartTitle: "", // enter chart title
+				    chartTitleColor: "black", // enter any valid css color
+				    chartTitleFontSize: "2rem", // enter a valid css font size
+				    yAxisTitle: "", // enter title for y-axis
+				    xAxisTitle: "", // enter title for x-axis
+				    barValuePosition: "center", // "flex-start" (top), "center", or "flex-end" (bottom)
+				    barSpacing: "1%" // "1%" (small), "3%" (medium), "5%" (large)
+				  };
+
+				let element = "#add_temporary_salary_boost"; // Use a jQuery selector to select the element to put the chart into
+
+				// Generate chart
+				drawBarChart(dataaaa, options, element);
+			}
+
+			//go to ramp up
+			if(target_page == 36){
+				let dataaaa = {
+				    dataValues: [
+				    	[1000, 4000], [500, 4000], [800, 4000], [1700,4000],
+				    	[2000, 4000], [1500, 4000], [1200, 4000], [1200,4000],
+				    	[800, 4000], [1900, 4000], [900, 4000], [2300,4000]
+				    	], // for a normal bar chart use multiple arrays with 1 value in each array
+				    legend: ["COMMISSION", "BASE" ], // for stacked bar charts
+				    legendColors: ["rgba(230, 75, 54, 0.21)", "rgba(50, 50, 55, 0.21)"], // bar colors
+				    barLabels: ["MONTH 1", "MONTH 2", "MONTH 3", "MONTH 4", "MONTH 5", "MONTH 6", "MONTH 7", "MONTH 8",
+				     "MONTH 9", "MONTH 10", "MONTH 11", "MONTH 12"], // x-axis labels
+				    labelColors: ["black"] // x-axis label colors
+				  };
+
+				  let options = {
+				    chartWidth: "60%", // use valid css sizing
+				    chartHeight: "60%", // use valid css sizing
+				    chartTitle: "", // enter chart title
+				    chartTitleColor: "black", // enter any valid css color
+				    chartTitleFontSize: "2rem", // enter a valid css font size
+				    yAxisTitle: "", // enter title for y-axis
+				    xAxisTitle: "", // enter title for x-axis
+				    barValuePosition: "center", // "flex-start" (top), "center", or "flex-end" (bottom)
+				    barSpacing: "1%" // "1%" (small), "3%" (medium), "5%" (large)
+				  };
+
+				  let element = "#bar_div_ramp"; // Use a jQuery selector to select the element to put the chart into
+
+				  // Generate chart
+				  drawBarChart(dataaaa, options, element);
+
+				  //$(".page" + next_page_id_from_recommendation + " .arrow_next_btn").attr("data-next", 40);
+			}
+
+			//Edit Temporary Salary Boost
+			if(target_page == 35){
+				let dataaaa = {
+				    dataValues: [
+				    	[2000, 1000, 4000], [1500, 500, 4000], [1000, 800, 4000], [750, 1700,4000],
+				    	[500, 2000, 4000], [250, 1500, 4000], [0, 1200, 4000], [0, 1200,4000],
+				    	[0, 800, 4000], [0, 1900, 4000], [0, 900, 4000], [0, 2300,4000]
+				    	], // for a normal bar chart use multiple arrays with 1 value in each array
+				    legend: ["BOOST", "COMMISSION", "BASE" ], // for stacked bar charts
+				    legendColors: ["rgba(54, 61, 230, 0.21)", "rgba(230, 75, 54, 0.21)", "rgba(50, 50, 55, 0.21)"], // bar colors
+				    barLabels: ["MONTH 1", "MONTH 2", "MONTH 3", "MONTH 4", "MONTH 5", "MONTH 6", "MONTH 7", "MONTH 8",
+				     "MONTH 9", "MONTH 10", "MONTH 11", "MONTH 12"], // x-axis labels
+				    labelColors: ["black"] // x-axis label colors
+				  };
+
+				let options = {
+				    chartWidth: "60%", // use valid css sizing
+				    chartHeight: "60%", // use valid css sizing
+				    chartTitle: "", // enter chart title
+				    chartTitleColor: "black", // enter any valid css color
+				    chartTitleFontSize: "2rem", // enter a valid css font size
+				    yAxisTitle: "", // enter title for y-axis
+				    xAxisTitle: "", // enter title for x-axis
+				    barValuePosition: "center", // "flex-start" (top), "center", or "flex-end" (bottom)
+				    barSpacing: "1%" // "1%" (small), "3%" (medium), "5%" (large)
+				  };
+
+				let element = "#edit_temporary_salary_boost"; // Use a jQuery selector to select the element to put the chart into
+
+				// Generate chart
+				drawBarChart(dataaaa, options, element);
+				//$(".page35 .arrow_next_btn").attr("data-next", 33);
+			}
+
+			if(target_page == 34){
+				//hide sidebar + body and show only result page
+				$(".questions_section").hide();
+				$(".result_section").show();
+
+				var bonus_amount_doms = $(".page33 input[type='number']");
+				var period_doms = $(".page33 select");
+				var bonuses = [];
+				var periods = [];
+				var bonus_html = ``;
+				for(var i = 0; i < bonus_amount_doms.length; i++){
+					periods.push(period_doms[i].value);
+					bonuses.push(bonus_amount_doms[i].value);
+					if(i == 0){
+						bonus_html += `<li><span class="small_text">+$`+bonus_amount_doms[i].value+` bonus per `+period_doms[i].value+` for acheiving outbound prospecting targets</span></li>`;	
+					}
+					else
+						bonus_html += `<li><span class="small_text">+$`+bonus_amount_doms[i].value+` bonus per `+period_doms[i].value+` for outbound prospecting performance</span></li>`;				
+				}
+
+				var new_bonus = $("#revenue_range").val();
+				
+				base_salary = parseFloat(base_salary) - parseFloat(new_bonus);
+				window.base_salary = base_salary;
+				saveConfiguration("base_salary", base_salary);
+				var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+				if(commission_percent < 5)
+					commission_percent = 5;
+
+				var chosen_features = getPageValue("features", "features");
+				if(chosen_features){
+					var features = JSON.parse(chosen_features).features;
+					format = features[0];
+					$(".page34 .left_half .format_text").text(format);
+
+				}			
+
+				$(".page34 .base_salary").text(formatPrice(base_salary));
+				$(".page34 .commission_percent").text(commission_percent);
+				$(".page34 .bonus_row ul li").remove();
+				$(".page34 .bonus_row ul").append(bonus_html);
+				$(".page34 .isProfitRevenue").html(IsProfitRevenue());
+
+				updateProgress(100);
+			}
+
+			if(window.current_page == 37){
+				//hide sidebar + body and show only result page
+				$(".questions_section").hide();
+				$(".result_section").show();
+
+				var time_period_doms = $(".page37 [name='tier_period']");
+				var percent_doms = $(".page37 [name='tier_percent']");
+				var percents = [];
+				var months = [];
+				for(var i = 0; i < time_period_doms.length; i++){
+					percents.push(percent_doms[i].value);
+					months.push(time_period_doms[i].value);
+				}
+
+				saveTiers(percents, months);
+				goToPage(33);
+				return;
+			}
+			goToPage(target_page);
 			return;
 		}
+		else{
+			//if no active answer is chosen, we deactivate next button.
+			if(window.current_page != 1 && window.current_page != 12 && $(".page" + window.current_page + " .answer_div .active").length == 0){
+				if(window.current_page != 29){
+					$(".page" + window.current_page + " .button_div .next_btn").attr("disabled", "disabled");
+					return;
+				}
+			}
+			else
+				$(".page" + window.current_page + " .button_div .next_btn").removeAttr("disabled");
 
-		goToNextPage();
+			if(window.current_page == 1 || window.current_page == 5 || multiple_pages.includes(window.current_page) || window.current_page == 25 || window.current_page == 29 || window.current_page == 33) {//if multiple choices			
+				saveToLocalStorage(window.current_page);
+			}
+
+			if(window.current_page == 1){
+				goToPage(16);
+				return;
+			}
+			
+			if(window.current_page == 3){ //end of prospecting
+				var chosen_responsibility_answers_doms = getPageValue("5", "5");
+				var chosen_responsibilities = JSON.parse(chosen_responsibility_answers_doms).answer;
+				if(chosen_responsibilities.length == 1)
+					var target_page = 8;
+				else{
+					var second_responsibility = chosen_responsibilities[1];
+					var target_page = getTargetPageJobResponsibilities(second_responsibility);
+				}
+				goToPage(target_page);
+				return;
+			}
+
+			//What are the rep's responsibilities?
+			if(window.current_page == 5){
+				saveFeature(2, "Bonuses");
+
+				var chosen_responsibility_answers_doms = $(".page5 .answer_div .active");
+				var first_chosen_answer = chosen_responsibility_answers_doms.eq(0).find("label").text();
+				var target_page = getTargetPageJobResponsibilities(first_chosen_answer);
+
+				goToPage(target_page);
+				return;
+			}
+
+			if(window.current_page == 9 || window.current_page == 10){
+				updateProgress(30);
+				goToPage(11);
+				return;
+			}
+			if(window.current_page == 11){
+				goToPage(13);
+				return;
+			}
+
+			if(window.current_page == 24){
+				var subtract = -250;
+				var temp = [];
+				temp["title"] = "subtract $250";
+				temp["description"] = "subtract $250";
+
+				var chosen_answers_doms = $(".page24 .answer_div .active");
+				for(var i = 0; i < chosen_answers_doms.length; i++){
+					var chosen_answer = chosen_answers_doms.eq(i).find("label").text();
+
+					if(chosen_answer == "Our industry is complex and can be difficult to master. Some prior experience in our industry is a must."){
+						var subtract = 500;
+						temp["title"] = "Add $500";
+						temp["description"] = "Add $500";
+					}
+				}				
+
+				var temp_price = parseFloat(base_salary) + subtract;				
+				if(temp_price < 3000)
+					temp_price = 3000;
+
+				base_salary = window.base_salary = temp_price;
+				$(".page25 .base_salary").val(formatPrice(base_salary));
+				saveFeature(4, "Base Pay " + formatPrice(base_salary));
+
+				recommendation = temp;
+				saveRecommendation(4, recommendation);
+				target_page = 25;
+				updateProgress(60);
+				goToPage(25);
+				return;
+			}
+
+			if(window.current_page == 25){
+				goToPage(28);
+				return;
+			}
+
+			/*if(window.current_page == 29){
+				var visible_inputs_doms = $(".page29 input:visible");
+				for(var i = 0; i < visible_inputs_doms.length; i++){
+					if(visible_inputs_doms.eq(i).val() == ""){
+						alert("All inputs are required.");
+						return;
+					}
+				}
+				//hide sidebar + body and show only result page
+				$(".questions_section").hide();
+				$(".result_section").show();
+				//get recommended commission percent
+				var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+				var info_json = JSON.parse(getPageValue(29, ""));
+				var deals = window.deals = parseInt(info_json.average_rep);
+				var deal_revenue = window.revenue_per_deal = parseInt(numberFormat(info_json.deal_revenue));
+
+				saveConfiguration("deals", deals);
+				saveConfiguration("deal_revenue", deal_revenue);
+				saveConfiguration("commission", commission_percent);
+				saveConfiguration("base_salary", window.base_salary);
+				saveConfiguration("cancel_percentage", $(".percentage_cancel").val());
+				saveConfiguration("deal_variation", 20);
+				saveConfiguration("commission_variation", 1);
+				saveConfiguration("commission_modifier", 0);
+				saveConfiguration("recommendation_variance", 60);
+
+				InitCommissionTable(31, deals, deal_revenue, commission_percent);
+				updateProgress(80);
+				goToPage(31);
+				return;
+			}*/
+
+			if(window.current_page == 31){
+				//hide sidebar + body and show only result page
+				$(".questions_section").hide();
+				$(".result_section").show();
+
+				var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;			
+				if(commission_percent < 5)
+					commission_percent = 5;
+
+				$(".page38 .commission_percent").text(commission_percent);
+
+				//InitCommissionTierTable(38, 500, percents);
+				//Based on capped/uncapped status
+				var cappted_status;
+				if(checkPageValue("features","Recurring commission (capped)")){
+					goToPage(38);
+				}
+				else{
+					var customer_number = getConfiguration("deals");
+					var churn_number = getConfiguration("cancel_percentage");
+					$(".page39 .customer_number").text(customer_number);
+					$(".page39 .churn_number").text(churn_number);
+					goToPage(39);
+				}
+				return;
+			}
+
+			
+			//go to determination bonus page
+			if(window.current_page == 38){
+				//hide sidebar + body and show only result page
+				$(".questions_section").hide();
+				$(".result_section").show();
+
+				goToPage(33);
+				return;
+			}
+
+			if(window.current_page == 39){
+				//hide sidebar + body and show only result page
+				$(".questions_section").hide();
+				$(".result_section").show();
+
+				goToPage(33);
+				return;
+			}
+
+			
+
+			goToNextPage();
+		}
+		
 	});
+	
+	//get target page for multiple job responsibilities
+	function getTargetPageJobResponsibilities(answer){
+		if(answer == "Managing Sales Reps"){
+			target_page = 6;
+		}
+		else if(answer == "Closing"){
+			var bonus_example_html;
+			var temp = [];
+
+			bonus_example_html = `
+				<li>Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%</li>
+				<li>Bonus for follow up task completion -- e.g. monthly bonus for exceeding daily follow-up task completion target of 95%</li>
+				<li>Bonus KPI contest winner -- e.g. bonus to whichever sales rep has the highest average deal size this quarter</li>
+			`;
+
+			temp.push("Bonus for conversion target -- e.g. monthly bonus for exceeding target qualified-to-close conversion rate of 50%");
+			temp.push("Bonus for follow up task completion -- e.g. monthly bonus for exceeding daily follow-up task completion target of 95%");
+			temp.push("Bonus KPI contest winner -- e.g. bonus to whichever sales rep has the highest average deal size this quarter");
+
+			$(".page12 .headline2 label").text(answer);
+			$(".page12 .headline4 ul").html(bonus_example_html);
+
+			var recommendation = [];
+			recommendation["title"] = `Bonus for closing`;
+			recommendation["description"] = temp;
+			saveFeature(2, "Bonus for closing");
+			saveRecommendation(1, recommendation);
+			target_page = 12;
+			$(".page12 .arrow_next_btn").attr("data-next", 8);
+		}
+		else if(answer == "Managing Accounts")
+			target_page = 4;
+		else if(answer == "Prospecting")
+			target_page = 3;
+
+		return target_page;
+	}
 
 	//determine profit/revenue
 	function IsProfitRevenue(){
@@ -1314,7 +1821,7 @@ $(document).ready(function(){
 		if($(".page" + window.current_page + " .answer_div .active").length > 1){
 			var active_options = $(".page" + window.current_page + " .answer_div .active label");			
 			for(var i = 0; i < active_options.length; i++){
-				answer = active_options[i]/*.innerText.trim()*/;
+				answer = active_options[i].innerText;
 				answers.push(answer);
 			}
 		}
@@ -1375,6 +1882,12 @@ $(document).ready(function(){
 			}
 			
 		}
+
+		//multiple choice selection
+		/*if(window.current_page == 24){
+			var base_salary = $(".base_salary").val();
+			item["base_salary"] = base_salary;
+		}*/
 
 		//salary edit modal page
 		if(window.current_page == 25){
@@ -1796,7 +2309,7 @@ $(document).ready(function(){
 	}
 
 	//Get progress bar
-	function updateProgress(page_num){
+	/*function updateProgress(page_num){
 		var total_steps = 5;
 		var processed_steps = 0;
 
@@ -1821,6 +2334,41 @@ $(document).ready(function(){
 			}
 			$(".sidebar_text_div .selection_sidebar").html(features_html);
 		}
+
+		return percent;
+	}*/
+	function updateProgress(percentage){		
+		/*
+		var chosen_features = getPageValue("features", "features");
+		var default_sidebar_menus = [
+			["Salary + Commission", 1], 
+			["Choose Commission Types (1/2)", 16], 
+			["Choose Commission Types (2/2)", 5], 
+			["Choose Commission Frequency", 13],
+			["Choose Base Pay", 20],
+			["Determine Commission Values", 28]
+		];
+		if(chosen_features){
+			var features = JSON.parse(chosen_features).features;
+		}*/
+		
+		var percent = percentage;
+		var percent_string = percent + "%";
+
+		$("#progressDivId #progressBar")[0].style.width = percent_string; //update progressbar width
+		$("#progressDivId #percent").html(percent_string); //update percent string in the center of progress bar
+
+		/*if(features){
+			var features_html = ``;
+			var active_class = '';
+			for(var i = 0; i < features.length; i++){
+				if(i == features.length - 1)
+					active_class = "active";
+				var li_html = `<li data-target="` + default_sidebar_menus[i][1] + `" class="`+active_class+`">` + default_sidebar_menus[i][0] + `</li>`;
+				features_html += li_html;
+			}
+			$(".sidebar_text_div .selection_sidebar").html(features_html);
+		}*/
 
 		return percent;
 	}
@@ -1916,7 +2464,7 @@ $(document).ready(function(){
 					{	
 						if(json_item.features){
 							for(var k = 0; k < json_item.features.length; k++){
-								if(json_item.features[k] = check_value)
+								if(json_item.features[k] == check_value)
 									found_flag = true;
 							}	
 						}						
@@ -1956,7 +2504,7 @@ $(document).ready(function(){
 
 	//go to the next page
 	function goToNextPage(){
-		var next_page = window.current_page + 1;		
+		var next_page = parseInt(window.current_page) + 1;		
 		goToPage(next_page);
 	}
 
@@ -1984,7 +2532,7 @@ $(document).ready(function(){
 	}
 
 	//go to the certain page from page ID
-	function goToPage(page_id){
+	function goToPage(page_id, target_active_menu_page){
 		//hide current active page before going to the certain page.
 		$(".page" + window.current_page).hide();
 		console.log("page" + window.current_page + " -> page" + page_id);
@@ -1993,35 +2541,63 @@ $(document).ready(function(){
 		if(!window.browsing_history.includes(window.current_page))
 			window.browsing_history.push(window.current_page);
 		if(!window.browsing_history.includes(page_id))
-			window.browsing_history.push(page_id);
+			window.browsing_history.push(page_id);		
+
+		var chosen_features = getPageValue("features", "features");
+		if(chosen_features){
+			var features = JSON.parse(chosen_features).features;
+		}
 
 		//Validation for the start/end page.
 		if(page_id < 1/* || page_id > $(".step").length*/)
 			return;
 		else{
 			$(".calculator_body .page" + getCurrentPage()).removeClass("active");
-			updateProgress(page_id);
+			//updateProgress(page_id);
 			$(".page" + page_id).show();
 			$(".page" + page_id).addClass("active");
 			$(".current_page").val(page_id);
 			window.current_page = page_id;
+
+			if(features){
+				var features_html = ``;
+				var active_class = '';
+				for(var i = 0; i < features.length; i++){
+					if(target_active_menu_page){
+						if(parseFloat(target_active_menu_page) == parseFloat(default_sidebar_menus[i][1]))
+							active_class = "active";
+						else
+							active_class = "";
+					}
+					else{
+						if(i == features.length - 1)
+							active_class = "active";
+						else
+							active_class = "";
+					} 
+						
+					var li_html = `<li data-target="` + default_sidebar_menus[i][1] + `" class="`+active_class+`">` + default_sidebar_menus[i][0] + `</li>`;
+					features_html += li_html;
+				}
+				$(".sidebar_text_div .selection_sidebar").html(features_html);
+			}
 		}
 	}
 
 	//get current active page
 	function getCurrentPage(){
-		var active_page = $(".current_page").val()
+		var active_page = $(".current_page").val();
 		return parseInt(active_page);
 	}
 
 	//share page JS
 	if(window.location.href.includes("share/?user_id=")){
-		/*var data = ajax_obj.data;
+		$(".calculator_container").css("height", "unset");
+		$(".calculator_container").css("margin-top", "1rem");
+		var data = ajax_obj.data;
 		var user_id = ajax_obj.user_id;
 		var user_login = ajax_obj.user_login;
 		var user_email = ajax_obj.user_email;
-		console.log("data");
-		console.log(data);
 
 		var json_data = [];
 		for(var i = 0; i < data.length; i++){
@@ -2035,7 +2611,7 @@ $(document).ready(function(){
 		localStorage.removeItem("commission_calculator");
 		//put DATA from DB to localStorage and show the corresponding result to the shared user.
 		window.items = json_data;
-		localStorage.setItem("commission_calculator", JSON.stringify(window.items));*/
+		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
 
 		var bonus_data = getPageValue("bonuses", "bonuses");
 		var bonus_periods = JSON.parse(bonus_data).periods;
@@ -2057,7 +2633,10 @@ $(document).ready(function(){
 		base_salary = parseFloat(base_salary) - parseFloat(new_bonus);
 		window.base_salary = base_salary;
 		
-		var commission_percent = getPageValue("commission", "commission") ? parseFloat(getPageValue("commission", "commission")): window.commission;
+		var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
+		if(commission_percent < 5)
+			commission_percent = 5;
+
 		var chosen_features = getPageValue("features", "features");
 		if(chosen_features){
 			var features = JSON.parse(chosen_features).features;

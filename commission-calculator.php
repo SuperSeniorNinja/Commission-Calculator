@@ -51,7 +51,7 @@
 	);
 
 	
-	function my_theme_wp_enqueue_scripts() {		
+	function my_theme_wp_enqueue_scripts() {
     	wp_enqueue_script( 'calculator-script4', CC__PLUGIN_URI . 'js/calculator.js', array ( 'jquery' ), 1.0, true);
     	$protocol = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
      

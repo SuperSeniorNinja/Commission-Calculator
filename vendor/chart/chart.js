@@ -1,6 +1,6 @@
 $ = jQuery;
-$(document).ready(function() {
-  // Specify data, options, and element in which to create the chart
+
+  /*// Specify data, options, and element in which to create the chart
   let data = {
     dataValues: [
     	[3000, 1000, 4000], [2500, 500, 4000], [2100, 800, 4000], [1900, 1700,4000],
@@ -26,13 +26,14 @@ $(document).ready(function() {
     barSpacing: "1%" // "1%" (small), "3%" (medium), "5%" (large)
   };
 
-  let element = "#bar_div_commission"; // Use a jQuery selector to select the element to put the chart into
+  let element = "#bar_div_ramp"; // Use a jQuery selector to select the element to put the chart into
 
   // Generate chart
-  drawBarChart(data, options, element);
+  drawBarChart(data, options, element);*/
 
   // Draws individual chart components
   function drawBarChart(data, options, element) {
+    console.log("drawchart is callled");
     drawChartContainer(element);
     //drawChartTitle(options);
     //drawChartLegend(data);
@@ -46,7 +47,7 @@ $(document).ready(function() {
   // Adds chart container to selected element
   function drawChartContainer(element) {
     $(element).prepend("<div class='chartContainer'></div>");
-    $(element).css("height", "100%");
+    $(element).css("height", "60vh");
   }
 
   // Draws chart title
@@ -189,4 +190,4 @@ $(document).ready(function() {
 
 		return formatter.format(price);
 	}
-});
+

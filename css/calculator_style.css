@@ -48,12 +48,14 @@ header{
 	max-width: 100%;
 }
 .outside-container{
-	margin-top: 7%;
+	margin-top: 8rem;
 }
 footer{
 	display: none;
 }
-
+.active_tick{
+	width: 100px;
+}
 /*end of style conflict*/
 
 .calculator_body .step{
@@ -73,16 +75,37 @@ footer{
 	padding: 0px;
 	width: 90%;
     margin: 0 auto;
+    height: auto;
+    margin-bottom: 1rem;
 	/*width: 100%;*/
 }
-.calculator_container .page1 .answer_div .row label{
+.calculator_container .page1 .answer_div .row label, .page2 .headline3 label, .page2 .headline1 label,  .page12 .headline3 label, .page12 .headline1 label,
+.page12 .headline4 ul li, .page40 .headline1 label, .page40 .headline5 label{
 	font-family: "OpenSans-Regular";
     font-weight: 400;
     font-style: normal;
     font-size: 24px;
     line-height: 55.81px;
 }
-.calculator_container .page1 .answer_div .row{
+.page40 .headline5{
+	margin-top: 50px;
+}
+.page12 .headline5{
+	margin-top: 30px;
+}
+.page12 .headline5 label{
+	font-family: "OpenSans-Regular";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 24px;
+}
+.page12 .button_div{
+	display: flex;
+}
+.page12 .headline4 ul li{
+	line-height: 40px;
+}
+.calculator_container .page1 .answer_div .row, .page40{
 	text-align: center;
 }
 .calculator_sidebar{
@@ -146,6 +169,12 @@ footer{
 	/*line-height: 32.52px;*/
 	line-height: 70px;
 	margin-left: 35px;
+	cursor: pointer;
+}
+.selection_sidebar .active{
+	font-style: italic;
+	font-family: revert !important;
+	font-size: 22px !important;
 }
 .step{
 	padding: 61px 0px 37px 0px;
@@ -155,7 +184,7 @@ footer{
     margin: 0 auto;
 	margin-bottom: 49px;
 }
-.step .header_line .page_title{
+.step .header_line .page_title, .page2 .headline2 label, .page12 .headline2 label{
 	font-family: "Bebas Neue";
 	font-weight: 400;
 	font-style: normal;
@@ -215,9 +244,9 @@ footer{
 .step .button_div{
 	text-align: center;
 	font-family: "Bebas Neue";
-	font-weight: 400;
+	font-weight: 400;	
 }
-.step button, .step .button_div .next_btn, .page31 .button_div button, .page32 .button_div button
+.step button, .step .button_div .next_btn, .page31 .button_div button, .page32 .button_div button, .step .button_div .faq_btn
 {
 	background-color: #fff !important;
     color: #000 !important;
@@ -243,6 +272,18 @@ footer{
 	color: #fff;
 	cursor: pointer;
 }
+.page2 .headline2{
+	margin: 50px 0px;
+}
+.page12 .headline2{
+	margin: 20px 0px;
+}
+.page12 ul{
+	width: fit-content;
+    margin: 0 auto;
+    line-height: 30px;
+    text-align: left;
+}
 .page25 .input_div{
 	margin: 20px 0px 30px 0px;
 }
@@ -261,7 +302,7 @@ input:focus{
 .page25 .header_line{
 	margin-bottom: 0px;
 }
-.page25 .base_salary{
+.page25 .base_salary, .page2, .page12{
 	text-align: center;
 }
 .page25 .button_div .edit_salary_btn{
@@ -304,8 +345,8 @@ input:focus{
     border: 1px solid #000;
 }
 .step .answer_div .active{
-	background: #000;
-	color: #fff;
+	background: rgba(0, 0, 0, 0.47);;
+	/*color: #fff;*/
 	box-shadow: 0px 4px 4px 6px rgb(52 49 49 / 30%);
 }
 .page26 .section .sub_header {
@@ -457,6 +498,26 @@ input:focus{
 }
 .page31 .row, .page31 table{
 	text-align: center;
+}
+.next_icon{
+	transform: rotate(180deg);
+    margin-left: 20px;
+    width: 18px;
+}
+.calculator_body .page25 .answer_div .active{
+	background: unset;
+	box-shadow: none;
+}
+.step button, .step .button_div .arrow_next_btn, .step .button_div .faq_btn{
+	border: none;
+}
+.step button, .step .button_div .arrow_next_btn:focus{
+	outline: none;
+}
+.step button, .step .button_div .arrow_next_btn:hover{
+	outline: none;
+	background-color: unset !important;
+    color: #000 !important;
 }
 .page31 .subheader{
 	margin: 30px 0px 50px 0px;
@@ -616,14 +677,14 @@ input:focus{
 .page33 .header_title{
 	margin-bottom: 30px;
 }
-.page35 .bar_div{
-	height: 500px;
-	width: 90%;
-	margin: 0 auto;
-	
+
+.bar_div{
+	height: auto;
+	width: 100%;
+	margin: 0 auto;	
 }
-.page35 #bar_div{
-	height: 500px;
+#bar_div{
+	height: auto;
 }
 .page33 .sub_title, .page34 .sub_title, .page35 .sub_title{
 	font-family: 'Bebas Neue';
@@ -987,9 +1048,25 @@ input:focus{
 	font-size: 12px;
 	line-height: 14px;	
 }
+.page31 .subheader{
+	margin: 0 auto;
+}
 .page35 .row, .page36 .row{
 	justify-content: center;
 	text-align: center;
+}
+.page35 .switch_div{
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+.page35 .bar_div{
+	width: 100%;
+}
+#edit_temporary_salary_boost .chartContainer{
+	margin-left: 0px;
+}
+.page35 .determine_amount, .page35 .determine_amount .bonus_row{
+	text-align: left;
 }
 .red_bg{
 	background-color: #E64B36;
@@ -1144,6 +1221,42 @@ input:focus{
 .page37 .tier_div div{
 	display: flex;
 }
+.page41 .row:first-child .col-md-6{
+	margin: 0 auto;
+	text-align: center;
+}
+.page41 .row:first-child span{
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	font-size: 20.2105px;
+	line-height: 28px;
+	text-align: center;
+}
+.page41 .month_block_div{
+	margin: 0 auto;
+	display: flex;
+	margin-top: 30px;
+	margin-bottom: 100px;
+}
+.page41 .month_block{
+	border: 1px solid #000000;
+    text-align: center;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.page41 .month_block label{
+	font-family: 'Bebas Neue';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 14px;
+	text-align: center;
+	margin-bottom: 0px;
+}
+.page41 .col-md-9{
+	margin: 0 auto;
+}
 /*hide up/down icon for input number*/
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -1160,6 +1273,9 @@ input[type=number] {
 }
 .pull-right{
 	float: right;
+}
+.page34 button{
+	border: 1px solid #000;
 }
 /*responsive styles for ipad version*/
 @media only screen and (min-width:481px) and (max-width:1200px){
