@@ -171,6 +171,9 @@ footer{
 	margin-left: 35px;
 	cursor: pointer;
 }
+.selection_sidebar{
+	margin-left: 0px;
+}
 .selection_sidebar .active{
 	font-style: italic;
 	font-family: revert !important;
@@ -284,6 +287,34 @@ footer{
     line-height: 30px;
     text-align: left;
 }
+.page19 input{
+	width: 210px;
+	outline: none;
+	border: 1px solid #000;
+}
+.page19 input:focus{
+	outline: none;
+}
+.page19 ul li label{
+	font-family: "OpenSans-Regular";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 22px;
+    line-height: 32.32px;
+    margin-bottom: 30px;
+}
+.mg_auto{
+	margin: 0 auto;
+}
+.page19 ul li:first-child{
+	margin-bottom: 30px;
+}
+.page19 ul{
+	line-height: 50px;
+}
+.page19 .answer_div{
+	font-size: 20px;
+}
 .page25 .input_div{
 	margin: 20px 0px 30px 0px;
 }
@@ -314,7 +345,7 @@ input:focus{
 /*Edit Salary Modal*/
 #salary_edit_modal{
 	top: 20%;
-	left: 27%;
+	/*left: 27%;*/
 	overflow-y: hidden;
 	padding-right: 0px;
 	text-align: center;

@@ -215,7 +215,7 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!-- What are the rep's responsibilities? -->
-			<div class="page5 step row">
+			<div class="page5 step row ">
 				<div class="header_line">
 					<label class="page_title">What are the rep's responsibilities?</label><br>
 					<label class="sub_header">Choose all that apply.<!--  Hover for more information. --></label>
@@ -274,8 +274,8 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!-- Do you want to incentivize reps for beneficial activities and milestones, or just sales? -->
-			<div class="page8 step row ">
-				<div class="header_line">
+			<div class="page8 step row">
+				<div class="header_line col-md-10 col-12">
 					<label class="page_title">Do you want to incentivize reps for beneficial activities and milestones, or just sales?</label>
 					<label class="sub_header">You may want to consider adding fixed bonuses to encourage important behaviors or success signals, such as a $100 bonus for appointments with new customers. </label>
 				</div>
@@ -308,7 +308,7 @@ $user_email = $current_user->user_email;
 					</div> -->
 				</div>
 				<div class="button_div">
-					<button class="next_btn">Finished adding bonuses</button>
+					<button class="arrow_next_btn finished_add_bonus" data-next="11">Finished adding bonuses</button>
 				</div>
 			</div>
 
@@ -333,7 +333,7 @@ $user_email = $current_user->user_email;
 					</div>
 				</div>
 				<div class="button_div">
-					<button class="next_btn">Finished adding bonuses</button>
+					<button class="arrow_next_btn finished_add_bonus" data-next="11">Finished adding bonuses</button>
 				</div>
 			</div>
 
@@ -365,7 +365,7 @@ $user_email = $current_user->user_email;
 			<div class="page12 step bonus_recommendation_page row ">
 				<div class="answer_div col-12 col-md-8  col-sm-12">
 					<div class="headline1">
-						<label>Consider adding a:</label>
+						<label>Consider adding a bonus for</label>
 					</div>
 					<div class="headline2">
 						<label>NameOfBonus</label>
@@ -384,8 +384,8 @@ $user_email = $current_user->user_email;
 						<label>If you want to add this bonus, click "Add bonus" below. You can set value and edit bonuses once your structure is more complete. </label>
 					</div>
 					<div class="button_div">
-						<button class="arrow_next_btn" data-next="">Don't add bonus</button>
-						<button class="arrow_next_btn" data-next="">Add bonus</button>
+						<button class="arrow_next_btn no_add_bonus" data-next="">Don't add bonus</button>
+						<button class="arrow_next_btn add_bonus" data-next="">Add bonus</button>
 					</div>
 				</div>				
 			</div>
@@ -425,22 +425,25 @@ $user_email = $current_user->user_email;
 			</div>
 
 			<!-- Slect one below page14 -->
-			<div class="page15 step row ">
+			<div class="page15 step row">
 				<div class="header_line">
 					<label class="page_title">Select one:</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Fixed (monthly)</label>
-						<span class="hidden">Customers pay a fixed amount based on subscription tier</span>
+						<label>Customers pay a <b>monthly</b> fixed fee based on subscription tier</label>
+						<!-- <label>Fixed (monthly)</label>
+						<span class="hidden">Customers pay a monthly fixed fee based on subscription tier</span> -->
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Variable</label>
-						<span class="hidden">Customers pay a variable amount based on usage, seasonality, etc</span>
+						<label>Customers pay a variable amount based on usage, seasonality, etc</label>
+						<!-- <label>Variable</label>
+						<span class="hidden">Customers pay a variable amount based on usage, seasonality, etc</span> -->
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Fixed (annual)</label>
-						<span class="hidden">Customers pay an annual fixed fee based on subscription tier</span>
+						<label>Customers pay an <b>annual</b> fixed fee based on subscription tier</label>
+						<!-- <label>Fixed (annual)</label>
+						<span class="hidden">Customers pay an annual fixed fee based on subscription tier</span> -->
 					</div>
 				</div>
 			</div>
@@ -491,30 +494,67 @@ $user_email = $current_user->user_email;
 				</div>
 			</div>
 
-			<!-- Choose Base Pay -->
-			<!-- <div class="page19 step row ">
+			<!-- Closing page -->
+			<div class="page19 step row ">
 				<div class="header_line">
-					<label class="page_title">Should sales reps try to push customers into buying products/services with a higher profit margin?</label>
-					<label class="sub_header">Note: this won't always align with your customer's goal of purchasing the best product for them. </label>
+					<label class="sub_header">Check all that apply:</label>
 				</div>
 				<div class="answer_div col-12 col-md-8  col-sm-12">
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Base Pay 1</label>
-					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Base Pay 2</label>
-					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Base Pay 3</label>
-					</div>
-					<div class="answer_option col-12 col-md-12 col-sm-12">
-						<label>Base Pay 4</label>
+					<ul>
+						<li>
+							<label>Approximately how many leads per month will be given to the sales rep?</label>
+							<div class="row">
+								<span>Answer: <input type="number" name="leads_per_month" class="leads_per_month" placeholder="whole number 0-99" maxlength="2" pattern="([0-9]|[0-9])"/></span>
+							</div>
+						</li>
+						<li>
+							<label>What quality are these leads?</label>
+							<div class="answer_div col-12 col-md-12  col-sm-12">
+								<div class="answer_option col-12 col-md-12 col-sm-12">
+									<label>Fair</label>
+									<span class="hidden">(i.e. few qualified and low conversion rates below 20%)</span>
+								</div>
+								<div class="answer_option col-12 col-md-12 col-sm-12">
+									<label>Good</label>
+									<span class="hidden">(i.e. mostly qualified with conversion rates between 20-50%)</span>
+								</div>
+								<div class="answer_option col-12 col-md-12 col-sm-12">
+									<label>Hot</label>
+									<span class="hidden">(i.e. all qualified and ready to buy from any sales rep. Conversion rates over 50%)</span>
+								</div>
+								<div class="answer_option col-12 col-md-12 col-sm-12">
+									<label>Unknown</label>
+									<span class="hidden">(i.e. few qualified and low conversion rates below 20%)</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div class="button_div">
+						<button class="arrow_next_btn" data-next="8">Confirm selection</button>
 					</div>
 				</div>
-			</div> -->
+				<!-- <div class="answer_div col-12 col-md-8  col-sm-12">
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Fair</label>
+						<span class="hidden">(i.e. few qualified and low conversion rates below 20%)</span>
+					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Good</label>
+						<span class="hidden">(i.e. mostly qualified with conversion rates between 20-50%)</span>
+					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Hot</label>
+						<span class="hidden">(i.e. all qualified and ready to buy from any sales rep. Conversion rates over 50%)</span>
+					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>Unknown</label>
+						<span class="hidden">(i.e. few qualified and low conversion rates below 20%)</span>
+					</div>
+				</div> -->
+			</div>
 
 			<!-- Are reps required to work on-site in an office? -->
-			<div class="page20 step row">
+			<div class="page20 step row ">
 				<div class="header_line">
 					<label class="page_title">Are reps required to work on-site in an office?</label>
 				</div>
@@ -593,6 +633,9 @@ $user_email = $current_user->user_email;
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Our industry is complex and can be difficult to master. Some prior experience in our industry is a must.</label>
 					</div>
+					<div class="answer_option col-12 col-md-12 col-sm-12">
+						<label>None of the above</label>
+					</div>
 				</div>
 				<div class="button_div">
 					<button class="next_btn">Confirm selection</button>
@@ -627,12 +670,12 @@ $user_email = $current_user->user_email;
 					</div>
 					<div class="answer_option col-12 col-md-12 col-sm-12">
 						<label>Need for experienced reps </label>
-					</div>
-					<div class="button_div">
-						<button class="edit_salary_btn" data-toggle="modal" data-target="#salary_edit_modal">Edit salary</button>
-						<button class="next_btn">Next</button>
-					</div>
-				</div>				
+					</div>					
+				</div>	
+				<div class="button_div col-12 col-md-8  col-sm-12 flex_div mg_auto">
+					<button class="edit_salary_btn" data-toggle="modal" data-target="#salary_edit_modal" data-backdrop="false">Edit salary</button>
+					<button class="next_btn">Next</button>
+				</div>			
 			</div>
 
 			<!-- Determine commission values -->
@@ -3081,7 +3124,7 @@ $user_email = $current_user->user_email;
 				</div>
 				<div class="col-12 col-md-12 col-xs-12 row">
 					<div class="button_div">
-						<button class="col-12 col-md-1 col-xs-12 arrow_next_btn">Looks good</button>
+						<button class="col-12 col-md-1 col-xs-12 arrow_next_btn" data-next="33">Looks good</button>
 						<button class="col-12 col-md-1 col-xs-12 add_tiers_btn pull-right">Add tiers </button>
 					</div>
 				</div>

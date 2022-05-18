@@ -5,7 +5,7 @@ $(document).ready(function(){
 	window.items = [];
 	window.browsing_history = [];
 	window.current_page = getCurrentPage();
-	var multiple_pages = [5, 11, 3, 26, 24]; // set pages for multiple options
+	var multiple_pages = [5, 11, 3, 26, 24, 19]; // set pages for multiple options
 	var commission = window.commission = 5; //by default, 5
 	var base_salary = getConfiguration("base_salary") ? getConfiguration("base_salary") : 4000;
 	window.revenue_per_deal;
@@ -53,6 +53,35 @@ $(document).ready(function(){
 		return;
 	});
 
+	//bonus add button on page12
+	$('.page12').on('click', '.button_div .add_bonus', function() {
+		var title = $(".page12 .headline2 label").text();
+		var description = [];
+		for(var i = 0; i < $(".page12 .headline4 ul li").length; i++){
+			description.push($(".page12 .headline4 ul li").eq(i).text());
+		}
+
+		saveBonus(title, description);
+
+		var recommendation = [];
+		recommendation["title"] = title;
+		recommendation["description"] = description;
+		saveRecommendation(1, recommendation);
+	});
+
+	//bonus add button on page12
+	$('.page12').on('click', '.button_div .no_add_bonus', function() {
+		var title = $(".page12 .headline2 label").text();
+		var previous_page = $(".page12 .arrow_next_btn").attr("data-next");
+		for(var i = 0; i < $(".page" + previous_page + " .answer_div .answer_option").length; i++){
+			if($(".page" + previous_page + " .answer_div .answer_option label").eq(i).text() == title)
+				$(".page" + previous_page + " .answer_div .answer_option").eq(i).removeClass("active")
+		}
+
+		removeBonus(title);
+		removeRecommendation(title);
+	});
+
 	//when an answer option is chosen
 	$('.step').on('click', '.answer_div .answer_option', function() {
 		var question = $(this).parent().parent().find("div label").eq(0).text();
@@ -79,7 +108,8 @@ $(document).ready(function(){
 			}
 		}
 		else{
-			$(this).parent().find(".active").removeClass("active"); //remove other active options for single choice
+			if(window.current_page != 9 && window.current_page != 10)
+				$(this).parent().find(".active").removeClass("active"); //remove other active options for single choice
 			$(this).addClass("active");
 			//Choose compensation format
 			/*if(window.current_page == 1){
@@ -185,7 +215,7 @@ $(document).ready(function(){
 									<label>`+ bonus_name +`</label>
 								</div>`;
 						}
-						$(".page9 .answer_div").append(bonus_html);
+						$(".page9 .answer_div").html(bonus_html);
 						target_page = 9;
 					}
 					else{
@@ -263,20 +293,21 @@ $(document).ready(function(){
 				$(".page12 .headline2 label").text(chosen_answer);
 				$(".page12 .headline4 ul").html(bonus_example_html);
 				
-				var recommendation = [];
+				/*var recommendation = [];
 				recommendation["title"] = chosen_answer;
 				recommendation["description"] = temp;
-				saveRecommendation(1, recommendation);
+				saveRecommendation(1, recommendation);*/
 				target_page = 12;
-				$(".page12 .arrow_next_btn").attr("data-next", 11);
+				$(".page12 .arrow_next_btn").attr("data-next", window.current_page);
+				$(".finished_add_bonus").attr("data-next", 11);
 			}
 
 			/*Choose Commission Frequency*/
-			if(window.current_page == 12){
+			/*if(window.current_page == 12){
 				saveToLocalStorage(window.current_page, recommendation);
 				goToPage(13);
 				return;
-			}
+			}*/
 
 			/*How do customers pay for products?*/
 			if(window.current_page == 13){
@@ -328,14 +359,14 @@ $(document).ready(function(){
 			/*Select one below page14*/
 			if(window.current_page == 15){
 				var temp = [];
-				if(chosen_answer == "Fixed (monthly)"){
+				if(chosen_answer == "Customers pay a monthly fixed fee based on subscription tier"){
 					saveFeature(3, "Recurring commission (Capped)");
 					temp["title"] = "Recurring commission (Capped)";
 					temp["description"] = `These commissions continue accruing after each customer renews. Pay 
 					commissions to the original sales rep for a year or so, then commissions should go to the 
 					rep(s) actively managing the account. Commissions stop if the account cancels.`;										
 				}
-				else if(chosen_answer == "Variable"){
+				else if(chosen_answer == "Customers pay a variable amount based on usage, seasonality, etc"){
 					saveFeature(3, "One-time commission");
 					temp["title"] = "One-time commission";
 					temp["description"] = `You should pay this based on estimated one-year income for the new account, after 
@@ -582,8 +613,8 @@ $(document).ready(function(){
 					//check if commission frequncy/one-time commission is chosen
 					if(checkPageValue("features", "One-time commission")){
 						$(".page29 .answer_div .div_question3").hide();
-						$(".page29 .arrow_next_btn").attr("data-next", 30);
-						$(".page30 .arrow_next_btn").attr("data-next", 31);
+						$(".page29 .arrow_next_btn").attr("data-next", 31);
+						//$(".page30 .arrow_next_btn").attr("data-next", 31);
 						$(".page31 .commission_percent_control_div .subheader").text(`
 							Here's how much the rep will earn depending on how good (or bad) of a month they have.
 						`);
@@ -593,8 +624,8 @@ $(document).ready(function(){
 					}
 					else/* if(checkPageValue("features","Recurring commission (capped)"))*/{
 						$(".page29 .answer_div .div_question3").show();
-						$(".page29 .arrow_next_btn").attr("data-next", 30);
-						$(".page30 .arrow_next_btn").attr("data-next", 31);
+						$(".page29 .arrow_next_btn").attr("data-next", 31);
+						//$(".page30 .arrow_next_btn").attr("data-next", 31);
 						var commission_percent = getPageValue("commission", "commission") ? parseFloat(JSON.parse(getPageValue("commission", "commission")).commission): window.commission;
 						if(commission_percent < 5)
 							commission_percent = 5;
@@ -643,8 +674,8 @@ $(document).ready(function(){
 						$(".page29 .answer_div .div_question3").show();
 						// $(".page29 .answer_div .average_revenue_profit").val(500);
 						// $(".page29 .answer_div .percentage_cancel").val(10);
-						$(".page29 .arrow_next_btn").attr("data-next", 30);
-						$(".page30 .arrow_next_btn").attr("data-next", 36);
+						$(".page29 .arrow_next_btn").attr("data-next", 31);
+						$(".page31 .arrow_next_btn").attr("data-next", 36);
 						$(".page36 .arrow_next_btn").attr("data-next", 40);
 					}
 				}				
@@ -785,6 +816,7 @@ $(document).ready(function(){
 		$(".page25 .base_salary").val(formatPrice(edit_salary_number_only));
 		//update base pay accordingly
 		saveFeature(4, "Base Pay " + formatPrice(edit_salary_number_only));
+		$('.modal-backdrop').remove();
 		$('#salary_edit_modal').modal('hide');
 	});
 
@@ -1146,7 +1178,7 @@ $(document).ready(function(){
 		}
 		else if(type == "bonus"){
 			recommendation_index = 3;
-			header_text = "Consider adding a:";
+			header_text = "Consider adding a bonus for:";
 		}
 		else if(type == "term"){			
 			recommendation_index = 4;
@@ -1329,16 +1361,23 @@ $(document).ready(function(){
 			var next_page_id_from_recommendation = e.target.dataset.next;
 			var target_page;
 			if(window.current_page == 12){
-				var chosen_responsibility_answers_doms = getPageValue("5", "5");
-				var chosen_responsibilities = JSON.parse(chosen_responsibility_answers_doms).answer;
-				if(chosen_responsibilities.length == 2)
-					target_page = next_page_id_from_recommendation;
-				else{
-					var third_responsibility = chosen_responsibilities[2];
-					target_page = getTargetPageJobResponsibilities(third_responsibility);
-				}
+				/*var chosen_responsibility_answers_doms = getPageValue("5", "5");
+				if(chosen_responsibility_answers_doms){
+					var chosen_responsibilities = JSON.parse(chosen_responsibility_answers_doms).answer;
+					if(chosen_responsibilities.length == 2)
+						target_page = next_page_id_from_recommendation;
+					else{
+						var third_responsibility = chosen_responsibilities[2];
+						target_page = getTargetPageJobResponsibilities(third_responsibility);
+					}
+				}*/
+				target_page = next_page_id_from_recommendation;
 			}
 			else{
+				if(window.current_page == 19){
+					saveToLocalStorage(window.current_page);
+				}
+
 				if(window.current_page == 29){
 					var visible_inputs_doms = $(".page29 input:visible");
 					for(var i = 0; i < visible_inputs_doms.length; i++){
@@ -1592,7 +1631,7 @@ $(document).ready(function(){
 			else
 				$(".page" + window.current_page + " .button_div .next_btn").removeAttr("disabled");
 
-			if(window.current_page == 1 || window.current_page == 5 || multiple_pages.includes(window.current_page) || window.current_page == 25 || window.current_page == 29 || window.current_page == 33) {//if multiple choices			
+			if(window.current_page == 1 || window.current_page == 5 || multiple_pages.includes(window.current_page) || window.current_page == 19 || window.current_page == 25 || window.current_page == 29 || window.current_page == 33) {//if multiple choices			
 				saveToLocalStorage(window.current_page);
 			}
 
@@ -1641,8 +1680,32 @@ $(document).ready(function(){
 				var temp = [];
 				temp["title"] = "subtract $250";
 				temp["description"] = "subtract $250";
+				var usable_answers = [];
 
-				var chosen_answers_doms = $(".page24 .answer_div .active");
+				//page25 chosen answer
+				var work_where_info = getPageValue("20", "answer");
+				if(work_where_info){
+					var work_where = JSON.parse(work_where_info).answer;
+					usable_answers.push(work_where);
+				}
+				
+				//$(".page25 .answer_div .answer_option").eq(0).find("label").text(work_where);
+
+				var where_info = getPageValue("21", "answer");
+				if(where_info){
+					var where = JSON.parse(where_info).answer;
+					usable_answers.push(where);
+				}
+
+				//$(".page25 .answer_div .answer_option").eq(1).find("label").text(where);
+
+				var benefit_info = getPageValue("23", "answer");
+				if(benefit_info){
+					var benefit = JSON.parse(benefit_info).answer;
+					usable_answers.push(benefit);
+				}				
+
+				var chosen_answers_doms = $(".page24 .answer_div .active");				
 				for(var i = 0; i < chosen_answers_doms.length; i++){
 					var chosen_answer = chosen_answers_doms.eq(i).find("label").text();
 
@@ -1650,6 +1713,25 @@ $(document).ready(function(){
 						var subtract = 500;
 						temp["title"] = "Add $500";
 						temp["description"] = "Add $500";
+						usable_answers.push("Need for experienced reps");						
+					}
+
+					if(chosen_answer == "Reps work less than 8 hours per day on average"){
+						usable_answers.push("Under 8hr work days");
+					}
+
+					if(chosen_answer == "Reps are given benefits such as insurance and 401k"){
+						usable_answers.push("Benefits (insurance, 401k)");
+					}
+
+					if(chosen_answer == "Our company, product or service is well-known in our industry"){
+						usable_answers.push("Well known in our industry");
+					}
+
+					if(chosen_answer == "None of the above"){
+						subtract = 0;
+						temp["title"] = "None of the above";
+						temp["description"] = "None of the above";
 					}
 				}				
 
@@ -1663,6 +1745,19 @@ $(document).ready(function(){
 
 				recommendation = temp;
 				saveRecommendation(4, recommendation);
+
+				if(usable_answers){
+					var usable_answers_html = ``;
+					for(var i = 0; i < usable_answers.length; i++){
+						usable_answers_html += `
+							<div class="answer_option col-12 col-md-12 col-sm-12 active">
+								<label>` + usable_answers[i] + `</label>
+							</div>
+						`;
+					}
+					$(".page25 .answer_div").html(usable_answers_html);
+				}
+
 				target_page = 25;
 				updateProgress(60);
 				goToPage(25);
@@ -1787,9 +1882,11 @@ $(document).ready(function(){
 			recommendation["title"] = `Bonus for closing`;
 			recommendation["description"] = temp;
 			saveFeature(2, "Bonus for closing");
-			saveRecommendation(1, recommendation);
-			target_page = 12;
-			$(".page12 .arrow_next_btn").attr("data-next", 8);
+			//saveRecommendation(1, recommendation);
+			/*target_page = 12;
+			$(".page12 .arrow_next_btn").attr("data-next", 8);*/
+			target_page = 19;
+			$(".page19 .arrow_next_btn").attr("data-next", 8);
 		}
 		else if(answer == "Managing Accounts")
 			target_page = 4;
@@ -1879,10 +1976,15 @@ $(document).ready(function(){
 				}
 
 				updateCommission(window.commission);
-			}
-			
+			}			
 		}
 
+		if(window.current_page == 19){
+			var leads_per_month = $(".page19 .leads_per_month").val();
+			var lead_quality = $(".page19 select").val();
+			item["leads_per_month"] = leads_per_month;
+			item["lead_quality"] = lead_quality;
+		}
 		//multiple choice selection
 		/*if(window.current_page == 24){
 			var base_salary = $(".base_salary").val();
@@ -2039,6 +2141,105 @@ $(document).ready(function(){
 			return false;
 	}
 
+	function saveBonus(title, description){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		if(json){
+			if(hasPageAnswers("bonus")){
+				for(var i = 0; i < json.length; i++){
+					var json_item = JSON.parse(json[i]);
+					if(json_item.page == "bonus"){
+						if(!json_item.titles.includes(title))
+							json_item.titles.push(title);
+						if(!json_item.descriptions.includes(description))
+							json_item.descriptions.push(description);
+
+						json[i] = JSON.stringify(json_item);
+						localStorage.removeItem("commission_calculator");
+						window.items = json;
+					}
+				}
+			}
+			else{
+				var temp_title = [];
+				var temp_description = [];
+				temp_title.push(title);
+				temp_description.push(description);
+
+				var bonus_item = {
+					"page": "bonus",
+					"titles": temp_title,
+					"descriptions": temp_description
+				};
+				
+				window.items.push(JSON.stringify(bonus_item));
+			}
+		}
+		else{
+			var temp_title = [];
+			var temp_description = [];
+			temp_title.push(title);
+			temp_description.push(description);
+			
+			var bonus_item = {
+				"page": "bonus",
+				"titles": temp_title,
+				"descriptions": temp_description
+			};
+
+			window.items.push(JSON.stringify(bonus_item));
+		}
+		
+		localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+	}
+
+	function removeBonus(title){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		if(json){
+			if(hasPageAnswers("bonus")){
+				for(var i = 0; i < json.length; i++){
+					var json_item = JSON.parse(json[i]);
+					if(json_item.page == "bonus"){
+						index = json_item.titles.indexOf(title);
+						if(index >= 0){
+							json_item.titles.splice(index, 1);
+							json_item.descriptions.splice(index, 1);
+						}
+
+						json[i] = JSON.stringify(json_item);
+						localStorage.removeItem("commission_calculator");
+						window.items = json;
+						localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+					}
+				}
+			}
+		}
+	}
+
+	function removeRecommendation(title){
+		var localstorage = localStorage.getItem("commission_calculator");
+		var json = JSON.parse(localstorage);
+		if(json){
+			if(hasPageAnswers("recommendations")){
+				for(var i = 0; i < json.length; i++){
+					var json_item = JSON.parse(json[i]);
+					if(json_item.page == "recommendations"){
+						index = json_item.titles.indexOf(title);
+						if(index >= 0){
+							json_item.titles.splice(index, 1);
+							json_item.descriptions.splice(index, 1);
+						}
+
+						json[i] = JSON.stringify(json_item);
+						localStorage.removeItem("commission_calculator");
+						window.items = json;
+						localStorage.setItem("commission_calculator", JSON.stringify(window.items));
+					}
+				}
+			}
+		}
+	}
 	//save Bonuses
 	function saveBonuses(bonuses, periods){
 		var localstorage = localStorage.getItem("commission_calculator");
@@ -2163,8 +2364,10 @@ $(document).ready(function(){
 						else{
 							recommendations_temp = json_item.descriptions;
 							titles_temp = json_item.titles;
-							recommendations_temp[index] = recommendation["description"];
-							titles_temp[index] = recommendation["title"];
+							if(!recommendations_temp.includes(recommendation["description"]))
+								recommendations_temp[index] = recommendation["description"];
+							if(!titles_temp.includes(recommendation["title"]))
+								titles_temp[index] = recommendation["title"];
 						}
 
 						json_item.descriptions = recommendations_temp;
@@ -2348,27 +2551,18 @@ $(document).ready(function(){
 			["Choose Base Pay", 20],
 			["Determine Commission Values", 28]
 		];
+		*/
+		
+		/*var chosen_features = getPageValue("features", "features");
 		if(chosen_features){
 			var features = JSON.parse(chosen_features).features;
 		}*/
-		
+
 		var percent = percentage;
 		var percent_string = percent + "%";
 
 		$("#progressDivId #progressBar")[0].style.width = percent_string; //update progressbar width
-		$("#progressDivId #percent").html(percent_string); //update percent string in the center of progress bar
-
-		/*if(features){
-			var features_html = ``;
-			var active_class = '';
-			for(var i = 0; i < features.length; i++){
-				if(i == features.length - 1)
-					active_class = "active";
-				var li_html = `<li data-target="` + default_sidebar_menus[i][1] + `" class="`+active_class+`">` + default_sidebar_menus[i][0] + `</li>`;
-				features_html += li_html;
-			}
-			$(".sidebar_text_div .selection_sidebar").html(features_html);
-		}*/
+		$("#progressDivId #percent").html(percent_string); //update percent string in the center of progress bar		
 
 		return percent;
 	}
@@ -2403,6 +2597,11 @@ $(document).ready(function(){
 						json_item.recommendation = recommendation;
 					else
 						json_item.recommendation = '';
+
+					if(page_num == 19){
+						json_item.leads_per_month = $(".page19 .leads_per_month").val();
+						json_item.lead_quality = $(".page19 select").val();
+					}
 
 					//particaular case for average revnue/profit/cancel percent update
 					if(page_num == 29)
@@ -2576,11 +2775,11 @@ $(document).ready(function(){
 							active_class = "";
 					} 
 						
-					var li_html = `<li data-target="` + default_sidebar_menus[i][1] + `" class="`+active_class+`">` + default_sidebar_menus[i][0] + `</li>`;
+					var li_html = `<li data-target="` + default_sidebar_menus[i][1] + `" class="`+active_class+`">` + features[i] + `</li>`;
 					features_html += li_html;
 				}
 				$(".sidebar_text_div .selection_sidebar").html(features_html);
-			}
+			}			
 		}
 	}
 
