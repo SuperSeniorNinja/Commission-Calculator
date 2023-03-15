@@ -1,11 +1,11 @@
 <?php
 	/*
-	Plugin Name: Commission calculator for Spencer Smith
-	Plugin URI: https://predrag.com
+	Plugin Name: Commission calculator
+	Plugin URI: https://example.com
 	description: All-in-one commission calculator which helps people conduct their commission fees.
 	Version: 1.0
-	Author: Mr. Predrag
-	Author URI: https://predrag.com
+	Author: Mr. Webster
+	Author URI: https://example.com
 	License: GPL2
 	*/
 
